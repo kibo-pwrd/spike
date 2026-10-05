@@ -17,22 +17,24 @@
       justify-content: center;
       align-items: center;
       padding: 1.5rem 1rem;
+      transition: background 0.3s ease;
     }
     .card-wrap {
       width: 100%;
       max-width: 390px;
-      background: #0b1325;
+      background: #020812;
       border-radius: 24px;
       padding: 1.8rem;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
       position: relative;
       overflow: hidden;
+      transition: background 0.3s ease;
     }
     .bg-pattern {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      opacity: 0.12;
+      opacity: 0.15;
       background-size: cover;
       background-position: center;
       pointer-events: none;
@@ -41,12 +43,16 @@
       position: relative;
       text-align: center;
       margin-bottom: 1.6rem;
+      z-index: 1;
     }
     .brand-logo {
-      max-height: 55px;
-      max-width: 180px;
+      max-height: 60px;
+      max-width: 200px;
       object-fit: contain;
       margin-bottom: 0.8rem;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
     .client-greeting {
       font-size: 0.8rem;
@@ -55,7 +61,7 @@
       letter-spacing: 0.08em;
     }
     .client-name {
-      font-size: 1.25rem;
+      font-size: 1.3rem;
       font-weight: 700;
       color: #ffffff;
       margin-top: 0.2rem;
@@ -66,6 +72,7 @@
       grid-template-columns: repeat(5, 1fr);
       gap: 0.75rem;
       margin: 1.5rem 0;
+      z-index: 1;
     }
     .stamp-slot {
       aspect-ratio: 1;
@@ -81,11 +88,11 @@
     .stamp-slot.active {
       background: rgba(255, 255, 255, 0.12);
       border: 1px solid rgba(255, 255, 255, 0.4);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
     .stamp-img {
-      width: 65%;
-      height: 65%;
+      width: 70%;
+      height: 70%;
       object-fit: contain;
     }
     .stamp-number {
@@ -97,18 +104,19 @@
       position: relative;
       text-align: center;
       margin-top: 1rem;
-      padding: 0.8rem;
+      padding: 0.9rem;
       border-radius: 12px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 1;
     }
     .status-count {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: #e2e8f0;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #f8fafc;
     }
     .reward-text {
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       color: #94a3b8;
       margin-top: 0.3rem;
     }
@@ -117,11 +125,12 @@
       margin-top: 1.5rem;
       padding: 0.85rem;
       border-radius: 10px;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.35);
       border: 1px solid rgba(255, 255, 255, 0.06);
       font-size: 0.72rem;
       color: #64748b;
       line-height: 1.4;
+      z-index: 1;
     }
     .legal-title {
       font-weight: 600;
@@ -141,6 +150,7 @@
       font-size: 0.72rem;
       color: #475569;
       letter-spacing: 0.05em;
+      z-index: 1;
     }
   </style>
 </head>
@@ -150,19 +160,18 @@
   <div class="bg-pattern" id="bg-pattern-layer"></div>
 
   <div class="header">
-    <img id="img-logo" class="brand-logo" alt="Logo">
+    <img id="img-logo" class="brand-logo" alt="Logo" style="display:none;">
     <div class="client-greeting">Tarjeta de Fidelización</div>
-    <div class="client-name" id="lbl-cliente-nombre">Consultando...</div>
+    <div class="client-name" id="lbl-cliente-nombre">Cargando...</div>
   </div>
 
   <div class="stamps-grid" id="grid-sellos"></div>
 
   <div class="status-box">
-    <div class="status-count" id="lbl-sellos-count">- / - sellos completados</div>
-    <div class="reward-text" id="lbl-premio-detalle">Beneficio disponible al completar el ciclo.</div>
+    <div class="status-count" id="lbl-sellos-count">Consultando sellos...</div>
+    <div class="reward-text" id="lbl-premio-detalle">Por favor espera un momento</div>
   </div>
 
-  <!-- Condiciones Legales -->
   <div class="legal-box">
     <div class="legal-title">Condiciones del Beneficio</div>
     <ul>
@@ -189,15 +198,28 @@
       const resCfg = await fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json());
       if (resCfg.success) {
         const c = resCfg.config;
-        document.getElementById('img-logo').src = c.LOGO_URL;
-        document.body.style.background = c.COLOR_CABECERA;
-        document.getElementById('card-element').style.background = c.COLOR_CABECERA;
+
+        // Cargar logo
+        if (c.LOGO_URL) {
+          const logoEl = document.getElementById('img-logo');
+          logoEl.src = c.LOGO_URL;
+          logoEl.style.display = 'block';
+        }
+
+        // Cargar color corporativo
+        if (c.COLOR_CABECERA) {
+          document.body.style.background = c.COLOR_CABECERA;
+          document.getElementById('card-element').style.background = c.COLOR_CABECERA;
+        }
+
+        // Cargar trama de fondo
         if (c.BACKGROUND_PATTERN) {
           document.getElementById('bg-pattern-layer').style.backgroundImage = `url('${c.BACKGROUND_PATTERN}')`;
         }
 
         const metaSellos = Number(c.COMPRAS_PARA_CICLO) || 10;
 
+        // Cargar datos del cliente
         const resCli = await fetch(`${SCRIPT_URL}?action=getCliente&idCliente=${idCliente}`).then(r => r.json());
         if (resCli.success) {
           const cli = resCli.cliente;
@@ -205,16 +227,20 @@
           document.getElementById('lbl-sellos-count').innerText = `${cli.sellosActuales} de ${metaSellos} sellos`;
 
           if (cli.sellosActuales >= metaSellos) {
-            document.getElementById('lbl-premio-detalle').innerText = `Ciclo completado. Beneficio disponible: ${cli.premioCalculado} BOB`;
+            document.getElementById('lbl-premio-detalle').innerText = `¡Meta alcanzada! Beneficio disponible: ${cli.premioCalculado} BOB`;
           } else {
             document.getElementById('lbl-premio-detalle').innerText = `Acumula ${metaSellos} sellos para desbloquear tu beneficio`;
           }
 
           dibujarSellos(cli.sellosActuales, metaSellos, c.STAMP_ICON);
+        } else {
+          document.getElementById('lbl-cliente-nombre').innerText = "Cliente Demo";
+          document.getElementById('lbl-sellos-count').innerText = `0 de ${metaSellos} sellos`;
+          dibujarSellos(0, metaSellos, c.STAMP_ICON);
         }
       }
     } catch (e) {
-      console.error(e);
+      console.error("Error al cargar tarjeta:", e);
     }
   }
 
