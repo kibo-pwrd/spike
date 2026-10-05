@@ -3,99 +3,244 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Macchia Café - Club de Fidelización</title>
+  <title>Tarjeta de Fidelización</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #1c1917;
-      --card-bg: #292524;
-      --accent: #d97706;
-      --text: #f5f5f4;
-      --text-muted: #a8a29e;
-      --stamp-empty: #44403c;
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
+    body {
+      background: #020812;
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem 1rem;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-    body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 1.5rem 1rem; }
-    .card { width: 100%; max-width: 400px; background: var(--card-bg); border-radius: 20px; padding: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid #44403c; }
-    .header { text-align: center; margin-bottom: 1.5rem; }
-    .header h1 { font-size: 1.6rem; color: #fbbf24; }
-    .header p { color: var(--text-muted); font-size: 0.9rem; }
-    .stamp-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.8rem; margin: 1.5rem 0; }
-    .stamp { aspect-ratio: 1; border-radius: 50%; background: var(--stamp-empty); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.3s; }
-    .stamp.active { background: var(--accent); color: white; transform: scale(1.05); }
-    .legal-card { margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
-    .footer { text-align: center; margin-top: 1.5rem; font-size: 0.75rem; color: #78716c; }
+    .card-wrap {
+      width: 100%;
+      max-width: 390px;
+      background: #0b1325;
+      border-radius: 24px;
+      padding: 1.8rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+    .bg-pattern {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      opacity: 0.12;
+      background-size: cover;
+      background-position: center;
+      pointer-events: none;
+    }
+    .header {
+      position: relative;
+      text-align: center;
+      margin-bottom: 1.6rem;
+    }
+    .brand-logo {
+      max-height: 55px;
+      max-width: 180px;
+      object-fit: contain;
+      margin-bottom: 0.8rem;
+    }
+    .client-greeting {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .client-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-top: 0.2rem;
+    }
+    .stamps-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.75rem;
+      margin: 1.5rem 0;
+    }
+    .stamp-slot {
+      aspect-ratio: 1;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .stamp-slot.active {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .stamp-img {
+      width: 65%;
+      height: 65%;
+      object-fit: contain;
+    }
+    .stamp-number {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #64748b;
+    }
+    .status-box {
+      position: relative;
+      text-align: center;
+      margin-top: 1rem;
+      padding: 0.8rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .status-count {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+    .reward-text {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-top: 0.3rem;
+    }
+    .legal-box {
+      position: relative;
+      margin-top: 1.5rem;
+      padding: 0.85rem;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.72rem;
+      color: #64748b;
+      line-height: 1.4;
+    }
+    .legal-title {
+      font-weight: 600;
+      color: #94a3b8;
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .legal-box ul {
+      padding-left: 1rem;
+      margin: 0;
+    }
+    .footer {
+      position: relative;
+      text-align: center;
+      margin-top: 1.4rem;
+      font-size: 0.72rem;
+      color: #475569;
+      letter-spacing: 0.05em;
+    }
   </style>
 </head>
 <body>
 
-<div class="card">
+<div class="card-wrap" id="card-element">
+  <div class="bg-pattern" id="bg-pattern-layer"></div>
+
   <div class="header">
-    <h1>☕ Macchia Café</h1>
-    <p>Tarjeta Digital de Fidelización</p>
-    <p style="margin-top:0.4rem; font-weight:600;" id="lbl-nombre">Cargando...</p>
+    <img id="img-logo" class="brand-logo" alt="Logo">
+    <div class="client-greeting">Tarjeta de Fidelización</div>
+    <div class="client-name" id="lbl-cliente-nombre">Consultando...</div>
   </div>
 
-  <div class="stamp-grid" id="stamp-container"></div>
+  <div class="stamps-grid" id="grid-sellos"></div>
 
-  <div style="text-align:center; margin-top: 0.5rem;">
-    <p id="lbl-estado" style="font-weight:600; color:#fbbf24;">Consultando sellos...</p>
+  <div class="status-box">
+    <div class="status-count" id="lbl-sellos-count">- / - sellos completados</div>
+    <div class="reward-text" id="lbl-premio-detalle">Beneficio disponible al completar el ciclo.</div>
   </div>
 
-  <!-- Términos y Condiciones Legales -->
-  <div class="legal-card">
-    <div style="font-weight:600; color:#e7e5e4; margin-bottom:0.4rem;">⚖️ Términos y Condiciones del Beneficio:</div>
-    <ul style="padding-left:1.1rem; margin:0;">
-      <li>Válido exclusivamente al completar los sellos del ciclo.</li>
-      <li><strong>Un solo uso:</strong> Se consume en su totalidad en una única visita.</li>
-      <li><strong>Sin saldo remanente:</strong> No fraccionable ni acumulable para próximas visitas.</li>
-      <li><strong>No canjeable por dinero en efectivo.</strong></li>
-      <li>Aplica con consumo mínimo en la visita de canje.</li>
+  <!-- Condiciones Legales -->
+  <div class="legal-box">
+    <div class="legal-title">Condiciones del Beneficio</div>
+    <ul>
+      <li>Beneficio de un solo uso por ciclo completado.</li>
+      <li>No acumulable ni fraccionable en saldo remanente.</li>
+      <li>No transferible ni liquidable en dinero en efectivo.</li>
+      <li>Aplica con el consumo mínimo establecido en el local.</li>
     </ul>
   </div>
 
   <div class="footer">
-    Powered by <strong>Spike</strong> · KiboLab
+    KiboLab Loyalty Platform
   </div>
 </div>
 
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXhjvfBEJC7XHMJi1jpkAXiAf-XYEW350sar7O29Zpl6LMF3HzAiLeaMCZHQNfWuBP6Q/exec";
 
-  async function cargarTarjeta() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const clientId = urlParams.get('cli') || 'CLI-TEST';
+  async function inicializarTarjeta() {
+    const params = new URLSearchParams(window.location.search);
+    const idCliente = params.get('cli') || 'CLI-PRUEBA';
 
     try {
-      const res = await fetch(`${SCRIPT_URL}?action=getCliente&clientId=${clientId}`);
-      const data = await res.json();
+      const resCfg = await fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json());
+      if (resCfg.success) {
+        const c = resCfg.config;
+        document.getElementById('img-logo').src = c.LOGO_URL;
+        document.body.style.background = c.COLOR_CABECERA;
+        document.getElementById('card-element').style.background = c.COLOR_CABECERA;
+        if (c.BACKGROUND_PATTERN) {
+          document.getElementById('bg-pattern-layer').style.backgroundImage = `url('${c.BACKGROUND_PATTERN}')`;
+        }
 
-      if (data.success) {
-        document.getElementById('lbl-nombre').innerText = data.cliente.nombre;
-        renderSellos(data.cliente.sellosActuales, 10);
-        document.getElementById('lbl-estado').innerText = `${data.cliente.sellosActuales} de 10 sellos acumulados`;
-      } else {
-        document.getElementById('lbl-nombre').innerText = "Cliente no encontrado";
-        renderSellos(0, 10);
+        const metaSellos = Number(c.COMPRAS_PARA_CICLO) || 10;
+
+        const resCli = await fetch(`${SCRIPT_URL}?action=getCliente&idCliente=${idCliente}`).then(r => r.json());
+        if (resCli.success) {
+          const cli = resCli.cliente;
+          document.getElementById('lbl-cliente-nombre').innerText = cli.nombre;
+          document.getElementById('lbl-sellos-count').innerText = `${cli.sellosActuales} de ${metaSellos} sellos`;
+
+          if (cli.sellosActuales >= metaSellos) {
+            document.getElementById('lbl-premio-detalle').innerText = `Ciclo completado. Beneficio disponible: ${cli.premioCalculado} BOB`;
+          } else {
+            document.getElementById('lbl-premio-detalle').innerText = `Acumula ${metaSellos} sellos para desbloquear tu beneficio`;
+          }
+
+          dibujarSellos(cli.sellosActuales, metaSellos, c.STAMP_ICON);
+        }
       }
-    } catch(e) {
-      document.getElementById('lbl-nombre').innerText = "Modo Demo";
-      renderSellos(3, 10);
-      document.getElementById('lbl-estado').innerText = "3 de 10 sellos";
+    } catch (e) {
+      console.error(e);
     }
   }
 
-  function renderSellos(actuales, meta) {
-    const container = document.getElementById('stamp-container');
-    container.innerHTML = '';
+  function dibujarSellos(actuales, meta, stampIconUrl) {
+    const grid = document.getElementById('grid-sellos');
+    grid.innerHTML = '';
     for (let i = 1; i <= meta; i++) {
-      const stamp = document.createElement('div');
-      stamp.className = 'stamp' + (i <= actuales ? ' active' : '');
-      stamp.innerText = i <= actuales ? '☕' : i;
-      container.appendChild(stamp);
+      const slot = document.createElement('div');
+      slot.className = 'stamp-slot' + (i <= actuales ? ' active' : '');
+
+      if (i <= actuales && stampIconUrl) {
+        const img = document.createElement('img');
+        img.src = stampIconUrl;
+        img.className = 'stamp-img';
+        slot.appendChild(img);
+      } else {
+        const num = document.createElement('span');
+        num.className = 'stamp-number';
+        num.innerText = i;
+        slot.appendChild(num);
+      }
+      grid.appendChild(slot);
     }
   }
 
-  cargarTarjeta();
+  inicializarTarjeta();
 </script>
 
 </body>
