@@ -3,55 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spike - Terminal de Caja y Gestión</title>
+  <title>Spike · Terminal y Gestión</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f172a;
-      --card: #1e293b;
+      --bg: #090d16;
+      --card: #131b2e;
+      --card-inner: #1c2640;
+      --primary: #2563eb;
+      --accent: #f59e0b;
+      --success: #10b981;
+      --danger: #ef4444;
       --text: #f8fafc;
       --text-muted: #94a3b8;
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --accent: #f59e0b;
-      --danger: #ef4444;
-      --success: #10b981;
-      --border: #334155;
+      --border: rgba(255, 255, 255, 0.08);
+      --radius: 14px;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-    body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 1.5rem 1rem; }
-    .container { width: 100%; max-width: 500px; }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.2rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-    h1 { font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
-    h2 { font-size: 1.15rem; margin-bottom: 0.5rem; }
-    p.subtitle { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.2rem; }
-    .form-group { margin-bottom: 1rem; position: relative; }
-    label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.35rem; }
-    input, select { width: 100%; padding: 0.75rem 0.9rem; background: #0b1120; border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.95rem; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; justify-content: center; padding: 1.5rem 1rem; }
+    .container { width: 100%; max-width: 480px; }
+    .header { text-align: center; margin-bottom: 1.5rem; }
+    .badge-sub { display: inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #60a5fa; margin-bottom: 0.4rem; }
+    .title { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; }
+    .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem; margin-bottom: 1rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+    .card-title { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .form-group { margin-bottom: 1rem; }
+    label { display: block; font-size: 0.8rem; font-weight: 600; color: #cbd5e1; margin-bottom: 0.35rem; }
+    input, select { width: 100%; padding: 0.8rem 0.95rem; background: var(--card-inner); border: 1px solid var(--border); border-radius: 9px; color: var(--text); font-size: 0.92rem; }
     input:focus, select:focus { outline: none; border-color: var(--primary); }
-    .password-wrap { position: relative; }
-    .password-toggle { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem; }
-    .btn { width: 100%; padding: 0.85rem; border-radius: 8px; border: none; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: 0.2s; }
+    .color-row { display: flex; gap: 0.6rem; align-items: center; }
+    .color-picker { width: 50px; height: 42px; padding: 0.2rem; cursor: pointer; border-radius: 8px; border: 1px solid var(--border); }
+    .btn { width: 100%; padding: 0.85rem; border-radius: 9px; border: none; font-weight: 700; font-size: 0.92rem; cursor: pointer; transition: 0.2s; }
     .btn-primary { background: var(--primary); color: white; }
-    .btn-primary:hover { background: var(--primary-hover); }
-    .btn-sm { padding: 0.6rem; font-size: 0.85rem; width: auto; }
-    .btn-danger { background: #334155; color: #f8fafc; font-size: 0.8rem; margin-top: 1rem; }
+    .btn-secondary { background: var(--card-inner); border: 1px solid var(--border); color: var(--text-muted); }
+    .btn-sm { padding: 0.55rem 0.85rem; font-size: 0.82rem; width: auto; border-radius: 8px; }
+    .tabs { display: flex; gap: 0.4rem; background: #0c1220; padding: 0.3rem; border-radius: 11px; margin-bottom: 1rem; border: 1px solid var(--border); }
+    .tab-btn { flex: 1; background: transparent; border: none; color: var(--text-muted); padding: 0.6rem 0.4rem; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600; }
+    .tab-btn.active { background: var(--card); color: white; }
+    .preview-box { background: var(--card-inner); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem; margin-bottom: 1rem; }
+    .legal-alert { background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); padding: 0.85rem; border-radius: 9px; font-size: 0.78rem; color: #fde68a; line-height: 1.45; margin: 0.8rem 0; }
+    .legal-alert ul { padding-left: 1.1rem; margin-top: 0.3rem; }
     .hidden { display: none !important; }
-    .tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; overflow-x: auto; padding-bottom: 0.2rem; }
-    .tab-btn { background: #0b1120; border: 1px solid var(--border); color: var(--text-muted); padding: 0.5rem 0.8rem; border-radius: 8px; cursor: pointer; font-size: 0.8rem; white-space: nowrap; }
-    .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-    .badge { display: inline-block; padding: 0.25rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; background: #334155; color: #38bdf8; }
-    .legal-alert { background: #451a03; border: 1px solid #b45309; padding: 0.85rem; border-radius: 8px; margin: 0.8rem 0; font-size: 0.8rem; color: #fde68a; }
+    .footer { text-align: center; font-size: 0.72rem; color: var(--text-muted); margin-top: 1.5rem; }
   </style>
 </head>
 <body>
 
 <div class="container">
   
+  <div class="header">
+    <div class="badge-sub">KIBOLAB PLATFORM</div>
+    <div class="title">Spike</div>
+    <div class="subtitle">Terminal y Gestión de Fidelización</div>
+  </div>
+
   <!-- VISTA 1: LOGIN -->
   <div id="view-login" class="card">
-    <h1>⚡ Spike</h1>
-    <p class="subtitle">Ingreso seguro a terminal de caja y administración</p>
-    
+    <div class="card-title">Acceso al Sistema</div>
+    <div class="subtitle" style="margin-bottom: 1.2rem;">Credenciales de Caja o Gerencia</div>
+
     <div class="form-group">
       <label>Correo Electrónico</label>
       <input type="email" id="txt-email" value="kibopwrd@gmail.com">
@@ -59,98 +72,133 @@
 
     <div class="form-group">
       <label>Contraseña</label>
-      <div class="password-wrap">
-        <input type="password" id="txt-pass" value="admin123">
-        <button type="button" class="password-toggle" onclick="togglePass()">👁️</button>
-      </div>
+      <input type="password" id="txt-pass" value="admin123">
     </div>
 
     <button class="btn btn-primary" onclick="ejecutarLogin()">Iniciar Sesión</button>
   </div>
 
-  <!-- VISTA 2: PANEL DE CAJA Y DUEÑO -->
+  <!-- VISTA 2: PANEL DE CONTROL -->
   <div id="view-panel" class="hidden">
-    <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+    
+    <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding: 0.9rem 1.2rem;">
       <div>
-        <h2 id="lbl-nombre-user">Usuario</h2>
-        <span class="badge" id="lbl-rol-user">ADMIN</span>
+        <div style="font-weight:700; font-size:0.95rem;" id="lbl-user-nombre">-</div>
+        <div style="font-size:0.75rem; color:#60a5fa;" id="lbl-user-rol">-</div>
       </div>
-      <button class="btn btn-danger btn-sm" onclick="cerrarSesion()">Salir</button>
+      <button class="btn btn-secondary btn-sm" onclick="cerrarSesion()">Salir</button>
     </div>
 
-    <!-- Pestañas -->
     <div class="tabs">
       <button class="tab-btn active" onclick="verTab('tab-caja', this)">Terminal Caja</button>
+      <button class="tab-btn" onclick="verTab('tab-branding', this)">Identidad Visual</button>
       <button class="tab-btn" onclick="verTab('tab-reglas', this)">Reglas de Negocio</button>
     </div>
 
-    <!-- TAB: CAJA -->
+    <!-- TAB 1: CAJA -->
     <div id="tab-caja" class="card">
-      <h2>Registrar Compra o Canje</h2>
-      <p class="subtitle">Ingresa el código o teléfono del cliente</p>
+      <div class="card-title">Registro en Mostrador</div>
+      <div class="subtitle" style="margin-bottom: 1rem;">Otorga sellos o aplica canjes completados</div>
 
       <div class="form-group">
-        <label>Código de Cliente / Teléfono</label>
+        <label>Identificador del Cliente (Código o WhatsApp)</label>
         <div style="display:flex; gap:0.5rem;">
-          <input type="text" id="txt-cli-id" placeholder="CLI-TEST">
+          <input type="text" id="txt-cli-id" placeholder="CLI-PRUEBA">
           <button class="btn btn-primary btn-sm" onclick="buscarCliente()">Buscar</button>
         </div>
       </div>
 
-      <div id="box-info-cli" class="hidden" style="margin-bottom:1rem; padding:0.8rem; background:#0b1120; border-radius:8px; border:1px solid var(--border);">
-        <p><strong>Cliente:</strong> <span id="cli-nombre">-</span></p>
-        <p><strong>Sellos Actuales:</strong> <span id="cli-sellos" style="color:var(--accent); font-weight:700;">0</span></p>
-        <p><strong>Premio Ciclo:</strong> <span id="cli-premio" style="color:var(--success); font-weight:700;">0 Bs</span></p>
+      <div id="box-info-cli" class="preview-box hidden">
+        <div style="font-weight:700;" id="cli-nombre">-</div>
+        <div style="display:flex; justify-content:space-between; margin-top:0.4rem; font-size:0.85rem;">
+          <span>Sellos: <strong id="cli-sellos" style="color:var(--accent);">0</strong></span>
+          <span>Premio Acumulado: <strong id="cli-premio" style="color:var(--success);">0 BOB</strong></span>
+        </div>
       </div>
 
       <div class="form-group">
-        <label>Importe de Consumo (BOB)</label>
-        <input type="number" id="txt-monto" step="0.5" placeholder="Ej: 25.00">
+        <label>Monto de la Compra (BOB)</label>
+        <input type="number" id="txt-monto" step="0.5" placeholder="0.00">
       </div>
 
-      <div class="form-group" style="display:flex; align-items:center; gap:0.5rem; margin-top:0.5rem;">
-        <input type="checkbox" id="chk-canje" style="width:auto;" onchange="onToggleCanje()">
-        <label for="chk-canje" style="margin:0; cursor:pointer; color:#fde68a;">¿Es Canje de Beneficio?</label>
+      <div style="margin: 0.8rem 0; display:flex; align-items:center; gap:0.6rem;">
+        <input type="checkbox" id="chk-canje" style="width:1.1rem; height:1.1rem; accent-color:var(--accent);" onchange="onToggleCanje()">
+        <label for="chk-canje" style="margin:0; font-weight:600; color:#fde68a; cursor:pointer;">¿Es Canje de Beneficio?</label>
       </div>
 
-      <!-- Legal en caja -->
       <div id="box-aviso-legal" class="legal-alert hidden">
-        <strong>⚠️ Reglas Legales de Canje:</strong>
-        <ul style="margin: 0.3rem 0 0 1rem; padding:0;">
-          <li>Beneficio de <strong>un solo uso</strong>.</li>
-          <li><strong>No se devuelve efectivo</strong> ni queda saldo a favor.</li>
-          <li>Requiere consumo mínimo estipulado.</li>
+        <strong>Condiciones Legales del Beneficio:</strong>
+        <ul>
+          <li>Un solo uso por ciclo completado.</li>
+          <li>No fraccionable ni reembolsable en dinero en efectivo.</li>
+          <li>Requiere el consumo mínimo fijado en el local.</li>
         </ul>
       </div>
 
-      <button class="btn btn-primary" onclick="procesarOperacion()" style="margin-top:0.5rem;">Registrar Operación</button>
+      <button class="btn btn-primary" onclick="procesarOperacion()" style="margin-top:0.6rem;">Registrar Operación</button>
     </div>
 
-    <!-- TAB: REGLAS COMERCIALES (DUEÑO) -->
-    <div id="tab-reglas" class="card hidden">
-      <h2>Reglas del Programa y Beneficio</h2>
-      <p class="subtitle">Personaliza los importes mínimos y el tipo de premio</p>
+    <!-- TAB 2: IDENTIDAD VISUAL (BRANDING) -->
+    <div id="tab-branding" class="card hidden">
+      <div class="card-title">Personalización de Marca</div>
+      <div class="subtitle" style="margin-bottom: 1.2rem;">Define el aspecto de la tarjeta para tus clientes</div>
 
       <div class="form-group">
-        <label>Sellos para completar tarjeta (Meta)</label>
+        <label>Nombre Comercial</label>
+        <input type="text" id="cfg-nombre">
+      </div>
+
+      <div class="form-group">
+        <label>Color de Cabecera y Fondo</label>
+        <div class="color-row">
+          <input type="color" id="cfg-color-picker" class="color-picker" onchange="document.getElementById('cfg-color-hex').value = this.value">
+          <input type="text" id="cfg-color-hex" placeholder="#020812" onchange="document.getElementById('cfg-color-picker').value = this.value">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>URL del Logo</label>
+        <input type="text" id="cfg-logo-url" placeholder="https://lh3.googleusercontent.com/d/...">
+      </div>
+
+      <div class="form-group">
+        <label>URL del Ícono de Sello</label>
+        <input type="text" id="cfg-stamp-url" placeholder="https://lh3.googleusercontent.com/d/...">
+      </div>
+
+      <div class="form-group">
+        <label>URL de la Trama de Fondo (Background Pattern)</label>
+        <input type="text" id="cfg-pattern-url" placeholder="https://lh3.googleusercontent.com/d/...">
+      </div>
+
+      <button class="btn btn-primary" onclick="guardarBranding()">Guardar Identidad Visual</button>
+    </div>
+
+    <!-- TAB 3: REGLAS DE NEGOCIO -->
+    <div id="tab-reglas" class="card hidden">
+      <div class="card-title">Reglas del Programa</div>
+      <div class="subtitle" style="margin-bottom: 1.2rem;">Requisitos de consumo y cálculo de premios</div>
+
+      <div class="form-group">
+        <label>Compras para completar ciclo (Meta de Sellos)</label>
         <input type="number" id="cfg-meta-sellos">
       </div>
 
       <div class="form-group">
-        <label>Compra mínima para ganar un sello (BOB)</label>
+        <label>Compra mínima para otorgar sello (BOB)</label>
         <input type="number" id="cfg-min-sello" step="0.5">
       </div>
 
       <div class="form-group">
-        <label>Consumo mínimo requerido para canjear (BOB)</label>
+        <label>Consumo mínimo obligatorio para canjear (BOB)</label>
         <input type="number" id="cfg-min-canje" step="0.5">
       </div>
 
       <div class="form-group">
-        <label>Modalidad de Recompensa</label>
+        <label>Modalidad de Beneficio</label>
         <select id="cfg-tipo-premio" onchange="toggleTipoPremio()">
-          <option value="PORCENTAJE">% de compras acumuladas en el ciclo</option>
-          <option value="FIJO">Monto / Beneficio Directo Fijo (BOB)</option>
+          <option value="PORCENTAJE">% de las compras acumuladas en el ciclo</option>
+          <option value="FIJO">Beneficio directo / Monto fijo en dinero (BOB)</option>
         </select>
       </div>
 
@@ -164,9 +212,13 @@
         <input type="number" id="cfg-premio-fijo" step="0.5">
       </div>
 
-      <button class="btn btn-primary btn-sm" onclick="guardarReglas()">Guardar Reglas</button>
+      <button class="btn btn-primary" onclick="guardarReglasComerciales()">Guardar Reglas</button>
     </div>
 
+  </div>
+
+  <div class="footer">
+    Spike Loyalty Engine · KiboLab
   </div>
 
 </div>
@@ -174,11 +226,6 @@
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXhjvfBEJC7XHMJi1jpkAXiAf-XYEW350sar7O29Zpl6LMF3HzAiLeaMCZHQNfWuBP6Q/exec";
   let sesionActual = null;
-
-  function togglePass() {
-    const el = document.getElementById('txt-pass');
-    el.type = el.type === 'password' ? 'text' : 'password';
-  }
 
   async function callApi(action, payload = {}) {
     payload.action = action;
@@ -195,14 +242,15 @@
 
     const res = await callApi('login', { email, password });
     if (res.success) {
-      sesionActual = res.user;
-      document.getElementById('lbl-nombre-user').innerText = res.user.nombre;
-      document.getElementById('lbl-rol-user').innerText = res.user.role;
+      sesionActual = res.usuario;
+      document.getElementById('lbl-user-nombre').innerText = sesionActual.nombre;
+      document.getElementById('lbl-user-rol').innerText = sesionActual.rol;
+
       document.getElementById('view-login').classList.add('hidden');
       document.getElementById('view-panel').classList.remove('hidden');
       cargarConfiguracion();
     } else {
-      alert(res.error || "Error al iniciar sesión");
+      alert(res.error || "Credenciales incorrectas.");
     }
   }
 
@@ -231,50 +279,63 @@
     const res = await callApi('getConfig');
     if (res.success && res.config) {
       const c = res.config;
-      document.getElementById('cfg-meta-sellos').value = c.META_SELLOS || 10;
-      document.getElementById('cfg-min-sello').value = c.MONTO_MIN_SELLO_BS || 15;
-      document.getElementById('cfg-min-canje').value = c.MONTO_MIN_CANJE_BS || 20;
+      // Identidad Visual
+      document.getElementById('cfg-nombre').value = c.NOMBRE_NEGOCIO || '';
+      document.getElementById('cfg-color-hex').value = c.COLOR_CABECERA || '#020812';
+      document.getElementById('cfg-color-picker').value = c.COLOR_CABECERA || '#020812';
+      document.getElementById('cfg-logo-url').value = c.LOGO_URL || '';
+      document.getElementById('cfg-stamp-url').value = c.STAMP_ICON || '';
+      document.getElementById('cfg-pattern-url').value = c.BACKGROUND_PATTERN || '';
+
+      // Reglas
+      document.getElementById('cfg-meta-sellos').value = c.COMPRAS_PARA_CICLO || 10;
+      document.getElementById('cfg-min-sello').value = c.MONTO_MINIMO_SELLO || 15;
+      document.getElementById('cfg-min-canje').value = c.MONTO_MINIMO_CANJE || 20;
       document.getElementById('cfg-tipo-premio').value = c.TIPO_PREMIO || 'PORCENTAJE';
-      document.getElementById('cfg-premio-pct').value = c.PREMIO_PORCENTAJE || 10;
-      document.getElementById('cfg-premio-fijo').value = c.PREMIO_FIJO_BS || 15;
+      document.getElementById('cfg-premio-pct').value = c.PCT_RECOMPENSA || 10;
+      document.getElementById('cfg-premio-fijo').value = c.VALOR_PREMIO_FIJO || 15;
       toggleTipoPremio();
     }
   }
 
-  async function guardarReglas() {
-    const meta = document.getElementById('cfg-meta-sellos').value;
-    const minSello = document.getElementById('cfg-min-sello').value;
-    const minCanje = document.getElementById('cfg-min-canje').value;
-    const tipo = document.getElementById('cfg-tipo-premio').value;
-    const pct = document.getElementById('cfg-premio-pct').value;
-    const fijo = document.getElementById('cfg-premio-fijo').value;
-
-    const res = await callApi('saveConfig', {
-      META_SELLOS: meta,
-      MONTO_MIN_SELLO_BS: minSello,
-      MONTO_MIN_CANJE_BS: minCanje,
-      TIPO_PREMIO: tipo,
-      PREMIO_PORCENTAJE: pct,
-      PREMIO_FIJO_BS: fijo
+  async function guardarBranding() {
+    const res = await callApi('guardarConfig', {
+      NOMBRE_NEGOCIO: document.getElementById('cfg-nombre').value,
+      COLOR_CABECERA: document.getElementById('cfg-color-hex').value,
+      LOGO_URL: document.getElementById('cfg-logo-url').value,
+      STAMP_ICON: document.getElementById('cfg-stamp-url').value,
+      BACKGROUND_PATTERN: document.getElementById('cfg-pattern-url').value
     });
+    if (res.success) alert("¡Identidad visual actualizada!");
+    else alert(res.error || "Error al guardar");
+  }
 
-    if (res.success) alert("¡Reglas actualizadas con éxito!");
+  async function guardarReglasComerciales() {
+    const res = await callApi('guardarConfig', {
+      COMPRAS_PARA_CICLO: document.getElementById('cfg-meta-sellos').value,
+      MONTO_MINIMO_SELLO: document.getElementById('cfg-min-sello').value,
+      MONTO_MINIMO_CANJE: document.getElementById('cfg-min-canje').value,
+      TIPO_PREMIO: document.getElementById('cfg-tipo-premio').value,
+      PCT_RECOMPENSA: document.getElementById('cfg-premio-pct').value,
+      VALOR_PREMIO_FIJO: document.getElementById('cfg-premio-fijo').value
+    });
+    if (res.success) alert("¡Reglas comerciales actualizadas!");
     else alert(res.error || "Error al guardar");
   }
 
   async function buscarCliente() {
     const cid = document.getElementById('txt-cli-id').value.trim();
-    if (!cid) return alert("Escribe un código de cliente");
+    if (!cid) return alert("Escribe un identificador o teléfono.");
 
-    const res = await callApi('getCliente', { clientId: cid });
+    const res = await callApi('getCliente', { idCliente: cid });
     if (res.success) {
-      const cli = res.cliente;
-      document.getElementById('cli-nombre').innerText = cli.nombre;
-      document.getElementById('cli-sellos').innerText = cli.sellosActuales;
-      document.getElementById('cli-premio').innerText = cli.premioCalculado + " BOB";
+      const c = res.cliente;
+      document.getElementById('cli-nombre').innerText = c.nombre;
+      document.getElementById('cli-sellos').innerText = c.sellosActuales;
+      document.getElementById('cli-premio').innerText = c.premioCalculado + " BOB";
       document.getElementById('box-info-cli').classList.remove('hidden');
     } else {
-      alert(res.error || "Cliente no encontrado");
+      alert(res.error || "Cliente no encontrado.");
     }
   }
 
@@ -288,17 +349,17 @@
     const monto = document.getElementById('txt-monto').value;
     const esCanje = document.getElementById('chk-canje').checked;
 
-    if (!cid || !monto) return alert("Completa el cliente y el monto");
+    if (!cid || !monto) return alert("Ingresa el cliente y el importe.");
 
     const res = await callApi('registrarCompra', {
-      clientId: cid,
-      montoBs: monto,
+      idCliente: cid,
+      monto: monto,
       esCanje: esCanje,
       usuarioCaja: sesionActual.nombre
     });
 
     if (res.success) {
-      alert("¡Operación registrada con éxito! Sellos actuales: " + res.sellosActuales);
+      alert("¡Operación completada! Sellos actuales: " + res.sellosActuales);
       document.getElementById('txt-monto').value = '';
       buscarCliente();
     } else {
