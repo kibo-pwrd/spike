@@ -2,377 +2,101 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Macchia Club • Tarjeta Digital</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#9A3412">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Macchia">
-  <link rel="apple-touch-icon" href="icon-192.png">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Macchia Café - Club de Fidelización</title>
   <style>
     :root {
-      --brand-color: #9A3412;
-      --brand-dark: #7C2D12;
-      --bg-color: #0f172a;
-      --card-bg: #ffffff;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
+      --bg: #1c1917;
+      --card-bg: #292524;
+      --accent: #d97706;
+      --text: #f5f5f4;
+      --text-muted: #a8a29e;
+      --stamp-empty: #44403c;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      background-color: var(--bg-color);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 16px;
-      color: var(--text-main);
-    }
-
-    .container {
-      width: 100%;
-      max-width: 380px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .card {
-      background: var(--card-bg);
-      border-radius: 20px;
-      padding: 24px 20px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #f1f5f9;
-      padding-bottom: 14px;
-      margin-bottom: 18px;
-    }
-
-    .brand-title {
-      font-size: 20px;
-      font-weight: 800;
-      color: var(--brand-color);
-      letter-spacing: -0.5px;
-    }
-
-    .cycle-badge {
-      background: #fef3c7;
-      color: #92400e;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .client-saludo {
-      margin-bottom: 16px;
-    }
-
-    .client-saludo h2 {
-      font-size: 18px;
-      font-weight: 700;
-      color: #0f172a;
-    }
-
-    .client-saludo p {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    /* Grid de Sellos */
-    .stamps-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin: 18px 0;
-    }
-
-    .stamp-slot {
-      aspect-ratio: 1;
-      border-radius: 14px;
-      border: 2px dashed #cbd5e1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 13px;
-      font-weight: 700;
-      color: #94a3b8;
-      transition: all 0.3s ease;
-    }
-
-    .stamp-slot.stamped {
-      border: 2px solid var(--brand-color);
-      background: #fff7ed;
-      color: var(--brand-color);
-      box-shadow: 0 4px 10px rgba(154, 52, 18, 0.15);
-    }
-
-    .stamp-slot.stamped svg {
-      width: 26px;
-      height: 26px;
-      fill: var(--brand-color);
-    }
-
-    /* Beneficio */
-    .benefit-box {
-      background: linear-gradient(135deg, #fff7ed, #ffedd5);
-      border: 1px solid #fed7aa;
-      border-radius: 14px;
-      padding: 14px;
-      text-align: center;
-      margin-top: 10px;
-    }
-
-    .benefit-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--brand-dark);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .benefit-amount {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--brand-color);
-      margin-top: 2px;
-    }
-
-    .benefit-info {
-      font-size: 11px;
-      color: #9a3412;
-      margin-top: 4px;
-    }
-
-    /* Promo Activa */
-    .promo-banner {
-      background: #f8fafc;
-      border-left: 4px solid var(--brand-color);
-      border-radius: 10px;
-      padding: 12px 14px;
-      display: none;
-    }
-
-    .promo-tag {
-      font-size: 10px;
-      font-weight: 800;
-      text-transform: uppercase;
-      color: var(--brand-color);
-      letter-spacing: 0.5px;
-    }
-
-    .promo-text {
-      font-size: 13px;
-      font-weight: 600;
-      color: #1e293b;
-      margin-top: 3px;
-      line-height: 1.35;
-    }
-
-    /* Footer KiboLab */
-    .kibo-footer {
-      text-align: center;
-      font-size: 11px;
-      color: #64748b;
-      margin-top: 4px;
-    }
-
-    .kibo-footer a {
-      color: #94a3b8;
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    /* Loader */
-    .loader {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 0;
-      color: var(--text-muted);
-      font-size: 13px;
-    }
-
-    .spinner {
-      width: 32px;
-      height: 32px;
-      border: 3px solid #e2e8f0;
-      border-top-color: var(--brand-color);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin-bottom: 12px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 1.5rem 1rem; }
+    .card { width: 100%; max-width: 400px; background: var(--card-bg); border-radius: 20px; padding: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid #44403c; }
+    .header { text-align: center; margin-bottom: 1.5rem; }
+    .header h1 { font-size: 1.6rem; color: #fbbf24; }
+    .header p { color: var(--text-muted); font-size: 0.9rem; }
+    .stamp-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.8rem; margin: 1.5rem 0; }
+    .stamp { aspect-ratio: 1; border-radius: 50%; background: var(--stamp-empty); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.3s; }
+    .stamp.active { background: var(--accent); color: white; transform: scale(1.05); }
+    .legal-card { margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
+    .footer { text-align: center; margin-top: 1.5rem; font-size: 0.75rem; color: #78716c; }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="card">
-      <div class="card-header">
-        <span class="brand-title">MACCHIA</span>
-        <span class="cycle-badge" id="lbl-ciclo">Ciclo 1</span>
-      </div>
-
-      <div id="loader-box" class="loader">
-        <div class="spinner"></div>
-        <span>Cargando tu tarjeta...</span>
-      </div>
-
-      <div id="card-content" style="display: none;">
-        <div class="client-saludo">
-          <h2 id="lbl-nombre">¡Hola!</h2>
-          <p id="lbl-meta">Completa tus sellos y gana tu beneficio</p>
-        </div>
-
-        <!-- Casilleros de sellos dinámicos -->
-        <div class="stamps-grid" id="stamps-container"></div>
-
-        <!-- Beneficio Acumulado -->
-        <div class="benefit-box">
-          <div class="benefit-label">Beneficio Acumulado de Ciclo</div>
-          <div class="benefit-amount" id="lbl-premio">0.00 BOB</div>
-          <div class="benefit-info" id="lbl-info-canje">Consumo mínimo para canje: 0 BOB</div>
-        </div>
-
-        <!-- Promoción Vigente -->
-        <div class="promo-banner" id="promo-box" style="margin-top: 14px;">
-          <span class="promo-tag">🔥 Promoción de Hoy</span>
-          <p class="promo-text" id="lbl-promo-texto"></p>
-        </div>
-      </div>
-      <!-- Bloque Legal / Términos del Beneficio -->
-<div class="legal-card" style="margin-top: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; font-size: 0.78rem; color: #94a3b8; line-height: 1.45;">
-  <div style="font-weight: 600; color: #cbd5e1; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
-    <span>⚖️</span> Términos y Condiciones del Beneficio
+<div class="card">
+  <div class="header">
+    <h1>☕ Macchia Café</h1>
+    <p>Tarjeta Digital de Fidelización</p>
+    <p style="margin-top:0.4rem; font-weight:600;" id="lbl-nombre">Cargando...</p>
   </div>
-  <ul style="padding-left: 1.2rem; margin: 0; space-y: 0.3rem;">
-    <li>Válido exclusivamente al completar los <strong>10 sellos</strong> del ciclo activo.</li>
-    <li><strong>Un solo uso:</strong> El beneficio se consume en su totalidad en una única visita.</li>
-    <li><strong>Sin saldo remanente:</strong> Si el importe consumido es menor al valor del beneficio, el saldo restante no queda acumulado ni disponible para futuras visitas.</li>
-    <li><strong>No canjeable por dinero:</strong> En ningún caso se devuelve cambio ni se liquida en efectivo.</li>
-    <li>Aplica con un <strong>consumo mínimo de 20 BOB</strong> en la visita de canje. No acumulable con otras promociones activas.</li>
-  </ul>
+
+  <div class="stamp-grid" id="stamp-container"></div>
+
+  <div style="text-align:center; margin-top: 0.5rem;">
+    <p id="lbl-estado" style="font-weight:600; color:#fbbf24;">Consultando sellos...</p>
+  </div>
+
+  <!-- Términos y Condiciones Legales -->
+  <div class="legal-card">
+    <div style="font-weight:600; color:#e7e5e4; margin-bottom:0.4rem;">⚖️ Términos y Condiciones del Beneficio:</div>
+    <ul style="padding-left:1.1rem; margin:0;">
+      <li>Válido exclusivamente al completar los sellos del ciclo.</li>
+      <li><strong>Un solo uso:</strong> Se consume en su totalidad en una única visita.</li>
+      <li><strong>Sin saldo remanente:</strong> No fraccionable ni acumulable para próximas visitas.</li>
+      <li><strong>No canjeable por dinero en efectivo.</strong></li>
+      <li>Aplica con consumo mínimo en la visita de canje.</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    Powered by <strong>Spike</strong> · KiboLab
+  </div>
 </div>
 
-      <div id="error-box" style="display:none; text-align:center; padding:20px; color:#ef4444; font-size:13px;"></div>
-    </div>
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXhjvfBEJC7XHMJi1jpkAXiAf-XYEW350sar7O29Zpl6LMF3HzAiLeaMCZHQNfWuBP6Q/exec";
 
-    <div class="kibo-footer">
-      Impulsado por <a href="https://kibolabs.com" target="_blank">KiboLab</a>
-    </div>
-  </div>
+  async function cargarTarjeta() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const clientId = urlParams.get('cli') || 'CLI-TEST';
 
-  <script>
-    // URL DE TU WEB APP EN GOOGLE APPS SCRIPT
-    // Reemplaza esto con tu URL real terminada en /exec
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXhjvfBEJC7XHMJi1jpkAXiAf-XYEW350sar7O29Zpl6LMF3HzAiLeaMCZHQNfWuBP6Q/exec";
-    const BIZ_ID = "MACCHIA";
+    try {
+      const res = await fetch(`${SCRIPT_URL}?action=getCliente&clientId=${clientId}`);
+      const data = await res.json();
 
-    function getParam(param) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(param);
-    }
-
-    async function cargarTarjeta() {
-      const cli = getParam("cli") || getParam("tel") || "";
-      
-      if (!cli) {
-        mostrarError("Enlace incompleto. Pide al cajero que te envíe tu enlace personal de tarjeta.");
-        return;
-      }
-
-      try {
-        const resp = await fetch(`${SCRIPT_URL}?biz=${BIZ_ID}&cli=${encodeURIComponent(cli)}&page=card_json`);
-        const data = await resp.json();
-
-        if (data.error) {
-          mostrarError(data.error);
-          return;
-        }
-
-        renderTarjeta(data);
-      } catch (err) {
-        // Fallback para pruebas si Apps Script devuelve la vista tradicional
-        mostrarError("No pudimos conectar con el servidor. Revisa tu conexión a internet.");
-      }
-    }
-
-    function renderTarjeta(d) {
-      document.getElementById("loader-box").style.display = "none";
-      document.getElementById("card-content").style.display = "block";
-
-      document.getElementById("lbl-ciclo").innerText = "Ciclo " + (d.cicloActual || 1);
-      document.getElementById("lbl-nombre").innerText = "¡Hola " + (d.clienteNombre ? d.clienteNombre.split(" ")[0] : "Cliente") + "!";
-      document.getElementById("lbl-premio").innerText = (d.premioDescuento || 0).toFixed(2) + " " + (d.moneda || "BOB");
-      
-      if (d.montoMinimoCanje > 0) {
-        document.getElementById("lbl-info-canje").innerText = "Consumo mínimo para canjear: " + d.montoMinimoCanje + " " + (d.moneda || "BOB");
+      if (data.success) {
+        document.getElementById('lbl-nombre').innerText = data.cliente.nombre;
+        renderSellos(data.cliente.sellosActuales, 10);
+        document.getElementById('lbl-estado').innerText = `${data.cliente.sellosActuales} de 10 sellos acumulados`;
       } else {
-        document.getElementById("lbl-info-canje").innerText = "¡Listo para aplicar en tu próxima compra!";
+        document.getElementById('lbl-nombre').innerText = "Cliente no encontrado";
+        renderSellos(0, 10);
       }
-
-      // Renderizar casilleros
-      const meta = d.targetPurchases || 8;
-      const sellos = d.sellos || 0;
-      const container = document.getElementById("stamps-container");
-      container.innerHTML = "";
-
-      const iconoTaza = `<svg viewBox="0 0 24 24"><path d="M2,21H20V19H2M20,8H18V5H20M20,3H4V13A4,4 0 0,0 8,17H14A4,4 0 0,0 18,13V10H20A2,2 0 0,0 22,8V5C22,3.89 21.1,3 20,3Z"/></svg>`;
-
-      for (let i = 1; i <= meta; i++) {
-        const slot = document.createElement("div");
-        slot.className = "stamp-slot" + (i <= sellos ? " stamped" : "");
-        slot.innerHTML = (i <= sellos) ? iconoTaza : i;
-        container.appendChild(slot);
-      }
-
-      // Promo
-      if (d.promoActiva) {
-        document.getElementById("lbl-promo-texto").innerText = d.promoActiva;
-        document.getElementById("promo-box").style.display = "block";
-      }
+    } catch(e) {
+      document.getElementById('lbl-nombre').innerText = "Modo Demo";
+      renderSellos(3, 10);
+      document.getElementById('lbl-estado').innerText = "3 de 10 sellos";
     }
+  }
 
-    function mostrarError(msg) {
-      document.getElementById("loader-box").style.display = "none";
-      const errBox = document.getElementById("error-box");
-      errBox.innerText = msg;
-      errBox.style.display = "block";
+  function renderSellos(actuales, meta) {
+    const container = document.getElementById('stamp-container');
+    container.innerHTML = '';
+    for (let i = 1; i <= meta; i++) {
+      const stamp = document.createElement('div');
+      stamp.className = 'stamp' + (i <= actuales ? ' active' : '');
+      stamp.innerText = i <= actuales ? '☕' : i;
+      container.appendChild(stamp);
     }
+  }
 
-    // Registrar Service Worker para PWA
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("sw.js").catch(() => {});
-      });
-    }
+  cargarTarjeta();
+</script>
 
-    window.onload = cargarTarjeta;
-  </script>
 </body>
 </html>
