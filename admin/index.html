@@ -428,6 +428,15 @@
       alert(res.error || "Error al cambiar la contraseña.");
     }
   }
+  <!-- Aviso visual en Caja cuando se activa Canje -->
+<div id="box-aviso-legal-canje" class="hidden" style="background: #451a03; border: 1px solid #b45309; padding: 0.85rem; border-radius: 8px; margin: 0.8rem 0; font-size: 0.82rem; color: #fde68a;">
+  <strong>⚠️ Recordatorio de Política de Canje:</strong>
+  <ul style="margin: 0.4rem 0 0 1.1rem; padding: 0;">
+    <li>Beneficio de <strong>un solo uso</strong>.</li>
+    <li><strong>No se devuelve efectivo</strong> ni queda saldo a favor.</li>
+    <li>Requiere consumo mínimo de <span id="lbl-min-canje-legal">20</span> BOB.</li>
+  </ul>
+</div>
 
   function cerrarSesion() {
     sesionActual = null;
