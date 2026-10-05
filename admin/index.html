@@ -55,7 +55,7 @@
 <div class="container">
   
   <div class="header">
-    <div class="badge-sub">KIBOLAB PLATFORM</div>
+    <div class="badge-sub">KIBO PLATFORM</div>
     <div class="title">Spike</div>
     <div class="subtitle">Terminal y Gestión de Fidelización</div>
   </div>
@@ -95,7 +95,7 @@
       <button class="tab-btn" onclick="verTab('tab-reglas', this)">Reglas de Negocio</button>
     </div>
 
-    <!-- TAB 1: CAJA -->
+    <!-- TAB 1: TERMINAL DE CAJA -->
     <div id="tab-caja" class="card">
       <div class="card-title">Registro en Mostrador</div>
       <div class="subtitle" style="margin-bottom: 1rem;">Otorga sellos o aplica canjes completados</div>
@@ -112,7 +112,7 @@
         <div style="font-weight:700;" id="cli-nombre">-</div>
         <div style="display:flex; justify-content:space-between; margin-top:0.4rem; font-size:0.85rem;">
           <span>Sellos: <strong id="cli-sellos" style="color:var(--accent);">0</strong></span>
-          <span>Premio Acumulado: <strong id="cli-premio" style="color:var(--success);">0 BOB</strong></span>
+          <span>Premio Ciclo: <strong id="cli-premio" style="color:var(--success);">0 BOB</strong></span>
         </div>
       </div>
 
@@ -218,13 +218,13 @@
   </div>
 
   <div class="footer">
-    Spike Loyalty Engine · KiboLab
+    Spike Loyalty Engine · Powered by KIBO
   </div>
 
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1TVAU452I84Q7LMz52QDS0YhFLEafHG7V12p-HXrH9gb2VyxOEX7aQxucH2z5m5LVEw/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXhjvfBEJC7XHMJi1jpkAXiAf-XYEW350sar7O29Zpl6LMF3HzAiLeaMCZHQNfWuBP6Q/exec";
   let sesionActual = null;
 
   async function callApi(action, payload = {}) {
@@ -279,7 +279,6 @@
     const res = await callApi('getConfig');
     if (res.success && res.config) {
       const c = res.config;
-      // Identidad Visual
       document.getElementById('cfg-nombre').value = c.NOMBRE_NEGOCIO || '';
       document.getElementById('cfg-color-hex').value = c.COLOR_CABECERA || '#020812';
       document.getElementById('cfg-color-picker').value = c.COLOR_CABECERA || '#020812';
@@ -287,7 +286,6 @@
       document.getElementById('cfg-stamp-url').value = c.STAMP_ICON || '';
       document.getElementById('cfg-pattern-url').value = c.BACKGROUND_PATTERN || '';
 
-      // Reglas
       document.getElementById('cfg-meta-sellos').value = c.COMPRAS_PARA_CICLO || 10;
       document.getElementById('cfg-min-sello').value = c.MONTO_MINIMO_SELLO || 15;
       document.getElementById('cfg-min-canje').value = c.MONTO_MINIMO_CANJE || 20;
