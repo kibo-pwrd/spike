@@ -3,38 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tarjeta de Fidelización</title>
+  <title>Macchia Café · Tarjeta de Fidelización</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: #020812;
+      --card-bg: #07101f;
+      --accent: #d97706;
+      --gold: #f59e0b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.1);
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
     body {
-      background: #020812;
-      color: #f8fafc;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 1.5rem 1rem;
-      transition: background 0.3s ease;
     }
     .card-wrap {
       width: 100%;
       max-width: 390px;
-      background: #020812;
+      background: var(--card-bg);
       border-radius: 24px;
       padding: 1.8rem;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
       position: relative;
       overflow: hidden;
-      transition: background 0.3s ease;
     }
     .bg-pattern {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
       opacity: 0.15;
+      background-image: url('https://lh3.googleusercontent.com/d/13Dsw1PEAiziJm8-DB_F5zR4TjmIVaGKo');
       background-size: cover;
       background-position: center;
       pointer-events: none;
@@ -42,26 +50,27 @@
     .header {
       position: relative;
       text-align: center;
-      margin-bottom: 1.6rem;
+      margin-bottom: 1.5rem;
       z-index: 1;
     }
     .brand-logo {
-      max-height: 60px;
-      max-width: 200px;
+      max-height: 55px;
+      max-width: 180px;
       object-fit: contain;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.6rem;
       display: block;
       margin-left: auto;
       margin-right: auto;
     }
     .client-greeting {
-      font-size: 0.8rem;
-      color: #94a3b8;
+      font-size: 0.75rem;
+      color: #cbd5e1;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
+      font-weight: 600;
     }
     .client-name {
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       font-weight: 700;
       color: #ffffff;
       margin-top: 0.2rem;
@@ -71,7 +80,7 @@
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 0.75rem;
-      margin: 1.5rem 0;
+      margin: 1.4rem 0;
       z-index: 1;
     }
     .stamp-slot {
@@ -86,9 +95,9 @@
       position: relative;
     }
     .stamp-slot.active {
-      background: rgba(255, 255, 255, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      background: rgba(217, 119, 6, 0.2);
+      border: 1px solid rgba(245, 158, 11, 0.6);
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
     }
     .stamp-img {
       width: 70%;
@@ -104,28 +113,28 @@
       position: relative;
       text-align: center;
       margin-top: 1rem;
-      padding: 0.9rem;
+      padding: 0.85rem;
       border-radius: 12px;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.08);
       z-index: 1;
     }
     .status-count {
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
       color: #f8fafc;
     }
     .reward-text {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: #94a3b8;
-      margin-top: 0.3rem;
+      margin-top: 0.25rem;
     }
     .legal-box {
       position: relative;
-      margin-top: 1.5rem;
+      margin-top: 1.4rem;
       padding: 0.85rem;
       border-radius: 10px;
-      background: rgba(0, 0, 0, 0.35);
+      background: rgba(0, 0, 0, 0.4);
       border: 1px solid rgba(255, 255, 255, 0.06);
       font-size: 0.72rem;
       color: #64748b;
@@ -133,11 +142,11 @@
       z-index: 1;
     }
     .legal-title {
-      font-weight: 600;
+      font-weight: 700;
       color: #94a3b8;
       margin-bottom: 0.35rem;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
     }
     .legal-box ul {
       padding-left: 1rem;
@@ -146,7 +155,7 @@
     .footer {
       position: relative;
       text-align: center;
-      margin-top: 1.4rem;
+      margin-top: 1.3rem;
       font-size: 0.72rem;
       color: #475569;
       letter-spacing: 0.05em;
@@ -160,16 +169,16 @@
   <div class="bg-pattern" id="bg-pattern-layer"></div>
 
   <div class="header">
-    <img id="img-logo" class="brand-logo" alt="Logo" style="display:none;">
+    <img id="img-logo" class="brand-logo" src="https://lh3.googleusercontent.com/d/1IOQYQ91fVdU1fmG4AIdDQDoZF2YGQZJH" alt="Macchia Café">
     <div class="client-greeting">Tarjeta de Fidelización</div>
-    <div class="client-name" id="lbl-cliente-nombre">Cargando...</div>
+    <div class="client-name" id="lbl-cliente-nombre">Cliente</div>
   </div>
 
   <div class="stamps-grid" id="grid-sellos"></div>
 
   <div class="status-box">
-    <div class="status-count" id="lbl-sellos-count">Consultando sellos...</div>
-    <div class="reward-text" id="lbl-premio-detalle">Por favor espera un momento</div>
+    <div class="status-count" id="lbl-sellos-count">0 de 10 sellos acumulados</div>
+    <div class="reward-text" id="lbl-premio-detalle">Completa 10 sellos para desbloquear tu beneficio</div>
   </div>
 
   <div class="legal-box">
@@ -189,71 +198,20 @@
 
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXhjvfBEJC7XHMJi1jpkAXiAf-XYEW350sar7O29Zpl6LMF3HzAiLeaMCZHQNfWuBP6Q/exec";
-
-  async function inicializarTarjeta() {
-    const params = new URLSearchParams(window.location.search);
-    const idCliente = params.get('cli') || 'CLI-PRUEBA';
-
-    try {
-      const resCfg = await fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json());
-      if (resCfg.success) {
-        const c = resCfg.config;
-
-        // Cargar logo
-        if (c.LOGO_URL) {
-          const logoEl = document.getElementById('img-logo');
-          logoEl.src = c.LOGO_URL;
-          logoEl.style.display = 'block';
-        }
-
-        // Cargar color corporativo
-        if (c.COLOR_CABECERA) {
-          document.body.style.background = c.COLOR_CABECERA;
-          document.getElementById('card-element').style.background = c.COLOR_CABECERA;
-        }
-
-        // Cargar trama de fondo
-        if (c.BACKGROUND_PATTERN) {
-          document.getElementById('bg-pattern-layer').style.backgroundImage = `url('${c.BACKGROUND_PATTERN}')`;
-        }
-
-        const metaSellos = Number(c.COMPRAS_PARA_CICLO) || 10;
-
-        // Cargar datos del cliente
-        const resCli = await fetch(`${SCRIPT_URL}?action=getCliente&idCliente=${idCliente}`).then(r => r.json());
-        if (resCli.success) {
-          const cli = resCli.cliente;
-          document.getElementById('lbl-cliente-nombre').innerText = cli.nombre;
-          document.getElementById('lbl-sellos-count').innerText = `${cli.sellosActuales} de ${metaSellos} sellos`;
-
-          if (cli.sellosActuales >= metaSellos) {
-            document.getElementById('lbl-premio-detalle').innerText = `¡Meta alcanzada! Beneficio disponible: ${cli.premioCalculado} BOB`;
-          } else {
-            document.getElementById('lbl-premio-detalle').innerText = `Acumula ${metaSellos} sellos para desbloquear tu beneficio`;
-          }
-
-          dibujarSellos(cli.sellosActuales, metaSellos, c.STAMP_ICON);
-        } else {
-          document.getElementById('lbl-cliente-nombre').innerText = "Cliente Demo";
-          document.getElementById('lbl-sellos-count').innerText = `0 de ${metaSellos} sellos`;
-          dibujarSellos(0, metaSellos, c.STAMP_ICON);
-        }
-      }
-    } catch (e) {
-      console.error("Error al cargar tarjeta:", e);
-    }
-  }
+  const DEFAULT_STAMP_ICON = "https://lh3.googleusercontent.com/d/1WzFb7rEBFlYu3sQGGo2o_yRq5u8lcNbG";
 
   function dibujarSellos(actuales, meta, stampIconUrl) {
     const grid = document.getElementById('grid-sellos');
     grid.innerHTML = '';
+    const icon = stampIconUrl || DEFAULT_STAMP_ICON;
+
     for (let i = 1; i <= meta; i++) {
       const slot = document.createElement('div');
       slot.className = 'stamp-slot' + (i <= actuales ? ' active' : '');
 
-      if (i <= actuales && stampIconUrl) {
+      if (i <= actuales) {
         const img = document.createElement('img');
-        img.src = stampIconUrl;
+        img.src = icon;
         img.className = 'stamp-img';
         slot.appendChild(img);
       } else {
@@ -266,7 +224,50 @@
     }
   }
 
-  inicializarTarjeta();
+  // Render inicial inmediato para evitar pantallas vacías
+  dibujarSellos(0, 10, DEFAULT_STAMP_ICON);
+
+  async function cargarDatosReales() {
+    const params = new URLSearchParams(window.location.search);
+    const idCliente = params.get('cli') || 'CLI-43707392';
+
+    try {
+      // 1. Obtener reglas y branding
+      const resCfg = await fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json());
+      let metaSellos = 10;
+      let stampIcon = DEFAULT_STAMP_ICON;
+
+      if (resCfg.success && resCfg.config) {
+        const c = resCfg.config;
+        if (c.LOGO_URL) document.getElementById('img-logo').src = c.LOGO_URL;
+        if (c.STAMP_ICON) stampIcon = c.STAMP_ICON;
+        metaSellos = Number(c.COMPRAS_PARA_CICLO) || 10;
+      }
+
+      // 2. Obtener datos del cliente
+      const resCli = await fetch(`${SCRIPT_URL}?action=getCliente&idCliente=${idCliente}`).then(r => r.json());
+      if (resCli.success && resCli.cliente) {
+        const cli = resCli.cliente;
+        document.getElementById('lbl-cliente-nombre').innerText = cli.nombre;
+        document.getElementById('lbl-sellos-count').innerText = `${cli.sellosActuales} de ${metaSellos} sellos`;
+
+        if (cli.sellosActuales >= metaSellos) {
+          document.getElementById('lbl-premio-detalle').innerText = `Ciclo completado. Beneficio disponible: ${cli.premioCalculado} BOB`;
+        } else {
+          document.getElementById('lbl-premio-detalle').innerText = `Acumula ${metaSellos} sellos para desbloquear tu beneficio`;
+        }
+
+        dibujarSellos(cli.sellosActuales, metaSellos, stampIcon);
+      } else {
+        document.getElementById('lbl-cliente-nombre').innerText = "Cliente Invitado";
+        dibujarSellos(0, metaSellos, stampIcon);
+      }
+    } catch (e) {
+      console.warn("Modo visual local activo:", e);
+    }
+  }
+
+  cargarDatosReales();
 </script>
 
 </body>
