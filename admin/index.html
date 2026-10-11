@@ -103,7 +103,7 @@
       <div class="form-group">
         <label>Identificador del Cliente (Código o WhatsApp)</label>
         <div style="display:flex; gap:0.5rem;">
-          <input type="text" id="txt-cli-id" placeholder="CLI-PRUEBA">
+          <input type="text" id="txt-cli-id" placeholder="CLI-43707392" value="CLI-43707392">
           <button class="btn btn-primary btn-sm" onclick="buscarCliente()">Buscar</button>
         </div>
       </div>
@@ -112,7 +112,7 @@
         <div style="font-weight:700;" id="cli-nombre">-</div>
         <div style="display:flex; justify-content:space-between; margin-top:0.4rem; font-size:0.85rem;">
           <span>Sellos: <strong id="cli-sellos" style="color:var(--accent);">0</strong></span>
-          <span>Premio Ciclo: <strong id="cli-premio" style="color:var(--success);">0 BOB</strong></span>
+          <span>Premio Acumulado: <strong id="cli-premio" style="color:var(--success);">0 BOB</strong></span>
         </div>
       </div>
 
@@ -145,30 +145,30 @@
 
       <div class="form-group">
         <label>Nombre Comercial</label>
-        <input type="text" id="cfg-nombre">
+        <input type="text" id="cfg-nombre" value="Macchia Café">
       </div>
 
       <div class="form-group">
         <label>Color de Cabecera y Fondo</label>
         <div class="color-row">
-          <input type="color" id="cfg-color-picker" class="color-picker" onchange="document.getElementById('cfg-color-hex').value = this.value">
-          <input type="text" id="cfg-color-hex" placeholder="#020812" onchange="document.getElementById('cfg-color-picker').value = this.value">
+          <input type="color" id="cfg-color-picker" class="color-picker" value="#020812" onchange="document.getElementById('cfg-color-hex').value = this.value">
+          <input type="text" id="cfg-color-hex" value="#020812" onchange="document.getElementById('cfg-color-picker').value = this.value">
         </div>
       </div>
 
       <div class="form-group">
         <label>URL del Logo</label>
-        <input type="text" id="cfg-logo-url" placeholder="https://lh3.googleusercontent.com/d/...">
+        <input type="text" id="cfg-logo-url" value="https://lh3.googleusercontent.com/d/1IOQYQ91fVdU1fmG4AIdDQDoZF2YGQZJH">
       </div>
 
       <div class="form-group">
         <label>URL del Ícono de Sello</label>
-        <input type="text" id="cfg-stamp-url" placeholder="https://lh3.googleusercontent.com/d/...">
+        <input type="text" id="cfg-stamp-url" value="https://lh3.googleusercontent.com/d/1WzFb7rEBFlYu3sQGGo2o_yRq5u8lcNbG">
       </div>
 
       <div class="form-group">
         <label>URL de la Trama de Fondo (Background Pattern)</label>
-        <input type="text" id="cfg-pattern-url" placeholder="https://lh3.googleusercontent.com/d/...">
+        <input type="text" id="cfg-pattern-url" value="https://lh3.googleusercontent.com/d/13Dsw1PEAiziJm8-DB_F5zR4TjmIVaGKo">
       </div>
 
       <button class="btn btn-primary" onclick="guardarBranding()">Guardar Identidad Visual</button>
@@ -181,35 +181,35 @@
 
       <div class="form-group">
         <label>Compras para completar ciclo (Meta de Sellos)</label>
-        <input type="number" id="cfg-meta-sellos">
+        <input type="number" id="cfg-meta-sellos" value="10">
       </div>
 
       <div class="form-group">
         <label>Compra mínima para otorgar sello (BOB)</label>
-        <input type="number" id="cfg-min-sello" step="0.5">
+        <input type="number" id="cfg-min-sello" step="0.5" value="15">
       </div>
 
       <div class="form-group">
         <label>Consumo mínimo obligatorio para canjear (BOB)</label>
-        <input type="number" id="cfg-min-canje" step="0.5">
+        <input type="number" id="cfg-min-canje" step="0.5" value="20">
       </div>
 
       <div class="form-group">
         <label>Modalidad de Beneficio</label>
         <select id="cfg-tipo-premio" onchange="toggleTipoPremio()">
-          <option value="PORCENTAJE">% de las compras acumuladas en el ciclo</option>
+          <option value="PORCENTAJE" selected>% de las compras acumuladas en el ciclo</option>
           <option value="FIJO">Beneficio directo / Monto fijo en dinero (BOB)</option>
         </select>
       </div>
 
       <div class="form-group" id="grp-porcentaje">
         <label>% de Recompensa sobre acumulado del ciclo</label>
-        <input type="number" id="cfg-premio-pct" step="0.5">
+        <input type="number" id="cfg-premio-pct" step="0.5" value="10">
       </div>
 
       <div class="form-group hidden" id="grp-fijo">
         <label>Valor fijo del beneficio (BOB)</label>
-        <input type="number" id="cfg-premio-fijo" step="0.5">
+        <input type="number" id="cfg-premio-fijo" step="0.5" value="15">
       </div>
 
       <button class="btn btn-primary" onclick="guardarReglasComerciales()">Guardar Reglas</button>
@@ -240,17 +240,21 @@
     const email = document.getElementById('txt-email').value;
     const password = document.getElementById('txt-pass').value;
 
-    const res = await callApi('login', { email, password });
-    if (res.success) {
-      sesionActual = res.usuario;
-      document.getElementById('lbl-user-nombre').innerText = sesionActual.nombre;
-      document.getElementById('lbl-user-rol').innerText = sesionActual.rol;
+    try {
+      const res = await callApi('login', { email, password });
+      if (res.success) {
+        sesionActual = res.usuario;
+        document.getElementById('lbl-user-nombre').innerText = sesionActual.nombre;
+        document.getElementById('lbl-user-rol').innerText = sesionActual.rol;
 
-      document.getElementById('view-login').classList.add('hidden');
-      document.getElementById('view-panel').classList.remove('hidden');
-      cargarConfiguracion();
-    } else {
-      alert(res.error || "Credenciales incorrectas.");
+        document.getElementById('view-login').classList.add('hidden');
+        document.getElementById('view-panel').classList.remove('hidden');
+        cargarConfiguracion();
+      } else {
+        alert(res.error || "Credenciales incorrectas.");
+      }
+    } catch (e) {
+      alert("Error de conexión al servidor.");
     }
   }
 
@@ -276,23 +280,29 @@
   }
 
   async function cargarConfiguracion() {
-    const res = await callApi('getConfig');
-    if (res.success && res.config) {
-      const c = res.config;
-      document.getElementById('cfg-nombre').value = c.NOMBRE_NEGOCIO || '';
-      document.getElementById('cfg-color-hex').value = c.COLOR_CABECERA || '#020812';
-      document.getElementById('cfg-color-picker').value = c.COLOR_CABECERA || '#020812';
-      document.getElementById('cfg-logo-url').value = c.LOGO_URL || '';
-      document.getElementById('cfg-stamp-url').value = c.STAMP_ICON || '';
-      document.getElementById('cfg-pattern-url').value = c.BACKGROUND_PATTERN || '';
+    try {
+      const res = await callApi('getConfig');
+      if (res.success && res.config) {
+        const c = res.config;
+        if (c.NOMBRE_NEGOCIO) document.getElementById('cfg-nombre').value = c.NOMBRE_NEGOCIO;
+        if (c.COLOR_CABECERA) {
+          document.getElementById('cfg-color-hex').value = c.COLOR_CABECERA;
+          document.getElementById('cfg-color-picker').value = c.COLOR_CABECERA;
+        }
+        if (c.LOGO_URL) document.getElementById('cfg-logo-url').value = c.LOGO_URL;
+        if (c.STAMP_ICON) document.getElementById('cfg-stamp-url').value = c.STAMP_ICON;
+        if (c.BACKGROUND_PATTERN) document.getElementById('cfg-pattern-url').value = c.BACKGROUND_PATTERN;
 
-      document.getElementById('cfg-meta-sellos').value = c.COMPRAS_PARA_CICLO || 10;
-      document.getElementById('cfg-min-sello').value = c.MONTO_MINIMO_SELLO || 15;
-      document.getElementById('cfg-min-canje').value = c.MONTO_MINIMO_CANJE || 20;
-      document.getElementById('cfg-tipo-premio').value = c.TIPO_PREMIO || 'PORCENTAJE';
-      document.getElementById('cfg-premio-pct').value = c.PCT_RECOMPENSA || 10;
-      document.getElementById('cfg-premio-fijo').value = c.VALOR_PREMIO_FIJO || 15;
-      toggleTipoPremio();
+        if (c.COMPRAS_PARA_CICLO) document.getElementById('cfg-meta-sellos').value = c.COMPRAS_PARA_CICLO;
+        if (c.MONTO_MINIMO_SELLO) document.getElementById('cfg-min-sello').value = c.MONTO_MINIMO_SELLO;
+        if (c.MONTO_MINIMO_CANJE) document.getElementById('cfg-min-canje').value = c.MONTO_MINIMO_CANJE;
+        if (c.TIPO_PREMIO) document.getElementById('cfg-tipo-premio').value = c.TIPO_PREMIO;
+        if (c.PCT_RECOMPENSA) document.getElementById('cfg-premio-pct').value = c.PCT_RECOMPENSA;
+        if (c.VALOR_PREMIO_FIJO) document.getElementById('cfg-premio-fijo').value = c.VALOR_PREMIO_FIJO;
+        toggleTipoPremio();
+      }
+    } catch (e) {
+      console.warn("Usando configuración predeterminada.");
     }
   }
 
@@ -304,8 +314,8 @@
       STAMP_ICON: document.getElementById('cfg-stamp-url').value,
       BACKGROUND_PATTERN: document.getElementById('cfg-pattern-url').value
     });
-    if (res.success) alert("¡Identidad visual actualizada!");
-    else alert(res.error || "Error al guardar");
+    if (res.success) alert("¡Identidad visual actualizada con éxito!");
+    else alert(res.error || "Error al guardar branding.");
   }
 
   async function guardarReglasComerciales() {
@@ -317,8 +327,8 @@
       PCT_RECOMPENSA: document.getElementById('cfg-premio-pct').value,
       VALOR_PREMIO_FIJO: document.getElementById('cfg-premio-fijo').value
     });
-    if (res.success) alert("¡Reglas comerciales actualizadas!");
-    else alert(res.error || "Error al guardar");
+    if (res.success) alert("¡Reglas comerciales actualizadas con éxito!");
+    else alert(res.error || "Error al guardar reglas.");
   }
 
   async function buscarCliente() {
@@ -326,7 +336,7 @@
     if (!cid) return alert("Escribe un identificador o teléfono.");
 
     const res = await callApi('getCliente', { idCliente: cid });
-    if (res.success) {
+    if (res.success && res.cliente) {
       const c = res.cliente;
       document.getElementById('cli-nombre').innerText = c.nombre;
       document.getElementById('cli-sellos').innerText = c.sellosActuales;
@@ -357,7 +367,7 @@
     });
 
     if (res.success) {
-      alert("¡Operación completada! Sellos actuales: " + res.sellosActuales);
+      alert("¡Operación completada con éxito!");
       document.getElementById('txt-monto').value = '';
       buscarCliente();
     } else {
