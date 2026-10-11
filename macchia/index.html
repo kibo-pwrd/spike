@@ -9,22 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --macchia-bg: #020812;
+      --brand-color: #020812;
       --accent: #d97706;
       --gold: #f59e0b;
-      --text: #f8fafc;
-      --text-muted: #cbd5e1;
-      
-      /* Transparencias estándar de blanco sobre fondo de marca */
-      --glass-surface: rgba(255, 255, 255, 0.05);
-      --glass-surface-hover: rgba(255, 255, 255, 0.08);
-      --glass-border: rgba(255, 255, 255, 0.12);
-      --glass-border-subtle: rgba(255, 255, 255, 0.08);
+      --text-main: #0f172a;
+      --text-muted: #475569;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
     body {
-      background: var(--macchia-bg);
-      color: var(--text);
+      background: #020812;
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -32,38 +25,26 @@
       padding: 1.5rem 1rem;
     }
 
-    /* Tarjeta envuelta al 100% por el color y la trama del negocio */
+    /* Contenedor Principal de la Tarjeta */
     .card-wrap {
       width: 100%;
       max-width: 390px;
-      background: var(--macchia-bg);
+      background: #ffffff;
       border-radius: 26px;
-      border: 1px solid var(--glass-border);
       box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
       position: relative;
       overflow: hidden;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
-    /* Trama continua de fondo en toda la tarjeta */
-    .bg-pattern {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      opacity: 0.14;
-      background-image: url('https://lh3.googleusercontent.com/d/13Dsw1PEAiziJm8-DB_F5zR4TjmIVaGKo');
-      background-size: cover;
-      background-position: center;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* Soporte superior para el Logo integrado */
+    /* 1. CABECERA DE MARCA DEDICADA */
     .brand-header {
-      position: relative;
-      padding: 2.2rem 1.5rem 1.2rem;
+      background: var(--brand-color);
+      padding: 2rem 1.5rem 1.6rem;
       text-align: center;
-      z-index: 1;
+      position: relative;
+      z-index: 2;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
     .brand-logo {
       max-height: 62px;
@@ -71,106 +52,125 @@
       object-fit: contain;
       display: block;
       margin: 0 auto;
-      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.7));
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
     }
 
-    /* Contenido sobre capas translúcidas */
-    .card-body {
+    /* 2. CUERPO INFERIOR: Trama de fondo + Capa de blanco degradado */
+    .card-body-wrapper {
       position: relative;
-      padding: 0 1.5rem 2rem;
+      background-color: #020812;
+      overflow: hidden;
+    }
+
+    /* Capa A: Trama del Cliente */
+    .bg-pattern {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url('https://lh3.googleusercontent.com/d/13Dsw1PEAiziJm8-DB_F5zR4TjmIVaGKo');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.35;
       z-index: 1;
+    }
+
+    /* Capa B: Degradado blanco translúcido para contraste perfecto */
+    .white-gradient-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.94) 50%, rgba(255, 255, 255, 0.98) 100%);
+      z-index: 2;
+    }
+
+    /* Capa C: Contenido activo */
+    .card-content {
+      position: relative;
+      padding: 1.6rem 1.5rem 1.8rem;
+      z-index: 3;
     }
 
     .client-section {
       text-align: center;
-      margin-bottom: 1.3rem;
+      margin-bottom: 1.4rem;
     }
     .client-name {
-      font-size: 1.35rem;
+      font-size: 1.4rem;
       font-weight: 800;
       letter-spacing: -0.01em;
-      color: #ffffff;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      color: var(--text-main);
     }
 
     /* Grilla de Sellos */
     .stamps-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 0.75rem;
+      gap: 0.7rem;
       margin-bottom: 1.3rem;
     }
     .stamp-slot {
       aspect-ratio: 1;
       border-radius: 13px;
-      background: var(--glass-surface);
-      border: 1px dashed var(--glass-border);
+      background: rgba(255, 255, 255, 0.7);
+      border: 1.5px dashed rgba(15, 23, 42, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.25s ease;
-      position: relative;
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     }
     .stamp-slot.active {
-      background: rgba(217, 119, 6, 0.22);
-      border: 1px solid rgba(245, 158, 11, 0.75);
-      box-shadow: 0 4px 16px rgba(217, 119, 6, 0.4);
+      background: rgba(217, 119, 6, 0.12);
+      border: 1.5px solid var(--accent);
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25);
     }
     .stamp-img {
-      width: 72%;
-      height: 72%;
+      width: 70%;
+      height: 70%;
       object-fit: contain;
-      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.6));
     }
     .stamp-number {
       font-size: 0.85rem;
       font-weight: 700;
-      color: rgba(255, 255, 255, 0.4);
+      color: #94a3b8;
     }
 
-    /* Caja de Estado con transparencia */
+    /* Caja de Estado */
     .status-box {
       text-align: center;
-      padding: 0.9rem 1rem;
+      padding: 0.85rem 1rem;
       border-radius: 14px;
-      background: var(--glass-surface);
-      border: 1px solid var(--glass-border-subtle);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     }
     .status-count {
       font-size: 0.95rem;
-      font-weight: 700;
-      color: #ffffff;
+      font-weight: 800;
+      color: var(--text-main);
     }
     .reward-text {
       font-size: 0.8rem;
       color: var(--text-muted);
       margin-top: 0.25rem;
+      font-weight: 500;
     }
 
-    /* Términos Legales sobre fondo translúcido blanco */
+    /* Condiciones Legales de Boutique */
     .legal-box {
       margin-top: 1.3rem;
-      padding: 0.9rem 1rem;
+      padding: 0.85rem 1rem;
       border-radius: 12px;
-      background: rgba(255, 255, 255, 0.035);
-      border: 1px solid var(--glass-border-subtle);
+      background: rgba(255, 255, 255, 0.65);
+      border: 1px solid rgba(15, 23, 42, 0.06);
       font-size: 0.72rem;
       color: var(--text-muted);
       line-height: 1.45;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
     }
     .legal-title {
       font-weight: 700;
-      color: #ffffff;
+      color: var(--text-main);
       margin-bottom: 0.35rem;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
-      opacity: 0.9;
+      letter-spacing: 0.05em;
     }
     .legal-box ul {
       padding-left: 1.1rem;
@@ -179,53 +179,56 @@
 
     .footer {
       text-align: center;
-      margin-top: 1.4rem;
+      margin-top: 1.3rem;
       font-size: 0.72rem;
-      color: rgba(255, 255, 255, 0.35);
+      color: #94a3b8;
+      font-weight: 600;
       letter-spacing: 0.05em;
     }
   </style>
 </head>
 <body>
 
-<div class="card-wrap" id="card-element">
-  <div class="bg-pattern" id="bg-pattern-layer"></div>
-
-  <!-- Cabecera de Logo limpia sobre la trama del negocio -->
-  <div class="brand-header">
+<div class="card-wrap">
+  
+  <!-- 1. CABECERA DE MARCA (Color de cabecera que identifica a la marca) -->
+  <div class="brand-header" id="brand-header">
     <img id="img-logo" class="brand-logo" src="https://lh3.googleusercontent.com/d/1IOQYQ91fVdU1fmG4AIdDQDoZF2YGQZJH" alt="Macchia">
   </div>
 
-  <div class="card-body">
-    <!-- Nombre directo del Cliente -->
-    <div class="client-section">
-      <div class="client-name" id="lbl-cliente-nombre">Cliente</div>
-    </div>
+  <!-- 2. CUERPO INFERIOR (Trama + degradado blanco superpuesto) -->
+  <div class="card-body-wrapper">
+    <div class="bg-pattern" id="bg-pattern-layer"></div>
+    <div class="white-gradient-overlay"></div>
 
-    <!-- Grilla de Sellos -->
-    <div class="stamps-grid" id="grid-sellos"></div>
+    <div class="card-content">
+      <div class="client-section">
+        <div class="client-name" id="lbl-cliente-nombre">Cliente</div>
+      </div>
 
-    <!-- Estado de Sellos y Beneficio -->
-    <div class="status-box">
-      <div class="status-count" id="lbl-sellos-count">0 de 10 sellos acumulados</div>
-      <div class="reward-text" id="lbl-premio-detalle">Completa 10 sellos para desbloquear tu beneficio</div>
-    </div>
+      <div class="stamps-grid" id="grid-sellos"></div>
 
-    <!-- Condiciones Legales -->
-    <div class="legal-box">
-      <div class="legal-title">Condiciones del Beneficio</div>
-      <ul>
-        <li>Beneficio de un solo uso por ciclo completado.</li>
-        <li>No acumulable ni fraccionable en saldo remanente.</li>
-        <li>No transferible ni liquidable en dinero en efectivo.</li>
-        <li>Aplica con el consumo mínimo establecido en boutique.</li>
-      </ul>
-    </div>
+      <div class="status-box">
+        <div class="status-count" id="lbl-sellos-count">0 de 10 sellos acumulados</div>
+        <div class="reward-text" id="lbl-premio-detalle">Completa 10 sellos para desbloquear tu beneficio</div>
+      </div>
 
-    <div class="footer">
-      Powered by KIBO
+      <div class="legal-box">
+        <div class="legal-title">Condiciones del Beneficio</div>
+        <ul>
+          <li>Beneficio de un solo uso por ciclo completado.</li>
+          <li>No acumulable ni fraccionable en saldo remanente.</li>
+          <li>No transferible ni liquidable en dinero en efectivo.</li>
+          <li>Aplica con el consumo mínimo establecido en boutique.</li>
+        </ul>
+      </div>
+
+      <div class="footer">
+        Powered by KIBO
+      </div>
     </div>
   </div>
+
 </div>
 
 <script>
@@ -256,7 +259,6 @@
     }
   }
 
-  // Pintar ranuras iniciales
   dibujarSellos(0, 10, DEFAULT_STAMP_ICON);
 
   async function cargarDatosReales() {
@@ -264,17 +266,16 @@
     const idCliente = params.get('cli') || 'CLI-43707392';
 
     try {
-      // 1. Configuración de Marca y Reglas
       const resCfg = await fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json());
       let metaSellos = 10;
       let stampIcon = DEFAULT_STAMP_ICON;
 
-      if (resCfg.success && resCfg.config) {
+      if (resCfg && resCfg.success && resCfg.config) {
         const c = resCfg.config;
         if (c.LOGO_URL) document.getElementById('img-logo').src = c.LOGO_URL;
         if (c.COLOR_CABECERA) {
+          document.getElementById('brand-header').style.background = c.COLOR_CABECERA;
           document.body.style.background = c.COLOR_CABECERA;
-          document.getElementById('card-element').style.background = c.COLOR_CABECERA;
         }
         if (c.BACKGROUND_PATTERN) {
           document.getElementById('bg-pattern-layer').style.backgroundImage = `url('${c.BACKGROUND_PATTERN}')`;
@@ -283,9 +284,8 @@
         metaSellos = Number(c.COMPRAS_PARA_CICLO) || 10;
       }
 
-      // 2. Datos del Cliente
       const resCli = await fetch(`${SCRIPT_URL}?action=getCliente&idCliente=${idCliente}`).then(r => r.json());
-      if (resCli.success && resCli.cliente) {
+      if (resCli && resCli.success && resCli.cliente) {
         const cli = resCli.cliente;
         document.getElementById('lbl-cliente-nombre').innerText = cli.nombre;
         document.getElementById('lbl-sellos-count').innerText = `${cli.sellosActuales} de ${metaSellos} sellos`;
