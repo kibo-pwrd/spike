@@ -9,10 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #020812;
-      --card-bg: #060d1a;
-      --header-bg: #0b1528;
-      --header-border: rgba(255, 255, 255, 0.08);
+      --macchia-bg: #020812;
+      --macchia-card: #040d1c;
+      --header-bg: #020812;
       --accent: #d97706;
       --gold: #f59e0b;
       --text: #f8fafc;
@@ -21,7 +20,7 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
     body {
-      background: var(--bg);
+      background: var(--macchia-bg);
       color: var(--text);
       min-height: 100vh;
       display: flex;
@@ -32,10 +31,10 @@
     .card-wrap {
       width: 100%;
       max-width: 390px;
-      background: var(--card-bg);
+      background: var(--macchia-card);
       border-radius: 24px;
       border: 1px solid var(--border);
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
       position: relative;
       overflow: hidden;
     }
@@ -50,12 +49,12 @@
       z-index: 0;
     }
 
-    /* Cabecera con fondo de soporte para el Logo */
+    /* Cabecera con fondo #020812 para soporte de Logo */
     .brand-header-band {
       position: relative;
       background: var(--header-bg);
-      border-bottom: 1px solid var(--header-border);
-      padding: 1.8rem 1.5rem 1.4rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 2rem 1.5rem 1.5rem;
       text-align: center;
       z-index: 1;
     }
@@ -65,7 +64,7 @@
       object-fit: contain;
       display: block;
       margin: 0 auto;
-      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
     }
 
     /* Cuerpo de la Tarjeta */
@@ -95,8 +94,8 @@
     .stamp-slot {
       aspect-ratio: 1;
       border-radius: 12px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px dashed rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px dashed rgba(255, 255, 255, 0.15);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -104,20 +103,20 @@
       position: relative;
     }
     .stamp-slot.active {
-      background: rgba(217, 119, 6, 0.2);
-      border: 1px solid rgba(245, 158, 11, 0.7);
+      background: rgba(217, 119, 6, 0.18);
+      border: 1px solid rgba(245, 158, 11, 0.65);
       box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
     }
     .stamp-img {
       width: 70%;
       height: 70%;
       object-fit: contain;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
     }
     .stamp-number {
       font-size: 0.85rem;
       font-weight: 600;
-      color: #64748b;
+      color: #475569;
     }
 
     /* Caja de Estado */
@@ -125,8 +124,8 @@
       text-align: center;
       padding: 0.85rem 1rem;
       border-radius: 12px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.06);
     }
     .status-count {
       font-size: 0.95rem;
@@ -144,7 +143,7 @@
       margin-top: 1.3rem;
       padding: 0.85rem 1rem;
       border-radius: 10px;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.45);
       border: 1px solid rgba(255, 255, 255, 0.05);
       font-size: 0.72rem;
       color: #64748b;
@@ -176,13 +175,13 @@
 <div class="card-wrap" id="card-element">
   <div class="bg-pattern" id="bg-pattern-layer"></div>
 
-  <!-- Cabecera de marca con fondo soporte para el Logo -->
+  <!-- Cabecera de soporte para el Logo (#020812) -->
   <div class="brand-header-band" id="header-band">
     <img id="img-logo" class="brand-logo" src="https://lh3.googleusercontent.com/d/1IOQYQ91fVdU1fmG4AIdDQDoZF2YGQZJH" alt="Macchia">
   </div>
 
   <div class="card-body">
-    <!-- Nombre del Cliente directo -->
+    <!-- Solo Nombre del Cliente -->
     <div class="client-section">
       <div class="client-name" id="lbl-cliente-nombre">Cliente</div>
     </div>
@@ -241,7 +240,7 @@
     }
   }
 
-  // Pintar 10 ranuras al instante
+  // Render inicial inmediato para pintar las ranuras sin esperar
   dibujarSellos(0, 10, DEFAULT_STAMP_ICON);
 
   async function cargarDatosReales() {
@@ -249,7 +248,7 @@
     const idCliente = params.get('cli') || 'CLI-43707392';
 
     try {
-      // 1. Configuración de Marca y Reglas
+      // 1. Obtener reglas y branding
       const resCfg = await fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json());
       let metaSellos = 10;
       let stampIcon = DEFAULT_STAMP_ICON;
@@ -257,14 +256,11 @@
       if (resCfg.success && resCfg.config) {
         const c = resCfg.config;
         if (c.LOGO_URL) document.getElementById('img-logo').src = c.LOGO_URL;
-        if (c.COLOR_CABECERA) {
-          document.getElementById('header-band').style.background = c.COLOR_CABECERA;
-        }
         if (c.STAMP_ICON) stampIcon = c.STAMP_ICON;
         metaSellos = Number(c.COMPRAS_PARA_CICLO) || 10;
       }
 
-      // 2. Datos del Cliente
+      // 2. Obtener datos del cliente
       const resCli = await fetch(`${SCRIPT_URL}?action=getCliente&idCliente=${idCliente}`).then(r => r.json());
       if (resCli.success && resCli.cliente) {
         const cli = resCli.cliente;
@@ -280,7 +276,7 @@
         dibujarSellos(cli.sellosActuales, metaSellos, stampIcon);
       }
     } catch (e) {
-      console.warn("Modo offline o error al conectar con Apps Script:", e);
+      console.warn("Modo local activo:", e);
     }
   }
 
