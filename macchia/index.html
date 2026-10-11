@@ -3,19 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Macchia Café · Tarjeta de Fidelización</title>
+  <title>Macchia Café</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #020812;
-      --card-bg: #07101f;
+      --card-bg: #060d1a;
+      --header-bg: #0b1528;
+      --header-border: rgba(255, 255, 255, 0.08);
       --accent: #d97706;
       --gold: #f59e0b;
       --text: #f8fafc;
       --text-muted: #94a3b8;
-      --border: rgba(255, 255, 255, 0.1);
+      --border: rgba(255, 255, 255, 0.08);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
     body {
@@ -32,92 +34,99 @@
       max-width: 390px;
       background: var(--card-bg);
       border-radius: 24px;
-      padding: 1.8rem;
       border: 1px solid var(--border);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
       position: relative;
       overflow: hidden;
     }
     .bg-pattern {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      opacity: 0.15;
+      opacity: 0.12;
       background-image: url('https://lh3.googleusercontent.com/d/13Dsw1PEAiziJm8-DB_F5zR4TjmIVaGKo');
       background-size: cover;
       background-position: center;
       pointer-events: none;
+      z-index: 0;
     }
-    .header {
+
+    /* Cabecera con fondo de soporte para el Logo */
+    .brand-header-band {
       position: relative;
+      background: var(--header-bg);
+      border-bottom: 1px solid var(--header-border);
+      padding: 1.8rem 1.5rem 1.4rem;
       text-align: center;
-      margin-bottom: 1.5rem;
       z-index: 1;
     }
     .brand-logo {
-      max-height: 55px;
-      max-width: 180px;
+      max-height: 60px;
+      max-width: 200px;
       object-fit: contain;
-      margin-bottom: 0.6rem;
       display: block;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 0 auto;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
     }
-    .client-greeting {
-      font-size: 0.75rem;
-      color: #cbd5e1;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-weight: 600;
+
+    /* Cuerpo de la Tarjeta */
+    .card-body {
+      position: relative;
+      padding: 1.5rem 1.6rem 1.8rem;
+      z-index: 1;
+    }
+    .client-section {
+      text-align: center;
+      margin-bottom: 1.4rem;
     }
     .client-name {
-      font-size: 1.25rem;
-      font-weight: 700;
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
       color: #ffffff;
-      margin-top: 0.2rem;
     }
+
+    /* Grilla de Sellos */
     .stamps-grid {
-      position: relative;
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 0.75rem;
-      margin: 1.4rem 0;
-      z-index: 1;
+      margin-bottom: 1.3rem;
     }
     .stamp-slot {
       aspect-ratio: 1;
       border-radius: 12px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px dashed rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed rgba(255, 255, 255, 0.18);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s ease;
+      transition: all 0.25s ease;
       position: relative;
     }
     .stamp-slot.active {
       background: rgba(217, 119, 6, 0.2);
-      border: 1px solid rgba(245, 158, 11, 0.6);
-      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+      border: 1px solid rgba(245, 158, 11, 0.7);
+      box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
     }
     .stamp-img {
       width: 70%;
       height: 70%;
       object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
     }
     .stamp-number {
       font-size: 0.85rem;
       font-weight: 600;
       color: #64748b;
     }
+
+    /* Caja de Estado */
     .status-box {
-      position: relative;
       text-align: center;
-      margin-top: 1rem;
-      padding: 0.85rem;
+      padding: 0.85rem 1rem;
       border-radius: 12px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      z-index: 1;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
     }
     .status-count {
       font-size: 0.95rem;
@@ -129,17 +138,17 @@
       color: #94a3b8;
       margin-top: 0.25rem;
     }
+
+    /* Condiciones Legales */
     .legal-box {
-      position: relative;
-      margin-top: 1.4rem;
-      padding: 0.85rem;
+      margin-top: 1.3rem;
+      padding: 0.85rem 1rem;
       border-radius: 10px;
       background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.05);
       font-size: 0.72rem;
       color: #64748b;
-      line-height: 1.4;
-      z-index: 1;
+      line-height: 1.45;
     }
     .legal-title {
       font-weight: 700;
@@ -152,14 +161,13 @@
       padding-left: 1rem;
       margin: 0;
     }
+
     .footer {
-      position: relative;
       text-align: center;
       margin-top: 1.3rem;
       font-size: 0.72rem;
       color: #475569;
       letter-spacing: 0.05em;
-      z-index: 1;
     }
   </style>
 </head>
@@ -168,31 +176,40 @@
 <div class="card-wrap" id="card-element">
   <div class="bg-pattern" id="bg-pattern-layer"></div>
 
-  <div class="header">
-    <img id="img-logo" class="brand-logo" src="https://lh3.googleusercontent.com/d/1IOQYQ91fVdU1fmG4AIdDQDoZF2YGQZJH" alt="Macchia Café">
-    <div class="client-greeting">Tarjeta de Fidelización</div>
-    <div class="client-name" id="lbl-cliente-nombre">Cliente</div>
+  <!-- Cabecera de marca con fondo soporte para el Logo -->
+  <div class="brand-header-band" id="header-band">
+    <img id="img-logo" class="brand-logo" src="https://lh3.googleusercontent.com/d/1IOQYQ91fVdU1fmG4AIdDQDoZF2YGQZJH" alt="Macchia">
   </div>
 
-  <div class="stamps-grid" id="grid-sellos"></div>
+  <div class="card-body">
+    <!-- Nombre del Cliente directo -->
+    <div class="client-section">
+      <div class="client-name" id="lbl-cliente-nombre">Cliente</div>
+    </div>
 
-  <div class="status-box">
-    <div class="status-count" id="lbl-sellos-count">0 de 10 sellos acumulados</div>
-    <div class="reward-text" id="lbl-premio-detalle">Completa 10 sellos para desbloquear tu beneficio</div>
-  </div>
+    <!-- Grilla de Sellos -->
+    <div class="stamps-grid" id="grid-sellos"></div>
 
-  <div class="legal-box">
-    <div class="legal-title">Condiciones del Beneficio</div>
-    <ul>
-      <li>Beneficio de un solo uso por ciclo completado.</li>
-      <li>No acumulable ni fraccionable en saldo remanente.</li>
-      <li>No transferible ni liquidable en dinero en efectivo.</li>
-      <li>Aplica con el consumo mínimo establecido en el local.</li>
-    </ul>
-  </div>
+    <!-- Estado de Sellos y Beneficio -->
+    <div class="status-box">
+      <div class="status-count" id="lbl-sellos-count">0 de 10 sellos acumulados</div>
+      <div class="reward-text" id="lbl-premio-detalle">Completa 10 sellos para desbloquear tu beneficio</div>
+    </div>
 
-  <div class="footer">
-    Powered by KIBO
+    <!-- Términos Formales -->
+    <div class="legal-box">
+      <div class="legal-title">Condiciones del Beneficio</div>
+      <ul>
+        <li>Beneficio de un solo uso por ciclo completado.</li>
+        <li>No acumulable ni fraccionable en saldo remanente.</li>
+        <li>No transferible ni liquidable en dinero en efectivo.</li>
+        <li>Aplica con el consumo mínimo establecido en sala.</li>
+      </ul>
+    </div>
+
+    <div class="footer">
+      Powered by KIBO
+    </div>
   </div>
 </div>
 
@@ -224,7 +241,7 @@
     }
   }
 
-  // Render inicial inmediato para evitar pantallas vacías
+  // Pintar 10 ranuras al instante
   dibujarSellos(0, 10, DEFAULT_STAMP_ICON);
 
   async function cargarDatosReales() {
@@ -232,7 +249,7 @@
     const idCliente = params.get('cli') || 'CLI-43707392';
 
     try {
-      // 1. Obtener reglas y branding
+      // 1. Configuración de Marca y Reglas
       const resCfg = await fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json());
       let metaSellos = 10;
       let stampIcon = DEFAULT_STAMP_ICON;
@@ -240,11 +257,14 @@
       if (resCfg.success && resCfg.config) {
         const c = resCfg.config;
         if (c.LOGO_URL) document.getElementById('img-logo').src = c.LOGO_URL;
+        if (c.COLOR_CABECERA) {
+          document.getElementById('header-band').style.background = c.COLOR_CABECERA;
+        }
         if (c.STAMP_ICON) stampIcon = c.STAMP_ICON;
         metaSellos = Number(c.COMPRAS_PARA_CICLO) || 10;
       }
 
-      // 2. Obtener datos del cliente
+      // 2. Datos del Cliente
       const resCli = await fetch(`${SCRIPT_URL}?action=getCliente&idCliente=${idCliente}`).then(r => r.json());
       if (resCli.success && resCli.cliente) {
         const cli = resCli.cliente;
@@ -252,18 +272,15 @@
         document.getElementById('lbl-sellos-count').innerText = `${cli.sellosActuales} de ${metaSellos} sellos`;
 
         if (cli.sellosActuales >= metaSellos) {
-          document.getElementById('lbl-premio-detalle').innerText = `Ciclo completado. Beneficio disponible: ${cli.premioCalculado} BOB`;
+          document.getElementById('lbl-premio-detalle').innerText = `¡Meta alcanzada! Beneficio disponible: ${cli.premioCalculado} BOB`;
         } else {
           document.getElementById('lbl-premio-detalle').innerText = `Acumula ${metaSellos} sellos para desbloquear tu beneficio`;
         }
 
         dibujarSellos(cli.sellosActuales, metaSellos, stampIcon);
-      } else {
-        document.getElementById('lbl-cliente-nombre').innerText = "Cliente Invitado";
-        dibujarSellos(0, metaSellos, stampIcon);
       }
     } catch (e) {
-      console.warn("Modo visual local activo:", e);
+      console.warn("Modo offline o error al conectar con Apps Script:", e);
     }
   }
 
