@@ -9,10 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --brand-color: #020812;
-      --accent: #d97706;
-      --gold: #f59e0b;
-      --text-main: #0f172a;
+      --brand-header: #020812;
+      --accent-gold: #d97706;
+      --text-dark: #0f172a;
       --text-muted: #475569;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
@@ -24,79 +23,71 @@
       align-items: center;
       padding: 1.5rem 1rem;
     }
-
-    /* Contenedor Principal de la Tarjeta */
-    .card-wrap {
+    .card-wrapper {
       width: 100%;
       max-width: 390px;
-      background: #ffffff;
       border-radius: 26px;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
-      position: relative;
+      background: #ffffff;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      position: relative;
     }
 
-    /* 1. CABECERA DE MARCA DEDICADA */
-    .brand-header {
-      background: var(--brand-color);
-      padding: 2rem 1.5rem 1.6rem;
+    /* 1. Cabecera Oficial #020812 */
+    .brand-header-band {
+      background: var(--brand-header);
+      padding: 2.2rem 1.5rem 1.6rem;
       text-align: center;
-      position: relative;
-      z-index: 2;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+      z-index: 3;
     }
     .brand-logo {
-      max-height: 62px;
-      max-width: 210px;
+      max-height: 60px;
+      max-width: 200px;
       object-fit: contain;
       display: block;
       margin: 0 auto;
       filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
     }
 
-    /* 2. CUERPO INFERIOR: Trama de fondo + Capa de blanco degradado */
-    .card-body-wrapper {
+    /* 2. Cuerpo con trama visible + veladura blanca degradada */
+    .card-body-section {
       position: relative;
       background-color: #020812;
       overflow: hidden;
     }
-
-    /* Capa A: Trama del Cliente */
-    .bg-pattern {
+    .bg-client-pattern {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
       background-image: url('https://lh3.googleusercontent.com/d/13Dsw1PEAiziJm8-DB_F5zR4TjmIVaGKo');
       background-size: cover;
       background-position: center;
-      opacity: 0.35;
+      opacity: 0.45; /* Trama claramente visible */
       z-index: 1;
     }
-
-    /* Capa B: Degradado blanco translúcido para contraste perfecto */
-    .white-gradient-overlay {
+    .white-mist-overlay {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.94) 50%, rgba(255, 255, 255, 0.98) 100%);
+      background: linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.92) 50%, rgba(255,255,255,0.97) 100%);
       z-index: 2;
     }
-
-    /* Capa C: Contenido activo */
-    .card-content {
+    .card-active-content {
       position: relative;
       padding: 1.6rem 1.5rem 1.8rem;
       z-index: 3;
     }
 
-    .client-section {
+    .client-title-box {
       text-align: center;
-      margin-bottom: 1.4rem;
+      margin-bottom: 1.3rem;
     }
     .client-name {
       font-size: 1.4rem;
       font-weight: 800;
       letter-spacing: -0.01em;
-      color: var(--text-main);
+      color: var(--text-dark);
     }
 
     /* Grilla de Sellos */
@@ -109,17 +100,17 @@
     .stamp-slot {
       aspect-ratio: 1;
       border-radius: 13px;
-      background: rgba(255, 255, 255, 0.7);
-      border: 1.5px dashed rgba(15, 23, 42, 0.2);
+      background: rgba(255, 255, 255, 0.75);
+      border: 1.5px dashed rgba(15, 23, 42, 0.22);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.25s ease;
       box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      transition: all 0.25s ease;
     }
     .stamp-slot.active {
-      background: rgba(217, 119, 6, 0.12);
-      border: 1.5px solid var(--accent);
+      background: rgba(217, 119, 6, 0.14);
+      border: 1.5px solid var(--accent-gold);
       box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25);
     }
     .stamp-img {
@@ -138,28 +129,28 @@
       text-align: center;
       padding: 0.85rem 1rem;
       border-radius: 14px;
-      background: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.9);
       border: 1px solid rgba(15, 23, 42, 0.08);
       box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     }
     .status-count {
       font-size: 0.95rem;
       font-weight: 800;
-      color: var(--text-main);
+      color: var(--text-dark);
     }
-    .reward-text {
+    .reward-desc {
       font-size: 0.8rem;
       color: var(--text-muted);
       margin-top: 0.25rem;
       font-weight: 500;
     }
 
-    /* Condiciones Legales de Boutique */
+    /* Condiciones Legales Boutique */
     .legal-box {
       margin-top: 1.3rem;
       padding: 0.85rem 1rem;
       border-radius: 12px;
-      background: rgba(255, 255, 255, 0.65);
+      background: rgba(255, 255, 255, 0.75);
       border: 1px solid rgba(15, 23, 42, 0.06);
       font-size: 0.72rem;
       color: var(--text-muted);
@@ -167,7 +158,7 @@
     }
     .legal-title {
       font-weight: 700;
-      color: var(--text-main);
+      color: var(--text-dark);
       margin-bottom: 0.35rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -189,20 +180,20 @@
 </head>
 <body>
 
-<div class="card-wrap">
+<div class="card-wrapper">
   
-  <!-- 1. CABECERA DE MARCA (Color de cabecera que identifica a la marca) -->
-  <div class="brand-header" id="brand-header">
+  <!-- Cabecera de Marca -->
+  <div class="brand-header-band" id="brand-header">
     <img id="img-logo" class="brand-logo" src="https://lh3.googleusercontent.com/d/1IOQYQ91fVdU1fmG4AIdDQDoZF2YGQZJH" alt="Macchia">
   </div>
 
-  <!-- 2. CUERPO INFERIOR (Trama + degradado blanco superpuesto) -->
-  <div class="card-body-wrapper">
-    <div class="bg-pattern" id="bg-pattern-layer"></div>
-    <div class="white-gradient-overlay"></div>
+  <!-- Cuerpo con trama y veladura blanca degradada -->
+  <div class="card-body-section">
+    <div class="bg-client-pattern" id="bg-pattern-layer"></div>
+    <div class="white-mist-overlay"></div>
 
-    <div class="card-content">
-      <div class="client-section">
+    <div class="card-active-content">
+      <div class="client-title-box">
         <div class="client-name" id="lbl-cliente-nombre">Cliente</div>
       </div>
 
@@ -210,7 +201,7 @@
 
       <div class="status-box">
         <div class="status-count" id="lbl-sellos-count">0 de 10 sellos acumulados</div>
-        <div class="reward-text" id="lbl-premio-detalle">Completa 10 sellos para desbloquear tu beneficio</div>
+        <div class="reward-desc" id="lbl-premio-detalle">Completa 10 sellos para desbloquear tu beneficio</div>
       </div>
 
       <div class="legal-box">
@@ -233,12 +224,12 @@
 
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXhjvfBEJC7XHMJi1jpkAXiAf-XYEW350sar7O29Zpl6LMF3HzAiLeaMCZHQNfWuBP6Q/exec";
-  const DEFAULT_STAMP_ICON = "https://lh3.googleusercontent.com/d/1WzFb7rEBFlYu3sQGGo2o_yRq5u8lcNbG";
+  const DEFAULT_STAMP = "https://lh3.googleusercontent.com/d/1WzFb7rEBFlYu3sQGGo2o_yRq5u8lcNbG";
 
   function dibujarSellos(actuales, meta, stampIconUrl) {
     const grid = document.getElementById('grid-sellos');
     grid.innerHTML = '';
-    const icon = stampIconUrl || DEFAULT_STAMP_ICON;
+    const icon = stampIconUrl || DEFAULT_STAMP;
 
     for (let i = 1; i <= meta; i++) {
       const slot = document.createElement('div');
@@ -259,16 +250,16 @@
     }
   }
 
-  dibujarSellos(0, 10, DEFAULT_STAMP_ICON);
+  dibujarSellos(0, 10, DEFAULT_STAMP);
 
-  async function cargarDatosReales() {
+  async function cargarTarjeta() {
     const params = new URLSearchParams(window.location.search);
-    const idCliente = params.get('cli') || 'CLI-43707392';
+    const telCliente = params.get('tel') || params.get('cli') || '77290636';
 
     try {
       const resCfg = await fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json());
       let metaSellos = 10;
-      let stampIcon = DEFAULT_STAMP_ICON;
+      let stampIcon = DEFAULT_STAMP;
 
       if (resCfg && resCfg.success && resCfg.config) {
         const c = resCfg.config;
@@ -284,7 +275,7 @@
         metaSellos = Number(c.COMPRAS_PARA_CICLO) || 10;
       }
 
-      const resCli = await fetch(`${SCRIPT_URL}?action=getCliente&idCliente=${idCliente}`).then(r => r.json());
+      const resCli = await fetch(`${SCRIPT_URL}?action=getCliente&telefono=${encodeURIComponent(telCliente)}`).then(r => r.json());
       if (resCli && resCli.success && resCli.cliente) {
         const cli = resCli.cliente;
         document.getElementById('lbl-cliente-nombre').innerText = cli.nombre;
@@ -299,11 +290,11 @@
         dibujarSellos(cli.sellosActuales, metaSellos, stampIcon);
       }
     } catch (e) {
-      console.warn("Modo visual estándar activo:", e);
+      console.warn("Modo visual estándar activo");
     }
   }
 
-  cargarDatosReales();
+  cargarTarjeta();
 </script>
 
 </body>
