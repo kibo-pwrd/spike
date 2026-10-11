@@ -38,12 +38,14 @@
     .color-picker { width: 50px; height: 42px; padding: 0.2rem; cursor: pointer; border-radius: 8px; border: 1px solid var(--border); }
     .btn { width: 100%; padding: 0.85rem; border-radius: 9px; border: none; font-weight: 700; font-size: 0.92rem; cursor: pointer; transition: 0.2s; }
     .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
     .btn-secondary { background: var(--card-inner); border: 1px solid var(--border); color: var(--text-muted); }
     .btn-sm { padding: 0.55rem 0.85rem; font-size: 0.82rem; width: auto; border-radius: 8px; }
     .tabs { display: flex; gap: 0.4rem; background: #0c1220; padding: 0.3rem; border-radius: 11px; margin-bottom: 1rem; border: 1px solid var(--border); }
     .tab-btn { flex: 1; background: transparent; border: none; color: var(--text-muted); padding: 0.6rem 0.4rem; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 600; }
     .tab-btn.active { background: var(--card); color: white; }
     .preview-box { background: var(--card-inner); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem; margin-bottom: 1rem; }
+    .msg-error { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; padding: 0.75rem; border-radius: 8px; font-size: 0.82rem; margin-bottom: 1rem; display: none; }
     .legal-alert { background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); padding: 0.85rem; border-radius: 9px; font-size: 0.78rem; color: #fde68a; line-height: 1.45; margin: 0.8rem 0; }
     .legal-alert ul { padding-left: 1.1rem; margin-top: 0.3rem; }
     .hidden { display: none !important; }
@@ -63,7 +65,9 @@
   <!-- VISTA 1: LOGIN -->
   <div id="view-login" class="card">
     <div class="card-title">Acceso al Sistema</div>
-    <div class="subtitle" style="margin-bottom: 1.2rem;">Credenciales de Caja o Gerencia</div>
+    <div class="subtitle" style="margin-bottom: 1.2rem;">Credenciales de Boutique o Gerencia</div>
+
+    <div id="login-error" class="msg-error"></div>
 
     <div class="form-group">
       <label>Correo Electrónico</label>
@@ -75,7 +79,7 @@
       <input type="password" id="txt-pass" value="admin123">
     </div>
 
-    <button class="btn btn-primary" onclick="ejecutarLogin()">Iniciar Sesión</button>
+    <button id="btn-login" class="btn btn-primary" onclick="ejecutarLogin()">Iniciar Sesión</button>
   </div>
 
   <!-- VISTA 2: PANEL DE CONTROL -->
@@ -97,8 +101,8 @@
 
     <!-- TAB 1: TERMINAL DE CAJA -->
     <div id="tab-caja" class="card">
-      <div class="card-title">Registro en Mostrador</div>
-      <div class="subtitle" style="margin-bottom: 1rem;">Otorga sellos o aplica canjes completados</div>
+      <div class="card-title">Registro en Boutique</div>
+      <div class="subtitle" style="margin-bottom: 1rem;">Otorga sellos o aplica beneficios acumulados</div>
 
       <div class="form-group">
         <label>Identificador del Cliente (Código o WhatsApp)</label>
@@ -112,7 +116,7 @@
         <div style="font-weight:700;" id="cli-nombre">-</div>
         <div style="display:flex; justify-content:space-between; margin-top:0.4rem; font-size:0.85rem;">
           <span>Sellos: <strong id="cli-sellos" style="color:var(--accent);">0</strong></span>
-          <span>Premio Acumulado: <strong id="cli-premio" style="color:var(--success);">0 BOB</strong></span>
+          <span>Beneficio Acumulado: <strong id="cli-premio" style="color:var(--success);">0 BOB</strong></span>
         </div>
       </div>
 
@@ -131,11 +135,11 @@
         <ul>
           <li>Un solo uso por ciclo completado.</li>
           <li>No fraccionable ni reembolsable en dinero en efectivo.</li>
-          <li>Requiere el consumo mínimo fijado en el local.</li>
+          <li>Requiere el consumo mínimo fijado en boutique.</li>
         </ul>
       </div>
 
-      <button class="btn btn-primary" onclick="procesarOperacion()" style="margin-top:0.6rem;">Registrar Operación</button>
+      <button id="btn-registrar" class="btn btn-primary" onclick="procesarOperacion()" style="margin-top:0.6rem;">Registrar Operación</button>
     </div>
 
     <!-- TAB 2: IDENTIDAD VISUAL (BRANDING) -->
@@ -145,7 +149,7 @@
 
       <div class="form-group">
         <label>Nombre Comercial</label>
-        <input type="text" id="cfg-nombre" value="Macchia Café">
+        <input type="text" id="cfg-nombre" value="Macchia">
       </div>
 
       <div class="form-group">
@@ -167,7 +171,7 @@
       </div>
 
       <div class="form-group">
-        <label>URL de la Trama de Fondo (Background Pattern)</label>
+        <label>URL de la Trama de Fondo</label>
         <input type="text" id="cfg-pattern-url" value="https://lh3.googleusercontent.com/d/13Dsw1PEAiziJm8-DB_F5zR4TjmIVaGKo">
       </div>
 
@@ -227,22 +231,39 @@
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXhjvfBEJC7XHMJi1jpkAXiAf-XYEW350sar7O29Zpl6LMF3HzAiLeaMCZHQNfWuBP6Q/exec";
   let sesionActual = null;
 
-  async function callApi(action, payload = {}) {
-    payload.action = action;
-    const res = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify(payload)
+  function mostrarErrorLogin(msg) {
+    const errBox = document.getElementById('login-error');
+    if (msg) {
+      errBox.innerText = msg;
+      errBox.style.display = 'block';
+    } else {
+      errBox.style.display = 'none';
+    }
+  }
+
+  // Llamada HTTP compatible sin preflight CORS
+  async function callApi(action, params = {}) {
+    params.action = action;
+    const query = new URLSearchParams(params).toString();
+    const res = await fetch(`${SCRIPT_URL}?${query}`, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' }
     });
     return await res.json();
   }
 
   async function ejecutarLogin() {
-    const email = document.getElementById('txt-email').value;
-    const password = document.getElementById('txt-pass').value;
+    const btn = document.getElementById('btn-login');
+    const email = document.getElementById('txt-email').value.trim();
+    const password = document.getElementById('txt-pass').value.trim();
+
+    mostrarErrorLogin('');
+    btn.disabled = true;
+    btn.innerText = "Verificando acceso...";
 
     try {
       const res = await callApi('login', { email, password });
-      if (res.success) {
+      if (res.success && res.usuario) {
         sesionActual = res.usuario;
         document.getElementById('lbl-user-nombre').innerText = sesionActual.nombre;
         document.getElementById('lbl-user-rol').innerText = sesionActual.rol;
@@ -251,10 +272,14 @@
         document.getElementById('view-panel').classList.remove('hidden');
         cargarConfiguracion();
       } else {
-        alert(res.error || "Credenciales incorrectas.");
+        mostrarErrorLogin(res.error || "Credenciales incorrectas.");
       }
-    } catch (e) {
-      alert("Error de conexión al servidor.");
+    } catch (err) {
+      console.error(err);
+      mostrarErrorLogin("No se pudo conectar con el servidor. Verifica tu conexión.");
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "Iniciar Sesión";
     }
   }
 
@@ -353,25 +378,36 @@
   }
 
   async function procesarOperacion() {
+    const btn = document.getElementById('btn-registrar');
     const cid = document.getElementById('txt-cli-id').value.trim();
     const monto = document.getElementById('txt-monto').value;
     const esCanje = document.getElementById('chk-canje').checked;
 
     if (!cid || !monto) return alert("Ingresa el cliente y el importe.");
 
-    const res = await callApi('registrarCompra', {
-      idCliente: cid,
-      monto: monto,
-      esCanje: esCanje,
-      usuarioCaja: sesionActual.nombre
-    });
+    btn.disabled = true;
+    btn.innerText = "Registrando...";
 
-    if (res.success) {
-      alert("¡Operación completada con éxito!");
-      document.getElementById('txt-monto').value = '';
-      buscarCliente();
-    } else {
-      alert("Error: " + res.error);
+    try {
+      const res = await callApi('registrarCompra', {
+        idCliente: cid,
+        monto: monto,
+        esCanje: esCanje,
+        usuarioCaja: sesionActual ? sesionActual.nombre : 'Boutique'
+      });
+
+      if (res.success) {
+        alert("¡Operación completada con éxito!");
+        document.getElementById('txt-monto').value = '';
+        buscarCliente();
+      } else {
+        alert("Error: " + res.error);
+      }
+    } catch (e) {
+      alert("Error de conexión al registrar operación.");
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "Registrar Operación";
     }
   }
 </script>
