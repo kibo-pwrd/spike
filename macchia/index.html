@@ -3,20 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Macchia Café</title>
+  <title>Macchia · Perfumería</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --macchia-bg: #020812;
-      --macchia-card: #040d1c;
-      --header-bg: #020812;
       --accent: #d97706;
       --gold: #f59e0b;
       --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --border: rgba(255, 255, 255, 0.08);
+      --text-muted: #cbd5e1;
+      
+      /* Transparencias estándar de blanco sobre fondo de marca */
+      --glass-surface: rgba(255, 255, 255, 0.05);
+      --glass-surface-hover: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-border-subtle: rgba(255, 255, 255, 0.08);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
     body {
@@ -28,20 +31,26 @@
       align-items: center;
       padding: 1.5rem 1rem;
     }
+
+    /* Tarjeta envuelta al 100% por el color y la trama del negocio */
     .card-wrap {
       width: 100%;
       max-width: 390px;
-      background: var(--macchia-card);
-      border-radius: 24px;
-      border: 1px solid var(--border);
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+      background: var(--macchia-bg);
+      border-radius: 26px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
       position: relative;
       overflow: hidden;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
+
+    /* Trama continua de fondo en toda la tarjeta */
     .bg-pattern {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      opacity: 0.12;
+      opacity: 0.14;
       background-image: url('https://lh3.googleusercontent.com/d/13Dsw1PEAiziJm8-DB_F5zR4TjmIVaGKo');
       background-size: cover;
       background-position: center;
@@ -49,39 +58,39 @@
       z-index: 0;
     }
 
-    /* Cabecera con fondo #020812 para soporte de Logo */
-    .brand-header-band {
+    /* Soporte superior para el Logo integrado */
+    .brand-header {
       position: relative;
-      background: var(--header-bg);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 2rem 1.5rem 1.5rem;
+      padding: 2.2rem 1.5rem 1.2rem;
       text-align: center;
       z-index: 1;
     }
     .brand-logo {
-      max-height: 60px;
-      max-width: 200px;
+      max-height: 62px;
+      max-width: 210px;
       object-fit: contain;
       display: block;
       margin: 0 auto;
-      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.7));
     }
 
-    /* Cuerpo de la Tarjeta */
+    /* Contenido sobre capas translúcidas */
     .card-body {
       position: relative;
-      padding: 1.5rem 1.6rem 1.8rem;
+      padding: 0 1.5rem 2rem;
       z-index: 1;
     }
+
     .client-section {
       text-align: center;
-      margin-bottom: 1.4rem;
+      margin-bottom: 1.3rem;
     }
     .client-name {
       font-size: 1.35rem;
       font-weight: 800;
       letter-spacing: -0.01em;
       color: #ffffff;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
 
     /* Grilla de Sellos */
@@ -93,79 +102,86 @@
     }
     .stamp-slot {
       aspect-ratio: 1;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.025);
-      border: 1px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 13px;
+      background: var(--glass-surface);
+      border: 1px dashed var(--glass-border);
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.25s ease;
       position: relative;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
     }
     .stamp-slot.active {
-      background: rgba(217, 119, 6, 0.18);
-      border: 1px solid rgba(245, 158, 11, 0.65);
-      box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
+      background: rgba(217, 119, 6, 0.22);
+      border: 1px solid rgba(245, 158, 11, 0.75);
+      box-shadow: 0 4px 16px rgba(217, 119, 6, 0.4);
     }
     .stamp-img {
-      width: 70%;
-      height: 70%;
+      width: 72%;
+      height: 72%;
       object-fit: contain;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.6));
     }
     .stamp-number {
       font-size: 0.85rem;
-      font-weight: 600;
-      color: #475569;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.4);
     }
 
-    /* Caja de Estado */
+    /* Caja de Estado con transparencia */
     .status-box {
       text-align: center;
-      padding: 0.85rem 1rem;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.025);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 0.9rem 1rem;
+      border-radius: 14px;
+      background: var(--glass-surface);
+      border: 1px solid var(--glass-border-subtle);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
     .status-count {
       font-size: 0.95rem;
       font-weight: 700;
-      color: #f8fafc;
+      color: #ffffff;
     }
     .reward-text {
       font-size: 0.8rem;
-      color: #94a3b8;
+      color: var(--text-muted);
       margin-top: 0.25rem;
     }
 
-    /* Condiciones Legales */
+    /* Términos Legales sobre fondo translúcido blanco */
     .legal-box {
       margin-top: 1.3rem;
-      padding: 0.85rem 1rem;
-      border-radius: 10px;
-      background: rgba(0, 0, 0, 0.45);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 0.9rem 1rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid var(--glass-border-subtle);
       font-size: 0.72rem;
-      color: #64748b;
+      color: var(--text-muted);
       line-height: 1.45;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
     .legal-title {
       font-weight: 700;
-      color: #94a3b8;
+      color: #ffffff;
       margin-bottom: 0.35rem;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
+      opacity: 0.9;
     }
     .legal-box ul {
-      padding-left: 1rem;
+      padding-left: 1.1rem;
       margin: 0;
     }
 
     .footer {
       text-align: center;
-      margin-top: 1.3rem;
+      margin-top: 1.4rem;
       font-size: 0.72rem;
-      color: #475569;
+      color: rgba(255, 255, 255, 0.35);
       letter-spacing: 0.05em;
     }
   </style>
@@ -175,13 +191,13 @@
 <div class="card-wrap" id="card-element">
   <div class="bg-pattern" id="bg-pattern-layer"></div>
 
-  <!-- Cabecera de soporte para el Logo (#020812) -->
-  <div class="brand-header-band" id="header-band">
+  <!-- Cabecera de Logo limpia sobre la trama del negocio -->
+  <div class="brand-header">
     <img id="img-logo" class="brand-logo" src="https://lh3.googleusercontent.com/d/1IOQYQ91fVdU1fmG4AIdDQDoZF2YGQZJH" alt="Macchia">
   </div>
 
   <div class="card-body">
-    <!-- Solo Nombre del Cliente -->
+    <!-- Nombre directo del Cliente -->
     <div class="client-section">
       <div class="client-name" id="lbl-cliente-nombre">Cliente</div>
     </div>
@@ -195,14 +211,14 @@
       <div class="reward-text" id="lbl-premio-detalle">Completa 10 sellos para desbloquear tu beneficio</div>
     </div>
 
-    <!-- Términos Formales -->
+    <!-- Condiciones Legales -->
     <div class="legal-box">
       <div class="legal-title">Condiciones del Beneficio</div>
       <ul>
         <li>Beneficio de un solo uso por ciclo completado.</li>
         <li>No acumulable ni fraccionable en saldo remanente.</li>
         <li>No transferible ni liquidable en dinero en efectivo.</li>
-        <li>Aplica con el consumo mínimo establecido en sala.</li>
+        <li>Aplica con el consumo mínimo establecido en boutique.</li>
       </ul>
     </div>
 
@@ -240,7 +256,7 @@
     }
   }
 
-  // Render inicial inmediato para pintar las ranuras sin esperar
+  // Pintar ranuras iniciales
   dibujarSellos(0, 10, DEFAULT_STAMP_ICON);
 
   async function cargarDatosReales() {
@@ -248,7 +264,7 @@
     const idCliente = params.get('cli') || 'CLI-43707392';
 
     try {
-      // 1. Obtener reglas y branding
+      // 1. Configuración de Marca y Reglas
       const resCfg = await fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json());
       let metaSellos = 10;
       let stampIcon = DEFAULT_STAMP_ICON;
@@ -256,11 +272,18 @@
       if (resCfg.success && resCfg.config) {
         const c = resCfg.config;
         if (c.LOGO_URL) document.getElementById('img-logo').src = c.LOGO_URL;
+        if (c.COLOR_CABECERA) {
+          document.body.style.background = c.COLOR_CABECERA;
+          document.getElementById('card-element').style.background = c.COLOR_CABECERA;
+        }
+        if (c.BACKGROUND_PATTERN) {
+          document.getElementById('bg-pattern-layer').style.backgroundImage = `url('${c.BACKGROUND_PATTERN}')`;
+        }
         if (c.STAMP_ICON) stampIcon = c.STAMP_ICON;
         metaSellos = Number(c.COMPRAS_PARA_CICLO) || 10;
       }
 
-      // 2. Obtener datos del cliente
+      // 2. Datos del Cliente
       const resCli = await fetch(`${SCRIPT_URL}?action=getCliente&idCliente=${idCliente}`).then(r => r.json());
       if (resCli.success && resCli.cliente) {
         const cli = resCli.cliente;
@@ -276,7 +299,7 @@
         dibujarSellos(cli.sellosActuales, metaSellos, stampIcon);
       }
     } catch (e) {
-      console.warn("Modo local activo:", e);
+      console.warn("Modo visual estándar activo:", e);
     }
   }
 
