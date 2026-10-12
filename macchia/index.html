@@ -12,7 +12,7 @@
       --brand-header: #020812;
       --accent-gold: #d97706;
       --text-dark: #0f172a;
-      --text-muted: #475569;
+      --text-muted: #334155;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
     body {
@@ -28,9 +28,9 @@
       max-width: 390px;
       border-radius: 26px;
       background: #ffffff;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+      box-shadow: 0 25px 65px rgba(0, 0, 0, 0.95);
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       position: relative;
     }
 
@@ -52,27 +52,35 @@
       filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
     }
 
-    /* 2. Cuerpo con trama visible + veladura blanca degradada */
+    /* 2. Cuerpo: Trama continua y visible */
     .card-body-section {
       position: relative;
-      background-color: #020812;
+      background-color: #f1f5f9;
       overflow: hidden;
     }
+
+    /* Capa A: La trama gráfica del cliente al 100% con repetición */
     .bg-client-pattern {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
       background-image: url('https://lh3.googleusercontent.com/d/13Dsw1PEAiziJm8-DB_F5zR4TjmIVaGKo');
-      background-size: cover;
-      background-position: center;
-      opacity: 0.45; /* Trama claramente visible */
+      background-repeat: repeat;
+      background-size: 180px auto; /* Escala adecuada para que el patrón se distinga */
+      opacity: 0.85; /* Trama claramente visible */
       z-index: 1;
     }
+
+    /* Capa B: Velo blanco translúcido ligero que no oculta el patrón */
     .white-mist-overlay {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.92) 50%, rgba(255,255,255,0.97) 100%);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.65) 60%, rgba(255, 255, 255, 0.80) 100%);
+      backdrop-filter: blur(1.5px);
+      -webkit-backdrop-filter: blur(1.5px);
       z-index: 2;
     }
+
+    /* Capa C: Contenedores con ligera transparencia para leer la trama a través de ellos */
     .card-active-content {
       position: relative;
       padding: 1.6rem 1.5rem 1.8rem;
@@ -84,10 +92,11 @@
       margin-bottom: 1.3rem;
     }
     .client-name {
-      font-size: 1.4rem;
+      font-size: 1.45rem;
       font-weight: 800;
       letter-spacing: -0.01em;
       color: var(--text-dark);
+      text-shadow: 0 1px 3px rgba(255,255,255,0.8);
     }
 
     /* Grilla de Sellos */
@@ -100,28 +109,29 @@
     .stamp-slot {
       aspect-ratio: 1;
       border-radius: 13px;
-      background: rgba(255, 255, 255, 0.75);
-      border: 1.5px dashed rgba(15, 23, 42, 0.22);
+      background: rgba(255, 255, 255, 0.85);
+      border: 1.5px dashed rgba(15, 23, 42, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
       transition: all 0.25s ease;
+      backdrop-filter: blur(4px);
     }
     .stamp-slot.active {
-      background: rgba(217, 119, 6, 0.14);
+      background: rgba(255, 255, 255, 0.95);
       border: 1.5px solid var(--accent-gold);
-      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25);
+      box-shadow: 0 4px 14px rgba(217, 119, 6, 0.3);
     }
     .stamp-img {
-      width: 70%;
-      height: 70%;
+      width: 72%;
+      height: 72%;
       object-fit: contain;
     }
     .stamp-number {
       font-size: 0.85rem;
       font-weight: 700;
-      color: #94a3b8;
+      color: #64748b;
     }
 
     /* Caja de Estado */
@@ -129,9 +139,10 @@
       text-align: center;
       padding: 0.85rem 1rem;
       border-radius: 14px;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid rgba(15, 23, 42, 0.08);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(15, 23, 42, 0.1);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      backdrop-filter: blur(6px);
     }
     .status-count {
       font-size: 0.95rem;
@@ -142,19 +153,20 @@
       font-size: 0.8rem;
       color: var(--text-muted);
       margin-top: 0.25rem;
-      font-weight: 500;
+      font-weight: 600;
     }
 
-    /* Condiciones Legales Boutique */
+    /* Condiciones Legales */
     .legal-box {
       margin-top: 1.3rem;
       padding: 0.85rem 1rem;
       border-radius: 12px;
-      background: rgba(255, 255, 255, 0.75);
-      border: 1px solid rgba(15, 23, 42, 0.06);
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(15, 23, 42, 0.08);
       font-size: 0.72rem;
       color: var(--text-muted);
       line-height: 1.45;
+      backdrop-filter: blur(6px);
     }
     .legal-title {
       font-weight: 700;
@@ -172,7 +184,7 @@
       text-align: center;
       margin-top: 1.3rem;
       font-size: 0.72rem;
-      color: #94a3b8;
+      color: #64748b;
       font-weight: 600;
       letter-spacing: 0.05em;
     }
@@ -182,12 +194,12 @@
 
 <div class="card-wrapper">
   
-  <!-- Cabecera de Marca -->
+  <!-- Cabecera Oficial #020812 -->
   <div class="brand-header-band" id="brand-header">
     <img id="img-logo" class="brand-logo" src="https://lh3.googleusercontent.com/d/1IOQYQ91fVdU1fmG4AIdDQDoZF2YGQZJH" alt="Macchia">
   </div>
 
-  <!-- Cuerpo con trama y veladura blanca degradada -->
+  <!-- Cuerpo con Trama Clara y Velo Translúcido -->
   <div class="card-body-section">
     <div class="bg-client-pattern" id="bg-pattern-layer"></div>
     <div class="white-mist-overlay"></div>
