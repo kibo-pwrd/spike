@@ -32,8 +32,8 @@
     .form-group { margin-bottom: 1.1rem; }
     label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.35rem; }
     input, textarea, select { width: 100%; padding: 0.75rem 0.9rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; }
-    .btn-submit { width: 100%; padding: 0.85rem; background: var(--primary-dark); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
-    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-submit { width: 100%; padding: 0.85rem; background: var(--primary-dark); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+    .btn-submit:active { transform: scale(0.98); }
 
     /* Header del Panel */
     .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; }
@@ -70,7 +70,7 @@
     .card-mid { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.25rem; }
     .card-bot { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-muted); align-items: center; }
     .cli-reward { font-weight: 700; color: var(--text-main); }
-    .btn-ws-cumple { background: #22c55e; color: white; border: none; padding: 0.25rem 0.55rem; border-radius: 6px; font-size: 0.72rem; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.2rem; }
+    .btn-ws-cumple { background: #22c55e; color: white; border: none; padding: 0.25rem 0.55rem; border-radius: 6px; font-size: 0.72rem; font-weight: 700; cursor: pointer; text-decoration: none; }
 
     /* Secciones Generales */
     .content-box { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.3rem; margin-bottom: 1rem; }
@@ -88,30 +88,30 @@
     
     <div class="form-group">
       <label>Correo Electrónico</label>
-      <input type="email" id="txt-email" value="dueno@macchia.com">
+      <input type="email" id="txt-email" value="dueno@macchia.com" autocomplete="off">
     </div>
     <div class="form-group">
       <label>Contraseña</label>
-      <input type="password" id="txt-pass" value="Mate@">
+      <input type="password" id="txt-pass" value="Mate@" autocomplete="off">
     </div>
-    <button class="btn-submit" onclick="ejecutarLogin()">Iniciar Sesión</button>
+    <button class="btn-submit" type="button" onclick="ejecutarLogin()">Iniciar Sesión</button>
   </div>
 
   <!-- VISTA 2: PANEL DEL DUEÑO (MACCHIA) -->
   <div id="view-dueno" class="hidden">
     <div class="top-bar">
       <div class="panel-title">Panel de Administración</div>
-      <button class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
+      <button class="btn-logout" type="button" onclick="cerrarSesion()">Cerrar Sesión</button>
     </div>
 
     <div class="company-label">Empresa: <span class="company-name">MACCHIA</span></div>
 
     <!-- Menú de Pestañas -->
     <div class="tab-bar">
-      <button class="tab-item active" onclick="cambiarTabDueno('metricas', this)">Métricas</button>
-      <button class="tab-item" onclick="cambiarTabDueno('marca', this)">Marca y Reglas</button>
-      <button class="tab-item" onclick="cambiarTabDueno('promociones', this)">Promociones</button>
-      <button class="tab-item" onclick="cambiarTabDueno('cajeros', this)">Cajeros</button>
+      <button class="tab-item active" type="button" onclick="cambiarTabDueno('metricas', this)">Métricas</button>
+      <button class="tab-item" type="button" onclick="cambiarTabDueno('marca', this)">Marca y Reglas</button>
+      <button class="tab-item" type="button" onclick="cambiarTabDueno('promociones', this)">Promociones</button>
+      <button class="tab-item" type="button" onclick="cambiarTabDueno('cajeros', this)">Cajeros</button>
     </div>
 
     <!-- PESTAÑA: MÉTRICAS -->
@@ -136,13 +136,13 @@
       </div>
 
       <div class="csv-grid">
-        <button class="btn-csv-clients" onclick="exportarCSV('clientes')">Descargar Clientes (CSV)</button>
-        <button class="btn-csv-sales" onclick="exportarCSV('compras')">Descargar Compras (CSV)</button>
+        <button class="btn-csv-clients" type="button" onclick="exportarCSV('clientes')">Descargar Clientes (CSV)</button>
+        <button class="btn-csv-sales" type="button" onclick="exportarCSV('compras')">Descargar Compras (CSV)</button>
       </div>
 
       <div class="section-header">
         <div class="section-title">Clientes Registrados</div>
-        <button class="btn-refresh" onclick="cargarMetricasDueno()">Actualizar</button>
+        <button class="btn-refresh" type="button" onclick="cargarMetricasDueno()">Actualizar</button>
       </div>
 
       <div class="client-list" id="contenedor-clientes"></div>
@@ -163,7 +163,7 @@
         <label>Consumo Mínimo para Canjear Beneficio (BOB)</label>
         <input type="number" id="cfg-min-canje" value="20">
       </div>
-      <button class="btn-submit" onclick="guardarReglasDueno()">Guardar Reglas</button>
+      <button class="btn-submit" type="button" onclick="alert('¡Reglas guardadas!')">Guardar Reglas</button>
     </div>
 
     <!-- PESTAÑA: PROMOCIONES Y CUMPLEAÑOS -->
@@ -178,35 +178,30 @@
           <div style="font-weight:700; font-size:0.95rem;">Ofrecer beneficio por cumpleaños</div>
           <div style="font-size:0.78rem; color:var(--text-muted);">Habilita el regalo especial durante el mes o día del cliente</div>
         </div>
-        <input type="checkbox" id="promo-cumple-activo" style="width:1.4rem; height:1.4rem; accent-color:#0f172a;" checked onchange="toggleCumpleCampos()">
+        <input type="checkbox" id="promo-cumple-activo" style="width:1.4rem; height:1.4rem; accent-color:#0f172a;" checked>
       </div>
 
-      <div id="cumple-detalles-box">
-        <div class="form-group">
-          <label>Modalidad de Regalo / Beneficio</label>
-          <select id="promo-cumple-tipo" onchange="actualizarPlaceholderRegalo()">
-            <option value="SELLO_EXTRA">1 Sello extra de regalo en mostrador</option>
-            <option value="DESCUENTO_PCT">% de Descuento especial en su compra</option>
-            <option value="MONTO_BOB">Monto de consumo de regalo (BOB)</option>
-            <option value="CORTESIA">Obsequio / Muestra exclusiva en boutique</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Descripción o Valor del Regalo</label>
-          <input type="text" id="promo-cumple-valor" value="1 Sello adicional en mostrador">
-        </div>
-
-        <div class="form-group">
-          <label>Mensaje Personalizado para WhatsApp</label>
-          <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.35rem;">
-            Puedes usar <strong>{nombre}</strong> para que el sistema inserte automáticamente el nombre del cliente.
-          </div>
-          <textarea id="promo-cumple-mensaje" rows="4">¡Hola {nombre}! 🎉 Desde Macchia Parfums te deseamos un muy feliz cumpleaños. Para celebrarlo, tienes un beneficio especial esperándote en nuestra boutique. ¡Pasa a visitarnos!</textarea>
-        </div>
+      <div class="form-group">
+        <label>Modalidad de Regalo / Beneficio</label>
+        <select id="promo-cumple-tipo">
+          <option value="SELLO_EXTRA">1 Sello extra de regalo en mostrador</option>
+          <option value="DESCUENTO_PCT">% de Descuento especial en su compra</option>
+          <option value="MONTO_BOB">Monto de consumo de regalo (BOB)</option>
+          <option value="CORTESIA">Obsequio / Muestra exclusiva en boutique</option>
+        </select>
       </div>
 
-      <button class="btn-submit" id="btn-guardar-promo" onclick="guardarConfigCumple()">Guardar Configuración de Cumpleaños</button>
+      <div class="form-group">
+        <label>Descripción o Valor del Regalo</label>
+        <input type="text" id="promo-cumple-valor" value="1 Sello adicional en mostrador">
+      </div>
+
+      <div class="form-group">
+        <label>Mensaje Personalizado para WhatsApp</label>
+        <textarea id="promo-cumple-mensaje" rows="4">¡Hola {nombre}! 🎉 Desde Macchia Parfums te deseamos un muy feliz cumpleaños. Te esperamos en boutique con un detalle especial.</textarea>
+      </div>
+
+      <button class="btn-submit" type="button" onclick="guardarConfigCumple()">Guardar Configuración de Cumpleaños</button>
     </div>
 
     <!-- PESTAÑA: CAJEROS -->
@@ -214,24 +209,24 @@
       <div class="section-title" style="margin-bottom:1rem;">Personal de Turno (Caja)</div>
       <div style="padding:0.9rem; border:1px solid var(--border); border-radius:8px; margin-bottom:1rem;">
         <div style="font-weight:700;">cajero@macchia.com</div>
-        <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.2rem;">Rol: Operador de Mostrador • Clave activa</div>
+        <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.2rem;">Rol: Operador de Mostrador</div>
       </div>
       <div class="form-group">
-        <label>Actualizar Contraseña de Cajero</label>
-        <input type="password" id="txt-nueva-pass-cajero" placeholder="Nueva clave de caja">
+        <label>Nueva Contraseña de Cajero</label>
+        <input type="password" id="txt-nueva-pass-cajero" placeholder="Nueva clave">
       </div>
-      <button class="btn-submit" onclick="actualizarClaveCajero()">Actualizar Clave</button>
+      <button class="btn-submit" type="button" onclick="alert('Contraseña actualizada.')">Actualizar Clave</button>
     </div>
   </div>
 
-  <!-- VISTA 3: TERMINAL DEL CAJERO (EXCLUSIVO BÚSQUEDA POR CELULAR) -->
+  <!-- VISTA 3: TERMINAL DEL CAJERO -->
   <div id="view-cajero" class="hidden">
     <div class="top-bar">
       <div>
         <div class="panel-title">Terminal de Caja</div>
         <div class="company-label" style="margin:0;">Boutique: <span class="company-name">MACCHIA</span></div>
       </div>
-      <button class="btn-logout" onclick="cerrarSesion()">Salir</button>
+      <button class="btn-logout" type="button" onclick="cerrarSesion()">Salir</button>
     </div>
 
     <div class="content-box">
@@ -240,11 +235,11 @@
         <label>Número de WhatsApp / Celular</label>
         <div style="display:flex; gap:0.5rem;">
           <input type="tel" id="caja-input-cel" placeholder="77290636" value="77290636">
-          <button class="btn-submit" id="btn-buscar-caja" style="width:auto; padding:0.75rem 1.2rem;" onclick="buscarClientePorCel()">Buscar</button>
+          <button class="btn-submit" id="btn-buscar-caja" type="button" style="width:auto; padding:0.75rem 1.2rem;" onclick="buscarClientePorCel()">Buscar</button>
         </div>
       </div>
 
-      <!-- Ficha rápida del cliente encontrado -->
+      <!-- Ficha de cliente -->
       <div id="caja-info-cliente" class="hidden" style="background:#f0fdf4; border:1px solid #bbf7d0; padding:1rem; border-radius:10px; margin-bottom:1.2rem;">
         <div style="font-weight:800; font-size:1.1rem; color:#166534;" id="caja-lbl-nombre">-</div>
         <div style="display:flex; justify-content:space-between; margin-top:0.4rem; font-size:0.88rem;">
@@ -263,13 +258,13 @@
         <label for="caja-chk-canje" style="margin:0; font-weight:700; cursor:pointer;">¿Es Canje de Beneficio?</label>
       </div>
 
-      <button class="btn-submit" id="btn-registrar-caja" onclick="registrarOperacionCaja()">Registrar Operación</button>
+      <button class="btn-submit" id="btn-registrar-caja" type="button" onclick="registrarOperacionCaja()">Registrar Operación</button>
     </div>
 
-    <!-- Alta Rápida de Cliente al Paso (SIN AÑO) -->
+    <!-- Alta Rápida de Cliente al Paso (Día y Mes) -->
     <div class="content-box">
       <div class="section-title" style="margin-bottom:0.4rem;">Registrar Nuevo Cliente</div>
-      <p style="color:var(--text-muted); font-size:0.82rem; margin-bottom:1rem;">Alta rápida en mostrador en 10 segundos:</p>
+      <p style="color:var(--text-muted); font-size:0.82rem; margin-bottom:1rem;">Alta rápida en mostrador:</p>
       
       <div class="form-group">
         <label>Nombre y Apellido</label>
@@ -281,7 +276,7 @@
       </div>
       
       <div class="form-group">
-        <label>Fecha de Cumpleaños (Solo Día y Mes)</label>
+        <label>Fecha de Cumpleaños (Día y Mes)</label>
         <div style="display:flex; gap:0.5rem;">
           <select id="nuevo-dia" style="flex:1;">
             <option value="">Día</option>
@@ -295,53 +290,53 @@
           </select>
           <select id="nuevo-mes" style="flex:1.5;">
             <option value="">Mes</option>
-            <option value="Ene">Enero</option>
-            <option value="Feb">Febrero</option>
-            <option value="Mar">Marzo</option>
-            <option value="Abr">Abril</option>
-            <option value="May">Mayo</option>
-            <option value="Jun">Junio</option>
-            <option value="Jul">Julio</option>
-            <option value="Ago">Agosto</option>
-            <option value="Sep">Septiembre</option>
-            <option value="Oct">Octubre</option>
-            <option value="Nov">Noviembre</option>
-            <option value="Dic">Diciembre</option>
+            <option value="1">Enero</option>
+            <option value="2">Febrero</option>
+            <option value="3">Marzo</option>
+            <option value="4">Abril</option>
+            <option value="5">Mayo</option>
+            <option value="6">Junio</option>
+            <option value="7">Julio</option>
+            <option value="8">Agosto</option>
+            <option value="9">Septiembre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
           </select>
         </div>
       </div>
 
-      <button class="btn-submit" id="btn-crear-cli" style="background:#0284c7;" onclick="registrarNuevoCliente()">Registrar y Vincular</button>
+      <button class="btn-submit" id="btn-crear-cli" type="button" style="background:#0284c7;" onclick="registrarNuevoCliente()">Registrar y Vincular</button>
     </div>
   </div>
 
-  <!-- VISTA 4: SUPER ADMINISTRADOR (TÚ) -->
+  <!-- VISTA 4: SUPER ADMINISTRADOR -->
   <div id="view-superadmin" class="hidden">
     <div class="top-bar">
       <div>
         <div class="panel-title">Consola Técnica KIBO</div>
         <div class="company-label" style="margin:0;">Instancia: <span class="company-name">MACCHIA PARFUMS</span></div>
       </div>
-      <button class="btn-logout" onclick="cerrarSesion()">Cerrar</button>
+      <button class="btn-logout" type="button" onclick="cerrarSesion()">Cerrar</button>
     </div>
 
     <div class="content-box">
       <div class="section-title" style="margin-bottom:0.5rem;">Estado de la Instancia</div>
-      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Base de Datos: <strong>Macchia - DB</strong> (ID vinculado)</p>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Base de Datos: <strong>Macchia - DB</strong></p>
       
       <div style="background:#f8fafc; border:1px solid var(--border); padding:0.8rem; border-radius:8px; font-size:0.85rem; margin-bottom:1rem;">
-        <div>• Conexión Apps Script: <span style="color:#16a34a; font-weight:700;">ACTIVA</span></div>
-        <div>• Motor de Sellos: <span style="color:#16a34a; font-weight:700;">10 BOB / PORCENTAJE</span></div>
-        <div>• Modo de Búsqueda: <span style="font-weight:700;">CELULAR (WHATSAPP)</span></div>
+        <div>• Conexión: <span style="color:#16a34a; font-weight:700;">ACTIVA</span></div>
+        <div>• Motor: <span style="color:#16a34a; font-weight:700;">10 BOB / PORCENTAJE</span></div>
+        <div>• Búsqueda: <span style="font-weight:700;">CELULAR (WHATSAPP)</span></div>
       </div>
 
       <div class="form-group">
-        <label>Credenciales del Dueño de Macchia</label>
+        <label>Credenciales Dueño</label>
         <input type="text" value="dueno@macchia.com / Mate@" readonly>
       </div>
 
       <div class="form-group">
-        <label>Credenciales de Caja</label>
+        <label>Credenciales Caja</label>
         <input type="text" value="cajero@macchia.com / Jeroca" readonly>
       </div>
     </div>
@@ -349,42 +344,41 @@
 
 </div>
 
-<script> 
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1TVAU452I84Q7LMz52QDS0YhFLEafHG7V12p-HXrH9gb2VyxOEX7aQxucH2z5m5LVEw/exec";
-  let sesionActual = null;
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXhjvfBEJC7XHMJi1jpkAXiAf-XYEW350sar7O29Zpl6LMF3HzAiLeaMCZHQNfWuBP6Q/exec";
   let datosDuenoCache = null;
+
+  function abrirVista(id) {
+    document.getElementById('view-login').classList.add('hidden');
+    document.getElementById('view-dueno').classList.add('hidden');
+    document.getElementById('view-cajero').classList.add('hidden');
+    document.getElementById('view-superadmin').classList.add('hidden');
+    
+    const target = document.getElementById(id);
+    if (target) target.classList.remove('hidden');
+  }
 
   function ejecutarLogin() {
     const email = document.getElementById('txt-email').value.trim().toLowerCase();
     const pass = document.getElementById('txt-pass').value.trim();
 
     if (email === "dueno@macchia.com" && pass === "Mate@") {
-      sesionActual = { rol: "DUENO", nombre: "Gerencia Macchia" };
       abrirVista('view-dueno');
       cargarMetricasDueno();
     } else if (email === "cajero@macchia.com" && pass === "Jeroca") {
-      sesionActual = { rol: "CAJERO", nombre: "Boutique Macchia" };
       abrirVista('view-cajero');
     } else if (email === "kibopwrd@gmail.com" && pass === "admin123") {
-      sesionActual = { rol: "SUPER_ADMIN", nombre: "Administrador Maestro" };
       abrirVista('view-superadmin');
     } else {
       alert("Credenciales incorrectas.");
     }
   }
 
-  function abrirVista(vistaId) {
-    ['view-login', 'view-dueno', 'view-cajero', 'view-superadmin'].forEach(v => {
-      document.getElementById(v).classList.toggle('hidden', v !== vistaId);
-    });
-  }
-
   function cerrarSesion() {
-    sesionActual = null;
     abrirVista('view-login');
   }
 
-  /* Pestañas del Dueño */
+  /* Pestañas Dueño */
   function cambiarTabDueno(tab, btn) {
     ['metricas', 'marca', 'promociones', 'cajeros'].forEach(t => {
       document.getElementById('dueno-' + t).classList.toggle('hidden', t !== tab);
@@ -406,9 +400,10 @@
         return;
       }
     } catch (e) {
-      console.warn("Cargando lista de muestra...");
+      console.warn("Usando vista de respaldo.");
     }
 
+    // Datos de respaldo visual si tarda la red
     const demo = [
       { nombre: "Rafa", telefono: "77290365", cumpleanos: "28 de Dic", totalConsumo: 0, comprasCount: 0, ciclo: 1, sellos: 0, beneficio: 0 },
       { nombre: "Alfonso", telefono: "77290636", cumpleanos: "4 de Jul", totalConsumo: 1364, comprasCount: 7, ciclo: 1, sellos: 4, beneficio: 136.4 },
@@ -432,7 +427,7 @@
         <div class="card-bot">
           <div>Cumpleaños: ${c.cumpleanos} • ${c.comprasCount} compras</div>
           <div style="display:flex; align-items:center; gap:0.5rem;">
-            <button class="btn-ws-cumple" onclick="enviarWhatsAppCumple('${c.telefono}', '${c.nombre}')">WhatsApp</button>
+            <button class="btn-ws-cumple" type="button" onclick="enviarWhatsAppCumple('${c.telefono}', '${c.nombre}')">WhatsApp</button>
             <span class="cli-reward">${c.beneficio} BOB</span>
           </div>
         </div>
@@ -448,9 +443,6 @@
       datosDuenoCache.clientes.forEach(c => {
         csv += `"${c.nombre}","${c.telefono}","${c.cumpleanos}",${c.totalConsumo},${c.comprasCount},${c.ciclo},${c.sellos},${c.beneficio}\n`;
       });
-    } else {
-      csv += "Tipo,Mensaje\n";
-      csv += "Compras,Historial generado desde Macchia - DB\n";
     }
     const uri = encodeURI(csv);
     const link = document.createElement("a");
@@ -459,26 +451,7 @@
     link.click();
   }
 
-  function toggleCumpleCampos() {
-    const activo = document.getElementById('promo-cumple-activo').checked;
-    document.getElementById('cumple-detalles-box').style.opacity = activo ? '1' : '0.4';
-    document.getElementById('cumple-detalles-box').style.pointerEvents = activo ? 'auto' : 'none';
-  }
-
-  function actualizarPlaceholderRegalo() {
-    const tipo = document.getElementById('promo-cumple-tipo').value;
-    const inputVal = document.getElementById('promo-cumple-valor');
-    if (tipo === 'SELLO_EXTRA') inputVal.value = "1 Sello adicional en mostrador";
-    if (tipo === 'DESCUENTO_PCT') inputVal.value = "15% de descuento en tu compra";
-    if (tipo === 'MONTO_BOB') inputVal.value = "30 BOB de consumo de regalo";
-    if (tipo === 'CORTESIA') inputVal.value = "Muestra de perfumería exclusiva de cortesía";
-  }
-
   async function guardarConfigCumple() {
-    const btn = document.getElementById('btn-guardar-promo');
-    btn.disabled = true;
-    btn.innerText = "Guardando...";
-
     const activo = document.getElementById('promo-cumple-activo').checked ? 'SI' : 'NO';
     const tipo = document.getElementById('promo-cumple-tipo').value;
     const valor = document.getElementById('promo-cumple-valor').value.trim();
@@ -493,37 +466,25 @@
         mensaje: mensaje
       });
       await fetch(`${SCRIPT_URL}?${p.toString()}`);
-      alert("¡Configuración de cumpleaños guardada exitosamente!");
-    } catch (e) {
-      alert("Configuración aplicada.");
-    } finally {
-      btn.disabled = false;
-      btn.innerText = "Guardar Configuración de Cumpleaños";
+      alert("¡Configuración de cumpleaños guardada!");
+    } catch(e) {
+      alert("Guardado.");
     }
   }
 
-  function enviarWhatsAppCumple(telefono, nombre) {
-    const plantilla = document.getElementById('promo-cumple-mensaje').value;
-    const mensajeFinal = plantilla.replace('{nombre}', nombre);
-    const url = `https://wa.me/591${telefono.replace(/\D/g, '')}?text=${encodeURIComponent(mensajeFinal)}`;
-    window.open(url, '_blank');
+  function enviarWhatsAppCumple(tel, nom) {
+    const msg = document.getElementById('promo-cumple-mensaje').value.replace('{nombre}', nom);
+    window.open(`https://wa.me/591${tel.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
   }
 
-  async function guardarReglasDueno() {
-    alert("¡Reglas de Macchia actualizadas con éxito!");
-  }
-
-  async function actualizarClaveCajero() {
-    alert("¡Contraseña de cajero actualizada!");
-  }
-
-  /* Operaciones de Cajero por Celular */
+  /* Operaciones Cajero */
   async function buscarClientePorCel() {
     const cel = document.getElementById('caja-input-cel').value.trim();
-    if (!cel) return alert("Ingresa el número de celular o WhatsApp.");
+    if (!cel) return alert("Ingresa el número de celular.");
 
     const btn = document.getElementById('btn-buscar-caja');
-    if (btn) { btn.disabled = true; btn.innerText = "..."; }
+    btn.disabled = true;
+    btn.innerText = "...";
 
     try {
       const res = await fetch(`${SCRIPT_URL}?action=getCliente&telefono=${encodeURIComponent(cel)}`).then(r => r.json());
@@ -537,10 +498,11 @@
         alert("Cliente no encontrado con ese número.");
         document.getElementById('caja-info-cliente').classList.add('hidden');
       }
-    } catch (e) {
-      alert("Error al contactar con el servidor. Verifica tu conexión.");
+    } catch(e) {
+      alert("Error al buscar cliente.");
     } finally {
-      if (btn) { btn.disabled = false; btn.innerText = "Buscar"; }
+      btn.disabled = false;
+      btn.innerText = "Buscar";
     }
   }
 
@@ -561,7 +523,66 @@
         telefono: cel,
         monto: monto,
         esCanje: esCanje,
-        usuarioCaja: 'Boutique Macchia'
+        usuarioCaja: 'cajero@macchia.com'
       });
 
-      const res = await
+      const res = await fetch(`${SCRIPT_URL}?${p.toString()}`).then(r => r.json());
+      if (res && res.success) {
+        alert("¡Operación registrada con éxito en Macchia!");
+        document.getElementById('caja-txt-monto').value = '';
+        buscarClientePorCel();
+      } else {
+        alert("Error al registrar compra.");
+      }
+    } catch(e) {
+      alert("Error al conectar con el servidor.");
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "Registrar Operación";
+    }
+  }
+
+  async function registrarNuevoCliente() {
+    const btn = document.getElementById('btn-crear-cli');
+    const nom = document.getElementById('nuevo-nombre').value.trim();
+    const cel = document.getElementById('nuevo-celular').value.trim();
+    const dia = document.getElementById('nuevo-dia').value;
+    const mes = document.getElementById('nuevo-mes').value;
+
+    if (!nom || !cel) return alert("Nombre y Celular son obligatorios.");
+
+    btn.disabled = true;
+    btn.innerText = "Registrando...";
+
+    const p = new URLSearchParams({
+      action: 'crearCliente',
+      nombre: nom,
+      telefono: cel,
+      dia: dia,
+      mes: mes
+    });
+
+    try {
+      const res = await fetch(`${SCRIPT_URL}?${p.toString()}`).then(r => r.json());
+      if (res && res.success) {
+        alert(`¡Cliente ${nom} registrado con éxito en Macchia!`);
+        document.getElementById('caja-input-cel').value = cel;
+        document.getElementById('nuevo-nombre').value = '';
+        document.getElementById('nuevo-celular').value = '';
+        document.getElementById('nuevo-dia').value = '';
+        document.getElementById('nuevo-mes').value = '';
+        buscarClientePorCel();
+      } else {
+        alert("Error: " + (res.error || "No se pudo registrar"));
+      }
+    } catch(e) {
+      alert("Error de conexión al registrar.");
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "Registrar y Vincular";
+    }
+  }
+</script>
+
+</body>
+</html>
