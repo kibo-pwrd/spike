@@ -19,6 +19,8 @@
       --red-btn: #ef4444;
       --teal-btn: #0f766e;
       --blue-btn: #0369a1;
+      --green-wa: #22c55e;
+      --green-dark: #16a34a;
       --border: #e2e8f0;
       --radius: 12px;
     }
@@ -32,8 +34,9 @@
     .form-group { margin-bottom: 1.1rem; }
     label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.35rem; }
     input, textarea, select { width: 100%; padding: 0.75rem 0.9rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; }
-    .btn-submit { width: 100%; padding: 0.85rem; background: var(--primary-dark); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; }
+    .btn-submit { width: 100%; padding: 0.85rem; background: var(--primary-dark); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: 0.2s; }
     .btn-submit:active { transform: scale(0.99); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
     .alert-error { background: #fee2e2; border: 1px solid #f87171; color: #b91c1c; padding: 0.75rem; border-radius: 8px; font-size: 0.85rem; margin-bottom: 1rem; display: none; }
 
     /* Header del Panel */
@@ -71,9 +74,15 @@
     .card-mid { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.25rem; }
     .card-bot { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-muted); align-items: center; }
     .cli-reward { font-weight: 700; color: var(--text-main); }
-    .btn-ws-cumple { background: #22c55e; color: white; border: none; padding: 0.25rem 0.55rem; border-radius: 6px; font-size: 0.72rem; font-weight: 700; cursor: pointer; text-decoration: none; }
+    .btn-ws-cumple { background: var(--green-wa); color: white; border: none; padding: 0.25rem 0.55rem; border-radius: 6px; font-size: 0.72rem; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.2rem; }
 
-    .content-box { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.3rem; margin-bottom: 1rem; }
+    .content-box { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 1.3rem; margin-bottom: 1.2rem; }
+
+    /* Botones WhatsApp Mostrador */
+    .btn-whatsapp-action { width: 100%; padding: 0.8rem; background: var(--green-wa); color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem; margin-top: 0.6rem; transition: 0.2s; }
+    .btn-whatsapp-action:hover { background: var(--green-dark); }
+    .btn-whatsapp-birthday { width: 100%; padding: 0.8rem; background: #f59e0b; color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem; margin-top: 0.5rem; transition: 0.2s; }
+    .btn-whatsapp-birthday:hover { background: #d97706; }
   </style>
 </head>
 <body>
@@ -199,7 +208,10 @@
 
       <div class="form-group">
         <label>Mensaje Personalizado para WhatsApp</label>
-        <textarea id="promo-cumple-mensaje" rows="4">¡Hola {nombre}! 🎉 Desde Macchia Parfums te deseamos un muy feliz cumpleaños. Te esperamos en boutique con un detalle especial.</textarea>
+        <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.35rem;">
+          Usa <strong>{nombre}</strong> para el nombre y <strong>{tarjeta}</strong> para el link de su tarjeta.
+        </div>
+        <textarea id="promo-cumple-mensaje" rows="4">¡Hola {nombre}! 🎉 Desde Macchia Parfums te deseamos un muy feliz cumpleaños. Te esperamos en boutique con un detalle especial. Puedes ver tu tarjeta aquí: {tarjeta}</textarea>
       </div>
 
       <button class="btn-submit" type="button" onclick="guardarConfigCumple()">Guardar Configuración</button>
@@ -220,52 +232,79 @@
     </div>
   </div>
 
-  <!-- VISTA 3: TERMINAL DEL CAJERO -->
+  <!-- VISTA 3: TERMINAL DEL CAJERO (SEPARACIÓN MOSTRADOR / ALTA) -->
   <div id="view-cajero" style="display: none;">
     <div class="top-bar">
       <div>
-        <div class="panel-title">Terminal de Caja</div>
+        <div class="panel-title">Terminal de Mostrador</div>
         <div class="company-label" style="margin:0;">Boutique: <span class="company-name">MACCHIA</span></div>
       </div>
       <button class="btn-logout" type="button" onclick="irALogin()">Salir</button>
     </div>
 
+    <!-- MÓDULO 1: RECONOCIMIENTO Y OPERACIONES DEL CLIENTE -->
     <div class="content-box">
-      <div class="section-title" style="margin-bottom:1rem;">Buscar Cliente por Celular</div>
+      <div class="section-title" style="margin-bottom:0.4rem;">1. Reconocer Cliente por Celular</div>
+      <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:0.9rem;">Escribe los dígitos y el sistema lo detecta automáticamente:</p>
+      
       <div class="form-group">
-        <label>Número de WhatsApp / Celular</label>
         <div style="display:flex; gap:0.5rem;">
-          <input type="tel" id="caja-input-cel" placeholder="77290636" value="77290636">
+          <input type="tel" id="caja-input-cel" placeholder="Ej: 77290636" value="" autocomplete="off" oninput="autoBuscarCliente(this.value)">
           <button class="btn-submit" id="btn-buscar-caja" type="button" style="width:auto; padding:0.75rem 1.2rem;" onclick="buscarClientePorCel()">Buscar</button>
         </div>
       </div>
 
-      <!-- Ficha de cliente -->
-      <div id="caja-info-cliente" style="display: none; background:#f0fdf4; border:1px solid #bbf7d0; padding:1rem; border-radius:10px; margin-bottom:1.2rem;">
-        <div style="font-weight:800; font-size:1.1rem; color:#166534;" id="caja-lbl-nombre">-</div>
-        <div style="display:flex; justify-content:space-between; margin-top:0.4rem; font-size:0.88rem;">
-          <span>Sellos actuales: <strong id="caja-lbl-sellos" style="color:#d97706;">0</strong></span>
-          <span>Beneficio: <strong id="caja-lbl-premio" style="color:#16a34a;">0 BOB</strong></span>
+      <!-- FICHA DINÁMICA DEL CLIENTE DETECTADO -->
+      <div id="caja-info-cliente" style="display: none; background:#f0fdf4; border:1px solid #bbf7d0; padding:1.1rem; border-radius:10px; margin-bottom:1.2rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div style="font-weight:800; font-size:1.15rem; color:#166534;" id="caja-lbl-nombre">-</div>
+          <span style="font-size:0.78rem; background:#dcfce7; color:#166534; font-weight:700; padding:0.2rem 0.55rem; border-radius:6px;" id="caja-lbl-cumple">Cumple: -</span>
         </div>
+        
+        <div style="display:flex; justify-content:space-between; margin-top:0.5rem; font-size:0.88rem;">
+          <span>Sellos actuales: <strong id="caja-lbl-sellos" style="color:#d97706; font-size:1.05rem;">0</strong> / 10</span>
+          <span>Beneficio: <strong id="caja-lbl-premio" style="color:#16a34a; font-size:1.05rem;">0 BOB</strong></span>
+        </div>
+
+        <!-- ALERTA SI CUMPLE AÑOS ESTE MES O HOY -->
+        <div id="caja-alerta-cumple" style="display:none; margin-top:0.8rem; background:#fef3c7; border:1px solid #fde68a; color:#92400e; padding:0.6rem 0.8rem; border-radius:8px; font-size:0.82rem; font-weight:700;">
+          🎂 ¡Cliente de cumpleaños! Puedes enviarle su felicitación y regalo.
+        </div>
+
+        <!-- ACCIÓN A: ENVIAR TARJETA POR WHATSAPP (COMPRE O NO COMPRE) -->
+        <button class="btn-whatsapp-action" type="button" onclick="enviarTarjetaWhatsApp()">
+          📲 Enviar Tarjeta Actualizada por WhatsApp
+        </button>
+
+        <!-- ACCIÓN B: SALUDO DE CUMPLEAÑOS SI APLICA -->
+        <button class="btn-whatsapp-birthday" id="btn-wa-cumple-mostrador" style="display:none;" type="button" onclick="enviarWhatsAppCumpleCliente()">
+          🎂 Enviar Saludo y Regalo de Cumpleaños
+        </button>
       </div>
 
-      <div class="form-group">
-        <label>Monto de la Compra (BOB)</label>
-        <input type="number" id="caja-txt-monto" step="0.5" placeholder="0.00">
-      </div>
+      <!-- REGISTRO DE COMPRA (SI EL CLIENTE COMPRA) -->
+      <div id="caja-box-compra" style="display:none; border-top:1px dashed var(--border); padding-top:1.1rem; margin-top:0.5rem;">
+        <label style="font-size:0.88rem; font-weight:700; color:var(--text-main);">¿Realiza compra hoy?</label>
+        
+        <div class="form-group" style="margin-top:0.5rem;">
+          <input type="number" id="caja-txt-monto" step="0.5" placeholder="Monto de la compra (BOB)">
+        </div>
 
-      <div style="margin: 0.8rem 0 1.2rem; display:flex; align-items:center; gap:0.6rem;">
-        <input type="checkbox" id="caja-chk-canje" style="width:1.2rem; height:1.2rem;">
-        <label for="caja-chk-canje" style="margin:0; font-weight:700; cursor:pointer;">¿Es Canje de Beneficio?</label>
-      </div>
+        <div style="margin: 0.8rem 0 1.1rem; display:flex; align-items:center; gap:0.6rem;">
+          <input type="checkbox" id="caja-chk-canje" style="width:1.2rem; height:1.2rem;">
+          <label for="caja-chk-canje" style="margin:0; font-weight:700; cursor:pointer;">¿Es Canje de Beneficio Acumulado?</label>
+        </div>
 
-      <button class="btn-submit" id="btn-registrar-caja" type="button" onclick="registrarOperacionCaja()">Registrar Operación</button>
+        <button class="btn-submit" id="btn-registrar-caja" type="button" onclick="registrarOperacionCaja()">
+          Registrar Compra y Enviar Tarjeta
+        </button>
+      </div>
     </div>
 
-    <!-- Alta Rápida de Cliente al Paso -->
+    <!-- MÓDULO 2: ALTA DE NUEVO CLIENTE (INDEPENDIENTE) -->
     <div class="content-box">
-      <div class="section-title" style="margin-bottom:0.4rem;">Registrar Nuevo Cliente</div>
-      <p style="color:var(--text-muted); font-size:0.82rem; margin-bottom:1rem;">Alta rápida en mostrador:</p>
+      <div class="section-title" style="margin-bottom:0.4rem;">2. Registrar Nuevo Cliente</div>
+      <p style="color:var(--text-muted); font-size:0.82rem; margin-bottom:1rem;">Si el cliente aún no existe, dale de alta aquí:</p>
       
       <div class="form-group">
         <label>Nombre y Apellido</label>
@@ -307,7 +346,9 @@
         </div>
       </div>
 
-      <button class="btn-submit" id="btn-crear-cli" type="button" style="background:#0284c7;" onclick="registrarNuevoCliente()">Registrar y Vincular</button>
+      <button class="btn-submit" id="btn-crear-cli" type="button" style="background:#0284c7;" onclick="registrarNuevoCliente()">
+        Registrar Cliente y Abrir en Mostrador
+      </button>
     </div>
   </div>
 
@@ -346,8 +387,11 @@
 </div>
 
 <script>
-  // URL conectada a Apps Script
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwl86XPb1DipLFtBItLcYmf7137-KaI0UAd0ldtogSTyLN9bQs-Ae0UUN7cNFyAkPU9Dg/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXhjvfBEJC7XHMJi1jpkAXiAf-XYEW350sar7O29Zpl6LMF3HzAiLeaMCZHQNfWuBP6Q/exec";
+  const CARD_BASE_URL = "https://kibopwrd.github.io/spike/macchia/";
+
+  let clienteSeleccionado = null;
+  let timerBusqueda = null;
   let datosDuenoCache = null;
 
   function mostrarVista(vistaId) {
@@ -377,6 +421,7 @@
       cargarMetricasDueno();
     } else if (email === "cajero@macchia.com" && pass === "Jeroca") {
       mostrarVista('view-cajero');
+      document.getElementById('caja-input-cel').focus();
     } else if (email === "kibopwrd@gmail.com" && pass === "admin123") {
       mostrarVista('view-superadmin');
     } else {
@@ -385,6 +430,197 @@
     }
   });
 
+  /* BÚSQUEDA AUTOMÁTICA EN TIEMPO REAL AL ESCRIBIR */
+  function autoBuscarCliente(val) {
+    const limpios = val.replace(/\D/g, '');
+    clearTimeout(timerBusqueda);
+    
+    if (limpios.length < 7) {
+      document.getElementById('caja-info-cliente').style.display = 'none';
+      document.getElementById('caja-box-compra').style.display = 'none';
+      clienteSeleccionado = null;
+      return;
+    }
+
+    // Si tiene 7 u 8 dígitos (celulares en Bolivia), busca automáticamente
+    timerBusqueda = setTimeout(() => {
+      buscarClientePorCel();
+    }, 400);
+  }
+
+  async function buscarClientePorCel() {
+    const cel = document.getElementById('caja-input-cel').value.trim();
+    if (!cel) return;
+
+    const btn = document.getElementById('btn-buscar-caja');
+    btn.disabled = true;
+    btn.innerText = "...";
+
+    try {
+      const res = await fetch(`${SCRIPT_URL}?action=getCliente&telefono=${encodeURIComponent(cel)}`).then(r => r.json());
+      if (res && res.success && res.cliente) {
+        clienteSeleccionado = res.cliente;
+        mostrarFichaCliente(clienteSeleccionado);
+      } else {
+        clienteSeleccionado = null;
+        document.getElementById('caja-info-cliente').style.display = 'none';
+        document.getElementById('caja-box-compra').style.display = 'none';
+      }
+    } catch(e) {
+      console.error(e);
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "Buscar";
+    }
+  }
+
+  function mostrarFichaCliente(c) {
+    document.getElementById('caja-lbl-nombre').innerText = c.nombre;
+    document.getElementById('caja-lbl-sellos').innerText = c.sellosActuales;
+    document.getElementById('caja-lbl-premio').innerText = c.premioCalculado + " BOB";
+
+    // Manejo de fecha de cumpleaños
+    const d = c.diaCumple;
+    const m = c.mesCumple;
+    const nombresMes = ["", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+    const mesStr = isNaN(m) ? m : (nombresMes[Number(m)] || m);
+    document.getElementById('caja-lbl-cumple').innerText = (d && m) ? `Cumple: ${d} de ${mesStr}` : 'Sin fecha';
+
+    // Evaluar si es el mes actual de cumpleaños
+    const mesActual = new Date().getMonth() + 1;
+    const esCumpleMes = (Number(m) === mesActual);
+
+    const alertaBox = document.getElementById('caja-alerta-cumple');
+    const btnCumple = document.getElementById('btn-wa-cumple-mostrador');
+
+    if (esCumpleMes) {
+      alertaBox.style.display = 'block';
+      btnCumple.style.display = 'flex';
+    } else {
+      alertaBox.style.display = 'none';
+      btnCumple.style.display = 'none';
+    }
+
+    document.getElementById('caja-info-cliente').style.display = 'block';
+    document.getElementById('caja-box-compra').style.display = 'block';
+  }
+
+  /* ENVIAR TARJETA POR WHATSAPP (COMPRE O NO COMPRE) */
+  function enviarTarjetaWhatsApp() {
+    if (!clienteSeleccionado) return alert("Selecciona o busca un cliente primero.");
+    const urlTarjeta = `${CARD_BASE_URL}?tel=${clienteSeleccionado.telefono}`;
+    const texto = `¡Hola ${clienteSeleccionado.nombre}! ✨ Te compartimos tu tarjeta digital de fidelización de Macchia Parfums: ${urlTarjeta}\n\nActualmente tienes ${clienteSeleccionado.sellosActuales} de 10 sellos acumulados. ¡Te esperamos pronto en boutique!`;
+    const waLink = `https://wa.me/591${clienteSeleccionado.telefono.replace(/\D/g, '')}?text=${encodeURIComponent(texto)}`;
+    window.open(waLink, '_blank');
+  }
+
+  /* ENVIAR SALUDO DE CUMPLEAÑOS DESDE MOSTRADOR */
+  function enviarWhatsAppCumpleCliente() {
+    if (!clienteSeleccionado) return;
+    const urlTarjeta = `${CARD_BASE_URL}?tel=${clienteSeleccionado.telefono}`;
+    let plantilla = document.getElementById('promo-cumple-mensaje') ? document.getElementById('promo-cumple-mensaje').value : '¡Feliz cumpleaños {nombre}! 🎉 Pasa por Macchia a recoger tu beneficio: {tarjeta}';
+    let mensaje = plantilla.replace('{nombre}', clienteSeleccionado.nombre).replace('{tarjeta}', urlTarjeta);
+    const waLink = `https://wa.me/591${clienteSeleccionado.telefono.replace(/\D/g, '')}?text=${encodeURIComponent(mensaje)}`;
+    window.open(waLink, '_blank');
+  }
+
+  /* REGISTRAR COMPRA Y DISPARAR WHATSAPP */
+  async function registrarOperacionCaja() {
+    if (!clienteSeleccionado) return alert("Primero ingresa el cliente.");
+    const monto = document.getElementById('caja-txt-monto').value;
+    const esCanje = document.getElementById('caja-chk-canje').checked;
+
+    if (!monto || Number(monto) <= 0) return alert("Ingresa un monto válido para la compra.");
+
+    const btn = document.getElementById('btn-registrar-caja');
+    btn.disabled = true;
+    btn.innerText = "Registrando...";
+
+    try {
+      const p = new URLSearchParams({
+        action: 'registrarCompra',
+        telefono: clienteSeleccionado.telefono,
+        idCliente: clienteSeleccionado.idCliente,
+        monto: monto,
+        esCanje: esCanje,
+        usuarioCaja: 'cajero@macchia.com'
+      });
+
+      const res = await fetch(`${SCRIPT_URL}?${p.toString()}`).then(r => r.json());
+      if (res && res.success) {
+        alert("¡Compra registrada exitosamente!");
+        document.getElementById('caja-txt-monto').value = '';
+        
+        // Recargar datos del cliente
+        await buscarClientePorCel();
+
+        // Preguntar para enviar la tarjeta actualizada de inmediato
+        if (confirm("¿Deseas enviar la tarjeta actualizada al WhatsApp del cliente ahora?")) {
+          enviarTarjetaWhatsApp();
+        }
+      } else {
+        alert("Error al registrar compra.");
+      }
+    } catch(e) {
+      alert("Error de conexión al registrar.");
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "Registrar Compra y Enviar Tarjeta";
+    }
+  }
+
+  /* ALTA RÁPIDA DE CLIENTE (MÓDULO INDEPENDIENTE) */
+  async function registrarNuevoCliente() {
+    const nom = document.getElementById('nuevo-nombre').value.trim();
+    const cel = document.getElementById('nuevo-celular').value.trim();
+    const dia = document.getElementById('nuevo-dia').value;
+    const mes = document.getElementById('nuevo-mes').value;
+
+    if (!nom || !cel) return alert("Nombre y Celular son obligatorios.");
+
+    const btn = document.getElementById('btn-crear-cli');
+    btn.disabled = true;
+    btn.innerText = "Registrando...";
+
+    const p = new URLSearchParams({
+      action: 'crearCliente',
+      nombre: nom,
+      telefono: cel,
+      dia: dia,
+      mes: mes
+    });
+
+    try {
+      const res = await fetch(`${SCRIPT_URL}?${p.toString()}`).then(r => r.json());
+      if (res && res.success) {
+        alert(`¡Cliente ${nom} registrado con éxito en Macchia!`);
+        
+        // Limpiar formulario de alta
+        document.getElementById('nuevo-nombre').value = '';
+        document.getElementById('nuevo-celular').value = '';
+        document.getElementById('nuevo-dia').value = '';
+        document.getElementById('nuevo-mes').value = '';
+
+        // Cargar inmediatamente en el mostrador
+        document.getElementById('caja-input-cel').value = cel;
+        await buscarClientePorCel();
+
+        // Ofrecer enviar su tarjeta de bienvenida al momento
+        if (confirm("¿Enviar tarjeta de bienvenida por WhatsApp ahora?")) {
+          enviarTarjetaWhatsApp();
+        }
+      } else {
+        alert("Error: " + (res.error || "No se pudo registrar"));
+      }
+    } catch(e) {
+      alert("Error de red al registrar.");
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "Registrar Cliente y Abrir en Mostrador";
+    }
+  }
+
+  /* PANEL DEL DUEÑO */
   function cambiarTabDueno(tab, btn) {
     ['metricas', 'marca', 'promociones', 'cajeros'].forEach(t => {
       document.getElementById('dueno-' + t).style.display = (t === tab) ? 'block' : 'none';
@@ -405,16 +641,7 @@
         renderizarClientesDueno(res.clientes);
         return;
       }
-    } catch (e) {
-      console.warn("Cargando datos de respaldo...");
-    }
-
-    const demo = [
-      { nombre: "Rafa", telefono: "77290365", cumpleanos: "28 de Dic", totalConsumo: 0, comprasCount: 0, ciclo: 1, sellos: 0, beneficio: 0 },
-      { nombre: "Alfonso", telefono: "77290636", cumpleanos: "4 de Jul", totalConsumo: 1364, comprasCount: 7, ciclo: 1, sellos: 4, beneficio: 136.4 },
-      { nombre: "Luz de Alborta", telefono: "78557000", cumpleanos: "29 de Dic", totalConsumo: 0, comprasCount: 0, ciclo: 1, sellos: 0, beneficio: 0 }
-    ];
-    renderizarClientesDueno(demo);
+    } catch(e) {}
   }
 
   function renderizarClientesDueno(lista) {
@@ -432,7 +659,7 @@
         <div class="card-bot">
           <div>Cumpleaños: ${c.cumpleanos} • ${c.comprasCount} compras</div>
           <div style="display:flex; align-items:center; gap:0.5rem;">
-            <button class="btn-ws-cumple" type="button" onclick="enviarWhatsAppCumple('${c.telefono}', '${c.nombre}')">WhatsApp</button>
+            <button class="btn-ws-cumple" type="button" onclick="enviarWhatsAppDueno('${c.telefono}', '${c.nombre}')">WhatsApp</button>
             <span class="cli-reward">${c.beneficio} BOB</span>
           </div>
         </div>
@@ -440,20 +667,11 @@
     `).join('');
   }
 
-  function exportarCSV(tipo) {
-    if (!datosDuenoCache || !datosDuenoCache.clientes) return alert("Sincronizando datos...");
-    let csv = "data:text/csv;charset=utf-8,";
-    if (tipo === 'clientes') {
-      csv += "Nombre,Telefono,Cumpleanos,Total_BOB,Compras,Ciclo,Sellos,Beneficio_BOB\n";
-      datosDuenoCache.clientes.forEach(c => {
-        csv += `"${c.nombre}","${c.telefono}","${c.cumpleanos}",${c.totalConsumo},${c.comprasCount},${c.ciclo},${c.sellos},${c.beneficio}\n`;
-      });
-    }
-    const uri = encodeURI(csv);
-    const link = document.createElement("a");
-    link.href = uri;
-    link.download = `${tipo}_macchia.csv`;
-    link.click();
+  function enviarWhatsAppDueno(tel, nom) {
+    const urlTarjeta = `${CARD_BASE_URL}?tel=${tel}`;
+    let plantilla = document.getElementById('promo-cumple-mensaje').value;
+    let msg = plantilla.replace('{nombre}', nom).replace('{tarjeta}', urlTarjeta);
+    window.open(`https://wa.me/591${tel.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
   }
 
   async function guardarConfigCumple() {
@@ -477,115 +695,20 @@
     }
   }
 
-  function enviarWhatsAppCumple(tel, nom) {
-    const msg = document.getElementById('promo-cumple-mensaje').value.replace('{nombre}', nom);
-    window.open(`https://wa.me/591${tel.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
-  }
-
-  /* Operaciones Cajero */
-  async function buscarClientePorCel() {
-    const cel = document.getElementById('caja-input-cel').value.trim();
-    if (!cel) return alert("Ingresa el número de celular.");
-
-    const btn = document.getElementById('btn-buscar-caja');
-    btn.disabled = true;
-    btn.innerText = "...";
-
-    try {
-      const res = await fetch(`${SCRIPT_URL}?action=getCliente&telefono=${encodeURIComponent(cel)}`).then(r => r.json());
-      if (res && res.success && res.cliente) {
-        const c = res.cliente;
-        document.getElementById('caja-lbl-nombre').innerText = c.nombre;
-        document.getElementById('caja-lbl-sellos').innerText = c.sellosActuales;
-        document.getElementById('caja-lbl-premio').innerText = c.premioCalculado + " BOB";
-        document.getElementById('caja-info-cliente').style.display = 'block';
-      } else {
-        alert("Cliente no encontrado con ese número.");
-        document.getElementById('caja-info-cliente').style.display = 'none';
-      }
-    } catch(e) {
-      alert("Error al buscar cliente.");
-    } finally {
-      btn.disabled = false;
-      btn.innerText = "Buscar";
-    }
-  }
-
-  async function registrarOperacionCaja() {
-    const btn = document.getElementById('btn-registrar-caja');
-    const cel = document.getElementById('caja-input-cel').value.trim();
-    const monto = document.getElementById('caja-txt-monto').value;
-    const esCanje = document.getElementById('caja-chk-canje').checked;
-
-    if (!cel || !monto) return alert("Completa el celular y el monto.");
-
-    btn.disabled = true;
-    btn.innerText = "Registrando...";
-
-    try {
-      const p = new URLSearchParams({
-        action: 'registrarCompra',
-        telefono: cel,
-        monto: monto,
-        esCanje: esCanje,
-        usuarioCaja: 'cajero@macchia.com'
+  function exportarCSV(tipo) {
+    if (!datosDuenoCache || !datosDuenoCache.clientes) return alert("Sincronizando datos...");
+    let csv = "data:text/csv;charset=utf-8,";
+    if (tipo === 'clientes') {
+      csv += "Nombre,Telefono,Cumpleanos,Total_BOB,Compras,Ciclo,Sellos,Beneficio_BOB\n";
+      datosDuenoCache.clientes.forEach(c => {
+        csv += `"${c.nombre}","${c.telefono}","${c.cumpleanos}",${c.totalConsumo},${c.comprasCount},${c.ciclo},${c.sellos},${c.beneficio}\n`;
       });
-
-      const res = await fetch(`${SCRIPT_URL}?${p.toString()}`).then(r => r.json());
-      if (res && res.success) {
-        alert("¡Operación registrada con éxito en Macchia!");
-        document.getElementById('caja-txt-monto').value = '';
-        buscarClientePorCel();
-      } else {
-        alert("Error al registrar compra.");
-      }
-    } catch(e) {
-      alert("Error al conectar con el servidor.");
-    } finally {
-      btn.disabled = false;
-      btn.innerText = "Registrar Operación";
     }
-  }
-
-  async function registrarNuevoCliente() {
-    const btn = document.getElementById('btn-crear-cli');
-    const nom = document.getElementById('nuevo-nombre').value.trim();
-    const cel = document.getElementById('nuevo-celular').value.trim();
-    const dia = document.getElementById('nuevo-dia').value;
-    const mes = document.getElementById('nuevo-mes').value;
-
-    if (!nom || !cel) return alert("Nombre y Celular son obligatorios.");
-
-    btn.disabled = true;
-    btn.innerText = "Registrando...";
-
-    const p = new URLSearchParams({
-      action: 'crearCliente',
-      nombre: nom,
-      telefono: cel,
-      dia: dia,
-      mes: mes
-    });
-
-    try {
-      const res = await fetch(`${SCRIPT_URL}?${p.toString()}`).then(r => r.json());
-      if (res && res.success) {
-        alert(`¡Cliente ${nom} registrado con éxito en Macchia!`);
-        document.getElementById('caja-input-cel').value = cel;
-        document.getElementById('nuevo-nombre').value = '';
-        document.getElementById('nuevo-celular').value = '';
-        document.getElementById('nuevo-dia').value = '';
-        document.getElementById('nuevo-mes').value = '';
-        buscarClientePorCel();
-      } else {
-        alert("Error: " + (res.error || "No se pudo registrar"));
-      }
-    } catch(e) {
-      alert("Error de conexión al registrar.");
-    } finally {
-      btn.disabled = false;
-      btn.innerText = "Registrar y Vincular";
-    }
+    const uri = encodeURI(csv);
+    const link = document.createElement("a");
+    link.href = uri;
+    link.download = `${tipo}_macchia.csv`;
+    link.click();
   }
 </script>
 
