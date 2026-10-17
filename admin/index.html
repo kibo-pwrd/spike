@@ -84,7 +84,8 @@
     .btn-whatsapp-birthday { width: 100%; padding: 0.85rem; background: #f59e0b; color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem; margin-top: 0.5rem; transition: 0.2s; }
     .btn-whatsapp-birthday:hover { background: #d97706; }
 
-    .btn-preview-card { background: white; border: 1.5px solid #0f172a; color: #0f172a; padding: 0.75rem 1rem; border-radius: 8px; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; width: 100%; justify-content: center; margin-top: 1rem; }
+    /* Botón de vista previa exclusivo en configuración */
+    .btn-preview-card { background: #f8fafc; border: 1.5px solid #0f172a; color: #0f172a; padding: 0.85rem 1rem; border-radius: 8px; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; width: 100%; justify-content: center; margin-top: 0.8rem; transition: all 0.2s; }
     .btn-preview-card:hover { background: #0f172a; color: white; }
 
     /* Panel Sponsor */
@@ -136,15 +137,15 @@
       <div class="kpi-grid">
         <div class="kpi-card">
           <div class="kpi-title">Clientes Registrados</div>
-          <div class="kpi-value" id="kpi-clientes">4</div>
+          <div class="kpi-value" id="kpi-clientes">-</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-title">Total Ventas</div>
-          <div class="kpi-value" id="kpi-total-ventas">1962 BOB</div>
+          <div class="kpi-value" id="kpi-total-ventas">- BOB</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-title">Ventas Este Mes</div>
-          <div class="kpi-value" id="kpi-ventas-mes">50 BOB</div>
+          <div class="kpi-value" id="kpi-ventas-mes">- BOB</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-title">Descuentos Otorgados</div>
@@ -165,12 +166,23 @@
       <div class="client-list" id="contenedor-clientes"></div>
     </div>
 
-    <!-- PESTAÑA: MARCA, REGLAS Y SPONSOR -->
+    <!-- PESTAÑA: MARCA, REGLAS Y SPONSOR (CON BOTÓN DE VISTA PREVIA FUNCIONAL) -->
     <div id="dueno-marca" class="content-box" style="display: none;">
-      <div class="section-title" style="margin-bottom:1rem;">1. Reglas del Programa</div>
+      <div class="section-title" style="margin-bottom:1rem;">1. Reglas Comerciales</div>
+      
       <div class="form-group">
         <label>Cantidad de Sellos por Ciclo (Meta de compras)</label>
-        <input type="number" id="cfg-meta-sellos" value="10" placeholder="Ej: 5, 6, 8 o 10">
+        <input type="number" id="cfg-meta-sellos" value="5" placeholder="Ej: 5 o 10">
+      </div>
+
+      <div class="form-group">
+        <label>Monto Mínimo por Compra para Ganar Sello (BOB)</label>
+        <input type="number" id="cfg-monto-min-sello" value="15" placeholder="Ej: 15">
+      </div>
+
+      <div class="form-group">
+        <label>Monto Mínimo de Consumo para Canjear Beneficio (BOB)</label>
+        <input type="number" id="cfg-monto-min-canje" value="20" placeholder="Ej: 20">
       </div>
 
       <!-- GESTIÓN DEL SPONSOR -->
@@ -222,22 +234,11 @@
         Guardar Configuración y Reglas
       </button>
 
-      <button class="btn-preview-card" type="button" onclick="abrirVistaPreviaTarjeta()">
-        👁 Probar y Ver Tarjeta en Producción
+      <!-- BOTÓN VISTA PREVIA DIRECTO -->
+      <button class="btn-preview-card" type="button" onclick="abrirVistaPreviaTarjetaDemo()">
+        👁 Probar y Ver Tarjeta Estándar (Modo Demo)
       </button>
     </div>
-    <div class="form-group">
-  <label>Cantidad de Sellos por Ciclo</label>
-  <input type="number" id="cfg-meta-sellos" value="5">
-</div>
-<div class="form-group">
-  <label>Monto Mínimo por Compra para Ganar Sello (BOB)</label>
-  <input type="number" id="cfg-monto-min-sello" value="15">
-</div>
-<div class="form-group">
-  <label>Monto Mínimo de Consumo para Canjear Beneficio (BOB)</label>
-  <input type="number" id="cfg-monto-min-canje" value="20">
-</div>
 
     <!-- PESTAÑA: PROMOCIONES -->
     <div id="dueno-promociones" class="content-box" style="display: none;">
@@ -292,7 +293,7 @@
         </div>
         
         <div style="display:flex; justify-content:space-between; margin-top:0.5rem; font-size:0.88rem;">
-          <span>Sellos actuales: <strong id="caja-lbl-sellos" style="color:#d97706; font-size:1.05rem;">0</strong> / <span id="caja-lbl-meta">10</span></span>
+          <span>Sellos actuales: <strong id="caja-lbl-sellos" style="color:#d97706; font-size:1.05rem;">0</strong> / <span id="caja-lbl-meta">5</span></span>
           <span>Beneficio: <strong id="caja-lbl-premio" style="color:#16a34a; font-size:1.05rem;">0 BOB</strong></span>
         </div>
 
@@ -366,7 +367,7 @@
     </div>
   </div>
 
-  <!-- VISTA 4: SUPER ADMIN -->
+  <!-- VISTA 4: CONSOLA TÉCNICA (LIMPIA, SIN BOTÓN DE PRUEBA REDUNDANTE) -->
   <div id="view-superadmin" style="display: none;">
     <div class="top-bar">
       <div>
@@ -380,22 +381,18 @@
       <div class="section-title" style="margin-bottom:0.5rem;">Estado de la Instancia</div>
       <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Base de Datos: <strong>Macchia - DB</strong></p>
       
-      <div style="background:#f8fafc; border:1px solid var(--border); padding:0.8rem; border-radius:8px; font-size:0.85rem; margin-bottom:1rem;">
+      <div style="background:#f8fafc; border:1px solid var(--border); padding:0.8rem; border-radius:8px; font-size:0.85rem;">
         <div>• Conexión: <span style="color:#16a34a; font-weight:700;">ACTIVA</span></div>
         <div>• Módulo Sponsor: <span style="color:#16a34a; font-weight:700;">HABILITADO</span></div>
         <div>• Búsqueda: <span style="font-weight:700;">CELULAR (WHATSAPP)</span></div>
       </div>
-
-      <button class="btn-preview-card" type="button" onclick="abrirVistaPreviaTarjeta()">
-        👁 Verificar Tarjeta Visual en Producción
-      </button>
     </div>
   </div>
 
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvITXvc0mxs4H8-XDqyTq02TUvmON39t08Dj0CRRxcz6DEYakVi6-q5H8PB0rqcofe0w/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXhjvfBEJC7XHMJi1jpkAXiAf-XYEW350sar7O29Zpl6LMF3HzAiLeaMCZHQNfWuBP6Q/exec";
   const CARD_BASE_URL = "https://kibo-pwrd.github.io/spike/macchia/";
 
   let clienteSeleccionado = null;
@@ -417,7 +414,6 @@
     document.getElementById('msg-login-error').style.display = 'none';
   }
 
-  /* DIRECCIONAMIENTO INMEDIATO Y AISLADO */
   document.getElementById('btn-login-action').addEventListener('click', function() {
     const email = document.getElementById('txt-email').value.trim().toLowerCase();
     const pass = document.getElementById('txt-pass').value.trim();
@@ -425,10 +421,8 @@
 
     errorBox.style.display = 'none';
 
-    // 1. Validar Dueño
     if (email === "dueno@macchia.com" && pass.toLowerCase() === "mate@") {
       mostrarVista('view-dueno');
-      // Las cargas asíncronas se ejecutan después de cambiar la vista
       setTimeout(() => {
         try { cargarMetricasDueno(); } catch(e) {}
         try { cargarConfiguracionSponsor(); } catch(e) {}
@@ -436,7 +430,6 @@
       return;
     }
 
-    // 2. Validar Cajero
     if (email === "cajero@macchia.com" && pass.toLowerCase() === "jeroca") {
       mostrarVista('view-cajero');
       setTimeout(() => {
@@ -446,7 +439,6 @@
       return;
     }
 
-    // 3. Validar Super Admin
     const esAdmin1 = (email === "admin@midominio.com") && (pass === "Admin2026!*");
     const esAdmin2 = (email === "kibopwrd@gmail.com") && (pass.toLowerCase() === "admin123");
     if (esAdmin1 || esAdmin2) {
@@ -454,7 +446,6 @@
       return;
     }
 
-    // Si ninguna coincide
     errorBox.innerText = "Credenciales incorrectas.";
     errorBox.style.display = 'block';
   });
@@ -502,7 +493,7 @@
   function mostrarFichaCliente(c) {
     document.getElementById('caja-lbl-nombre').innerText = c.nombre;
     document.getElementById('caja-lbl-sellos').innerText = c.sellosActuales;
-    document.getElementById('caja-lbl-meta').innerText = c.metaSellos || 10;
+    document.getElementById('caja-lbl-meta').innerText = c.metaSellos || 5;
     document.getElementById('caja-lbl-premio').innerText = c.premioCalculado + " BOB";
 
     const d = c.diaCumple;
@@ -532,7 +523,7 @@
   function enviarTarjetaWhatsApp() {
     if (!clienteSeleccionado) return alert("Busca un cliente primero.");
     const urlTarjeta = `${CARD_BASE_URL}?tel=${clienteSeleccionado.telefono}`;
-    const meta = clienteSeleccionado.metaSellos || 10;
+    const meta = clienteSeleccionado.metaSellos || 5;
     const texto = `¡Hola ${clienteSeleccionado.nombre}! ✨ Te compartimos tu tarjeta digital de fidelización de Macchia Parfums:\n\n🔗 ${urlTarjeta}\n\nActualmente tienes ${clienteSeleccionado.sellosActuales} de ${meta} sellos acumulados. ¡Te esperamos pronto en boutique!`;
     const waLink = `https://wa.me/591${clienteSeleccionado.telefono.replace(/\D/g, '')}?text=${encodeURIComponent(texto)}`;
     window.open(waLink, '_blank');
@@ -633,53 +624,35 @@
     }
   }
 
-  /* GESTIÓN DE CONFIGURACIÓN DEL SPONSOR Y REGLAS CON MANEJO DE ERRORES */
+  /* GESTIÓN DE CONFIGURACIÓN Y SPONSOR */
   async function cargarConfiguracionSponsor() {
-  try {
-    const res = await fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json());
-    if (res && res.success && res.config) {
-      const c = res.config;
-      const setVal = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.value = val; };
-      setVal('cfg-meta-sellos', c.COMPRAS_PARA_CICLO);
-      setVal('cfg-monto-min-sello', c.MONTO_MINIMO_SELLO);
-      setVal('cfg-monto-min-canje', c.MONTO_MINIMO_CANJE);
-      setVal('cfg-sponsor-activo', c.SPONSOR_ACTIVO);
-      setVal('cfg-sponsor-modalidad', c.SPONSOR_MODALIDAD);
-      setVal('cfg-sponsor-nombre', c.SPONSOR_NOMBRE);
-      setVal('cfg-sponsor-logo-url', c.SPONSOR_LOGO_URL);
-      setVal('cfg-sponsor-stamp-icon', c.SPONSOR_STAMP_ICON);
-      setVal('cfg-sponsor-link', c.SPONSOR_LINK);
+    try {
+      const res = await fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json());
+      if (res && res.success && res.config) {
+        const c = res.config;
+        const setVal = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.value = val; };
+        setVal('cfg-meta-sellos', c.COMPRAS_PARA_CICLO || 5);
+        setVal('cfg-monto-min-sello', c.MONTO_MINIMO_SELLO || 15);
+        setVal('cfg-monto-min-canje', c.MONTO_MINIMO_CANJE || 20);
+        setVal('cfg-sponsor-activo', c.SPONSOR_ACTIVO || 'NO');
+        setVal('cfg-sponsor-modalidad', c.SPONSOR_MODALIDAD || 'BANNER_Y_SELLO');
+        setVal('cfg-sponsor-nombre', c.SPONSOR_NOMBRE || '');
+        setVal('cfg-sponsor-logo-url', c.SPONSOR_LOGO_URL || '');
+        setVal('cfg-sponsor-stamp-icon', c.SPONSOR_STAMP_ICON || '');
+        setVal('cfg-sponsor-link', c.SPONSOR_LINK || '');
+      }
+    } catch(e) {
+      console.warn("Carga protegida de configuración:", e);
     }
-  } catch(e) {}
-}
-
-async function guardarReglasYSponsor() {
-  const getVal = (id) => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
-  const p = new URLSearchParams({
-    action: 'guardarConfiguracionSponsor',
-    COMPRAS_PARA_CICLO: getVal('cfg-meta-sellos') || '5',
-    MONTO_MINIMO_SELLO: getVal('cfg-monto-min-sello') || '15',
-    MONTO_MINIMO_CANJE: getVal('cfg-monto-min-canje') || '20',
-    SPONSOR_ACTIVO: getVal('cfg-sponsor-activo') || 'NO',
-    SPONSOR_MODALIDAD: getVal('cfg-sponsor-modalidad') || 'BANNER_Y_SELLO',
-    SPONSOR_NOMBRE: getVal('cfg-sponsor-nombre'),
-    SPONSOR_LOGO_URL: getVal('cfg-sponsor-logo-url'),
-    SPONSOR_STAMP_ICON: getVal('cfg-sponsor-stamp-icon'),
-    SPONSOR_LINK: getVal('cfg-sponsor-link')
-  });
-  await fetch(`${SCRIPT_URL}?${p.toString()}`);
-  alert("¡Configuración guardada en Macchia - DB!");
-}
+  }
 
   async function guardarReglasYSponsor() {
-    const getVal = (id) => {
-      const el = document.getElementById(id);
-      return el ? el.value.trim() : '';
-    };
-
+    const getVal = (id) => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
     const p = new URLSearchParams({
       action: 'guardarConfiguracionSponsor',
-      COMPRAS_PARA_CICLO: getVal('cfg-meta-sellos') || 10,
+      COMPRAS_PARA_CICLO: getVal('cfg-meta-sellos') || '5',
+      MONTO_MINIMO_SELLO: getVal('cfg-monto-min-sello') || '15',
+      MONTO_MINIMO_CANJE: getVal('cfg-monto-min-canje') || '20',
       SPONSOR_ACTIVO: getVal('cfg-sponsor-activo') || 'NO',
       SPONSOR_MODALIDAD: getVal('cfg-sponsor-modalidad') || 'BANNER_Y_SELLO',
       SPONSOR_NOMBRE: getVal('cfg-sponsor-nombre'),
@@ -750,7 +723,6 @@ async function guardarReglasYSponsor() {
       </div>
     `).join('');
   }
-  
 
   function enviarWhatsAppDueno(tel, nom) {
     const urlTarjeta = `${CARD_BASE_URL}?tel=${tel}`;
@@ -791,8 +763,9 @@ async function guardarReglasYSponsor() {
     link.click();
   }
 
-  function abrirVistaPreviaTarjeta() {
-    window.open(`${CARD_BASE_URL}?tel=77290636`, '_blank');
+  // Abre la tarjeta en modo estándar / demo (sin atarse a ningún teléfono de cliente real)
+  function abrirVistaPreviaTarjetaDemo() {
+    window.open(`${CARD_BASE_URL}?demo=1`, '_blank');
   }
 </script>
 
