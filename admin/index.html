@@ -39,6 +39,11 @@
     .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
     .alert-error { background: #fee2e2; border: 1px solid #f87171; color: #b91c1c; padding: 0.75rem; border-radius: 8px; font-size: 0.85rem; margin-bottom: 1rem; display: none; }
 
+    /* Accesos rápidos de prueba */
+    .quick-access-box { display: flex; gap: 0.4rem; margin-top: 1rem; }
+    .btn-quick { flex: 1; padding: 0.45rem; background: #f1f5f9; border: 1px solid var(--border); border-radius: 6px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); cursor: pointer; }
+    .btn-quick:hover { background: #e2e8f0; color: var(--text-main); }
+
     /* Header */
     .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; }
     .panel-title { font-size: 1.55rem; font-weight: 800; }
@@ -112,6 +117,13 @@
       <input type="password" id="txt-pass" value="Mate@">
     </div>
     <button class="btn-submit" type="button" id="btn-login-action">Iniciar Sesión</button>
+
+    <!-- Botones de relleno rápido para pruebas directas -->
+    <div class="quick-access-box">
+      <button type="button" class="btn-quick" onclick="autocompletar('dueno')">Rol Dueño</button>
+      <button type="button" class="btn-quick" onclick="autocompletar('cajero')">Rol Cajero</button>
+      <button type="button" class="btn-quick" onclick="autocompletar('admin')">Super Admin</button>
+    </div>
   </div>
 
   <!-- VISTA 2: PANEL DEL DUEÑO -->
@@ -405,24 +417,43 @@
     document.getElementById('msg-login-error').style.display = 'none';
   }
 
+  function autocompletar(rol) {
+    const errorBox = document.getElementById('msg-login-error');
+    errorBox.style.display = 'none';
+    if (rol === 'dueno') {
+      document.getElementById('txt-email').value = "dueno@macchia.com";
+      document.getElementById('txt-pass').value = "Mate@";
+    } else if (rol === 'cajero') {
+      document.getElementById('txt-email').value = "cajero@macchia.com";
+      document.getElementById('txt-pass').value = "Jeroca";
+    } else if (rol === 'admin') {
+      document.getElementById('txt-email').value = "kibopwrd@gmail.com";
+      document.getElementById('txt-pass').value = "admin123";
+    }
+  }
+
   document.getElementById('btn-login-action').addEventListener('click', function() {
     const email = document.getElementById('txt-email').value.trim().toLowerCase();
     const pass = document.getElementById('txt-pass').value.trim();
+    const passLower = pass.toLowerCase();
     const errorBox = document.getElementById('msg-login-error');
 
     errorBox.style.display = 'none';
 
-    if (email === "dueno@macchia.com" && pass === "Mate@") {
+    // Dueño: Tolera Mate@ y mate@
+    if (email === "dueno@macchia.com" && (pass === "Mate@" || passLower === "mate@")) {
       mostrarVista('view-dueno');
       cargarMetricasDueno();
       cargarConfiguracionSponsor();
-    } else if (email === "cajero@macchia.com" && pass === "Jeroca") {
+    // Cajero: Tolera Jeroca y jeroca
+    } else if (email === "cajero@macchia.com" && (pass === "Jeroca" || passLower === "jeroca")) {
       mostrarVista('view-cajero');
       document.getElementById('caja-input-cel').focus();
-    } else if (email === "kibopwrd@gmail.com" && pass === "admin123") {
+    // Super Admin: Tolera admin123
+    } else if (email === "kibopwrd@gmail.com" && passLower === "admin123") {
       mostrarVista('view-superadmin');
     } else {
-      errorBox.innerText = "Correo o contraseña incorrectos.";
+      errorBox.innerText = "Credenciales incorrectas. Verifica correo y contraseña.";
       errorBox.style.display = 'block';
     }
   });
@@ -602,4 +633,139 @@
   }
 
   /* GESTIÓN DE CONFIGURACIÓN DEL SPONSOR Y REGLAS */
-  async function cargarConfiguracionSponsor()
+  async function cargarConfiguracionSponsor() {
+    try {
+      const res = await fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json());
+      if (res && res.success && res.config) {
+        const c = res.config;
+        if (c.COMPRAS_PARA_CICLO) document.getElementById('cfg-meta-sellos').value = c.COMPRAS_PARA_CICLO;
+        if (c.SPONSOR_ACTIVO) document.getElementById('cfg-sponsor-activo').value = c.SPONSOR_ACTIVO;
+        if (c.SPONSOR_MODALIDAD) document.getElementById('cfg-sponsor-modalidad').value = c.SPONSOR_MODALIDAD;
+        if (c.SPONSOR_NOMBRE) document.getElementById('cfg-sponsor-nombre').value = c.SPONSOR_NOMBRE;
+        if (c.SPONSOR_LOGO_URL) document.getElementById('cfg-sponsor-logo-url').value = c.SPONSOR_LOGO_URL;
+        if (c.SPONSOR_STAMP_ICON) document.getElementById('cfg-sponsor-stamp-icon').value = c.SPONSOR_STAMP_ICON;
+        if (c.SPONSOR_LINK !== undefined) document.getElementById('cfg-sponsor-link').value = c.SPONSOR_LINK;
+      }
+    } catch(e) {
+      console.warn("Carga de configuración:", e);
+    }
+  }
+
+  async function guardarReglasYSponsor() {
+    const meta = document.getElementById('cfg-meta-sellos').value;
+    const activo = document.getElementById('cfg-sponsor-activo').value;
+    const mod = document.getElementById('cfg-sponsor-modalidad').value;
+    const nom = document.getElementById('cfg-sponsor-nombre').value.trim();
+    const logo = document.getElementById('cfg-sponsor-logo-url').value.trim();
+    const stamp = document.getElementById('cfg-sponsor-stamp-icon').value.trim();
+    const link = document.getElementById('cfg-sponsor-link').value.trim();
+
+    const p = new URLSearchParams({
+      action: 'guardarConfiguracionSponsor',
+      COMPRAS_PARA_CICLO: meta,
+      SPONSOR_ACTIVO: activo,
+      SPONSOR_MODALIDAD: mod,
+      SPONSOR_NOMBRE: nom,
+      SPONSOR_LOGO_URL: logo,
+      SPONSOR_STAMP_ICON: stamp,
+      SPONSOR_LINK: link
+    });
+
+    try {
+      await fetch(`${SCRIPT_URL}?${p.toString()}`);
+      alert("¡Configuración guardada exitosamente en Macchia - DB!");
+    } catch(e) {
+      alert("Configuración enviada.");
+    }
+  }
+
+  function cambiarTabDueno(tab, btn) {
+    ['metricas', 'marca', 'promociones', 'cajeros'].forEach(t => {
+      document.getElementById('dueno-' + t).style.display = (t === tab) ? 'block' : 'none';
+    });
+    document.querySelectorAll('#view-dueno .tab-item').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  async function cargarMetricasDueno() {
+    try {
+      const res = await fetch(`${SCRIPT_URL}?action=getMetricasDueno`).then(r => r.json());
+      if (res && res.success) {
+        datosDuenoCache = res;
+        document.getElementById('kpi-clientes').innerText = res.metricas.clientesRegistrados;
+        document.getElementById('kpi-total-ventas').innerText = `${res.metricas.totalVentas} BOB`;
+        document.getElementById('kpi-ventas-mes').innerText = `${res.metricas.ventasMes} BOB`;
+        document.getElementById('kpi-descuentos').innerText = `${res.metricas.descuentosOtorgados} BOB`;
+        renderizarClientesDueno(res.clientes);
+        return;
+      }
+    } catch(e) {}
+  }
+
+  function renderizarClientesDueno(lista) {
+    const cont = document.getElementById('contenedor-clientes');
+    cont.innerHTML = lista.map(c => `
+      <div class="client-card">
+        <div class="card-top">
+          <div class="cli-name">${c.nombre}</div>
+          <div class="cli-total">${c.totalConsumo} BOB</div>
+        </div>
+        <div class="card-mid">
+          <div>Tel: ${c.telefono}</div>
+          <div>Ciclo ${c.ciclo} • ${c.sellos} sellos</div>
+        </div>
+        <div class="card-bot">
+          <div>Cumpleaños: ${c.cumpleanos} • ${c.comprasCount} compras</div>
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <button class="btn-ws-cumple" type="button" onclick="enviarWhatsAppDueno('${c.telefono}', '${c.nombre}')">WhatsApp</button>
+            <span class="cli-reward">${c.beneficio} BOB</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function enviarWhatsAppDueno(tel, nom) {
+    const urlTarjeta = `${CARD_BASE_URL}?tel=${tel}`;
+    let plantilla = document.getElementById('promo-cumple-mensaje').value;
+    let msg = plantilla.replace('{nombre}', nom).replace('{tarjeta}', urlTarjeta);
+    window.open(`https://wa.me/591${tel.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
+  }
+
+  async function guardarConfigCumple() {
+    const mensaje = document.getElementById('promo-cumple-mensaje').value.trim();
+    try {
+      const p = new URLSearchParams({
+        action: 'guardarPromocionCumple',
+        mensaje: mensaje
+      });
+      await fetch(`${SCRIPT_URL}?${p.toString()}`);
+      alert("¡Mensaje de cumpleaños guardado!");
+    } catch(e) {
+      alert("Guardado.");
+    }
+  }
+
+  function exportarCSV(tipo) {
+    if (!datosDuenoCache || !datosDuenoCache.clientes) return alert("Sincronizando datos...");
+    let csv = "data:text/csv;charset=utf-8,";
+    if (tipo === 'clientes') {
+      csv += "Nombre,Telefono,Cumpleanos,Total_BOB,Compras,Ciclo,Sellos,Beneficio_BOB\n";
+      datosDuenoCache.clientes.forEach(c => {
+        csv += `"${c.nombre}","${c.telefono}","${c.cumpleanos}",${c.totalConsumo},${c.comprasCount},${c.ciclo},${c.sellos},${c.beneficio}\n`;
+      });
+    }
+    const uri = encodeURI(csv);
+    const link = document.createElement("a");
+    link.href = uri;
+    link.download = `${tipo}_macchia.csv`;
+    link.click();
+  }
+
+  function abrirVistaPreviaTarjeta() {
+    window.open(`${CARD_BASE_URL}?tel=77290636`, '_blank');
+  }
+</script>
+
+</body>
+</html>
