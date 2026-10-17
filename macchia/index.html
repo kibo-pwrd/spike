@@ -29,7 +29,6 @@
       color: var(--text-dark);
     }
 
-    /* TARJETA PRINCIPAL CON LA TRAMA OFICIAL DE MACCHIA */
     .card-container {
       width: 100%;
       max-width: 420px;
@@ -43,7 +42,6 @@
       background-size: 150px auto;
     }
 
-    /* CABECERA INSTITUCIONAL MACCHIA */
     .card-header {
       background-color: var(--brand-header);
       padding: 1.5rem 1.2rem;
@@ -59,7 +57,6 @@
       object-fit: contain;
     }
 
-    /* VELO TRANSLÚCIDO QUE PERMITE VER LA TRAMA CON CLARIDAD */
     .card-body-veil {
       background: rgba(255, 255, 255, 0.45);
       backdrop-filter: blur(2px);
@@ -67,7 +64,6 @@
       padding: 1.4rem 1.2rem 1.6rem;
     }
 
-    /* DATOS DEL CLIENTE */
     .client-section {
       text-align: center;
       margin-bottom: 1.3rem;
@@ -87,7 +83,6 @@
       letter-spacing: -0.02em;
     }
 
-    /* GRILLA DINÁMICA DE SELLOS */
     .stamps-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -127,7 +122,6 @@
       object-fit: contain;
     }
 
-    /* CASILLERO META (SPONSOR TIER 2) */
     .stamp-slot.sponsor-goal {
       border: 1.5px solid #f59e0b;
       background: rgba(255, 255, 255, 0.98);
@@ -149,7 +143,6 @@
       letter-spacing: 0.05em;
     }
 
-    /* CAJA DE BENEFICIOS */
     .reward-box {
       background: rgba(255, 255, 255, 0.95);
       border: 1px solid var(--border-soft);
@@ -180,7 +173,6 @@
       color: var(--gold-dark);
     }
 
-    /* BANNER PUBLICITARIO GRÁFICO (400x120) */
     .sponsor-ad-container {
       margin-top: 1.1rem;
       position: relative;
@@ -224,209 +216,8 @@
       display: block;
     }
 
-    /* LEGALES: SOLO POWERED BY KIBO */
+    /* PIE LEGAL CON CONDICIONES COMERCIALES */
     .card-footer {
       text-align: center;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      margin-top: 1.3rem;
-      border-top: 1px solid rgba(15, 23, 42, 0.1);
-      padding-top: 0.9rem;
-      line-height: 1.45;
-    }
-    .card-footer-kibo {
-      font-size: 0.65rem;
-      color: #475569;
-      margin-top: 0.35rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-    }
-  </style>
-</head>
-<body>
-
-<div class="card-container">
-  
-  <!-- CABECERA INSTITUCIONAL MACCHIA -->
-  <div class="card-header">
-    <img id="card-logo" src="https://lh3.googleusercontent.com/d/1IOQYQ91fVdU1fmG4AIdDQDoZF2YGQZJH" alt="Macchia Parfums" class="logo-img">
-  </div>
-
-  <!-- CUERPO CON VELO Y TRAMA VISIBLE -->
-  <div class="card-body-veil">
-    
-    <div class="client-section">
-      <div class="client-tag">Programa de Fidelización</div>
-      <div class="client-name" id="card-client-name">Alfonso</div>
-    </div>
-
-    <!-- GRILLA DINÁMICA DE SELLOS -->
-    <div class="stamps-grid" id="stamps-grid"></div>
-
-    <!-- RESUMEN DE BENEFICIO -->
-    <div class="reward-box">
-      <div>
-        <div class="reward-label">Sellos Acumulados</div>
-        <div class="reward-count" id="lbl-sellos-count">4 / 10</div>
-      </div>
-      <div style="text-align:right;">
-        <div class="reward-label">Beneficio Disponible</div>
-        <div class="reward-val" id="lbl-premio">136.40 BOB</div>
-      </div>
-    </div>
-
-    <!-- BANNER ANUNCIANTE 400x120 (LINK DESTINO OPCIONAL) -->
-    <div class="sponsor-ad-container" id="sponsor-ad-block" style="display: none;">
-      <span class="sponsor-ad-badge" id="sponsor-ad-label">Espacio Comercial</span>
-      <div id="sponsor-wrapper">
-        <!-- Renderizado dinámico según tenga o no link -->
-      </div>
-    </div>
-
-    <!-- FOOTER: SOLO POWERED BY KIBO -->
-    <div class="card-footer">
-      Válido en Boutique Macchia Parfums · Recompensa acumulativa<br>
-      <div class="card-footer-kibo">POWERED BY KIBO</div>
-    </div>
-
-  </div>
-
-</div>
-
-<script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxvITXvc0mxs4H8-XDqyTq02TUvmON39t08Dj0CRRxcz6DEYakVi6-q5H8PB0rqcofe0w/exec";
-  const DEFAULT_STAMP = 'https://lh3.googleusercontent.com/d/1WzFb7rEBFlYu3sQGGo2o_yRq5u8lcNbG';
-
-  // URLs de los materiales oficiales subidos
-  const BANNER_DEFAULT = "https://lh3.googleusercontent.com/d/1cFK4pyi_fI9oPwUEQlkoKxgO5E9Mf9-m";
-  const STAMP_DEFAULT = "https://lh3.googleusercontent.com/d/1b0fhTaF3uq_54zkmKALhYVsZymAWw2Gn";
-
-  async function iniciarTarjeta() {
-    const params = new URLSearchParams(window.location.search);
-    const tel = params.get('tel') || '77290636';
-
-    let cliente = {
-      nombre: 'Alfonso',
-      sellosActuales: 4,
-      premioCalculado: 136.4,
-      metaSellos: 10
-    };
-
-    let config = {
-      COMPRAS_PARA_CICLO: 10,
-      SPONSOR_ACTIVO: 'SI',
-      SPONSOR_MODALIDAD: 'BANNER_Y_SELLO',
-      SPONSOR_NOMBRE: 'Coca-Cola',
-      SPONSOR_LOGO_URL: BANNER_DEFAULT,
-      SPONSOR_STAMP_ICON: STAMP_DEFAULT,
-      SPONSOR_LINK: ''
-    };
-
-    renderizarTarjeta(cliente, config);
-
-    try {
-      const [cfgRes, cliRes] = await Promise.all([
-        fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json()).catch(() => null),
-        fetch(`${SCRIPT_URL}?action=getCliente&telefono=${encodeURIComponent(tel)}`).then(r => r.json()).catch(() => null)
-      ]);
-
-      if (cfgRes && cfgRes.success && cfgRes.config) {
-        config = Object.assign({}, config, cfgRes.config);
-        if (!config.SPONSOR_LOGO_URL) config.SPONSOR_LOGO_URL = BANNER_DEFAULT;
-        if (!config.SPONSOR_STAMP_ICON) config.SPONSOR_STAMP_ICON = STAMP_DEFAULT;
-      }
-      if (cliRes && cliRes.success && cliRes.cliente) {
-        cliente = cliRes.cliente;
-      }
-
-      renderizarTarjeta(cliente, config);
-    } catch(e) {
-      console.warn("Modo offline:", e);
-    }
-  }
-
-  function renderizarTarjeta(cli, cfg) {
-    document.getElementById('card-client-name').innerText = cli.nombre;
-    const meta = Number(cfg.COMPRAS_PARA_CICLO) || cli.metaSellos || 10;
-    document.getElementById('lbl-sellos-count').innerText = `${cli.sellosActuales} / ${meta}`;
-    document.getElementById('lbl-premio').innerText = `${Number(cli.premioCalculado || 0).toFixed(2)} BOB`;
-
-    // Grilla
-    const grid = document.getElementById('stamps-grid');
-    grid.innerHTML = '';
-
-    const sponsorActivo = (String(cfg.SPONSOR_ACTIVO).toUpperCase() === 'SI');
-    const esTier2 = (sponsorActivo && cfg.SPONSOR_MODALIDAD === 'BANNER_Y_SELLO');
-    const stampIconUrl = cfg.STAMP_ICON || DEFAULT_STAMP;
-    const sponsorStampUrl = cfg.SPONSOR_STAMP_ICON || STAMP_DEFAULT;
-
-    for (let i = 1; i <= meta; i++) {
-      const alcanzado = (i <= cli.sellosActuales);
-      const esUltimo = (i === meta);
-      const slot = document.createElement('div');
-      slot.className = 'stamp-slot' + (alcanzado ? ' active' : '');
-
-      if (esUltimo && esTier2) {
-        slot.classList.add('sponsor-goal');
-        const badge = document.createElement('div');
-        badge.className = 'badge-meta';
-        badge.innerText = 'META';
-        slot.appendChild(badge);
-
-        const img = document.createElement('img');
-        img.className = 'stamp-icon';
-        img.src = sponsorStampUrl;
-        img.style.opacity = alcanzado ? '1' : '0.35';
-        slot.appendChild(img);
-      } else {
-        if (alcanzado) {
-          const img = document.createElement('img');
-          img.className = 'stamp-icon';
-          img.src = stampIconUrl;
-          slot.appendChild(img);
-        } else {
-          const num = document.createElement('span');
-          num.className = 'stamp-num';
-          num.innerText = i;
-          slot.appendChild(num);
-        }
-      }
-
-      grid.appendChild(slot);
-    }
-
-    // Banner publicitario 400x120
-    const bannerBlock = document.getElementById('sponsor-ad-block');
-    const bannerWrapper = document.getElementById('sponsor-wrapper');
-    const bannerLabel = document.getElementById('sponsor-ad-label');
-
-    const imagenUrl = cfg.SPONSOR_LOGO_URL || BANNER_DEFAULT;
-    const linkUrl = (cfg.SPONSOR_LINK || '').trim();
-
-    if (sponsorActivo && imagenUrl) {
-      bannerBlock.style.display = 'block';
-      bannerLabel.innerText = cfg.SPONSOR_NOMBRE ? `Aliado: ${cfg.SPONSOR_NOMBRE}` : 'Espacio Comercial';
-
-      if (linkUrl) {
-        bannerWrapper.innerHTML = `
-          <a href="${linkUrl}" target="_blank" class="sponsor-ad-frame clickable">
-            <img src="${imagenUrl}" alt="Sponsor" class="sponsor-ad-img">
-          </a>
-        `;
-      } else {
-        bannerWrapper.innerHTML = `
-          <div class="sponsor-ad-frame">
-            <img src="${imagenUrl}" alt="Sponsor" class="sponsor-ad-img">
-          </div>
-        `;
-      }
-    } else {
-      bannerBlock.style.display = 'none';
-    }
-  }
-
-  window.addEventListener('DOMContentLoaded', iniciarTarjeta);
-</script>
-
-</body>
-</html>
+      font-size: 0.72rem;
+      color: #334155;
