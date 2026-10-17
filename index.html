@@ -3,16 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Spike · Terminal de Control</title>
+  <title>Macchia Parfums</title>
   
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#0f172a">
+  <meta name="theme-color" content="#020812">
+
+  <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1WzFb7rEBFlYu3sQGGo2o_yRq5u8lcNbG">
+  <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/1WzFb7rEBFlYu3sQGGo2o_yRq5u8lcNbG">
 
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { width: 100%; height: 100%; overflow: hidden; background-color: #0f172a; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background-color: #020812; }
     iframe { width: 100%; height: 100%; border: none; display: block; }
   </style>
 </head>
@@ -20,9 +23,24 @@
 
   <iframe 
     id="app-frame" 
-    src="https://script.google.com/macros/s/AKfycbwcc5kZ2nAa75ujiq9-uhSEOW4GXLCRR4lUXEtp1beVfrRyYzeJHmNHHb8BMcLHSLfr/exec" 
+    src="" 
     allow="clipboard-write">
   </iframe>
+
+  <script>
+    const APPS_SCRIPT_EXEC_URL = "https://script.google.com/macros/s/AKfycbwcc5kZ2nAa75ujiq9-uhSEOW4GXLCRR4lUXEtp1beVfrRyYzeJHmNHHb8BMcLHSLfr/exec";
+
+    // Captura los parámetros que vienen en la barra de direcciones (?cli=..., ?demo=1, ?page=owner, etc.)
+    let query = window.location.search;
+
+    // Si entra a la raíz limpia sin ningún parámetro, le muestra la tarjeta en modo demo
+    if (!query || query === "" || query === "?") {
+      query = "?demo=1";
+    }
+
+    // Pasa exactamente los parámetros al iframe de Apps Script
+    document.getElementById('app-frame').src = APPS_SCRIPT_EXEC_URL + query;
+  </script>
 
 </body>
 </html>
