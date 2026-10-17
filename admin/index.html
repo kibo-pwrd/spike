@@ -62,7 +62,7 @@
     .btn-csv-clients { background: var(--teal-btn); color: white; border: none; padding: 0.8rem 0.5rem; border-radius: 8px; font-weight: 700; font-size: 0.82rem; cursor: pointer; text-align: center; }
     .btn-csv-sales { background: var(--blue-btn); color: white; border: none; padding: 0.8rem 0.5rem; border-radius: 8px; font-weight: 700; font-size: 0.82rem; cursor: pointer; text-align: center; }
 
-    /* Lista Clientes */
+    /* Clientes */
     .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.9rem; }
     .section-title { font-size: 1.05rem; font-weight: 800; }
     .btn-refresh { background: white; border: 1px solid var(--border); color: var(--text-main); font-weight: 600; font-size: 0.8rem; padding: 0.35rem 0.8rem; border-radius: 6px; cursor: pointer; }
@@ -84,11 +84,10 @@
     .btn-whatsapp-birthday { width: 100%; padding: 0.85rem; background: #f59e0b; color: white; border: none; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem; margin-top: 0.5rem; transition: 0.2s; }
     .btn-whatsapp-birthday:hover { background: #d97706; }
 
-    /* Botón Ver Tarjeta */
     .btn-preview-card { background: white; border: 1.5px solid #0f172a; color: #0f172a; padding: 0.75rem 1rem; border-radius: 8px; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; width: 100%; justify-content: center; margin-top: 1rem; }
     .btn-preview-card:hover { background: #0f172a; color: white; }
 
-    /* Caja de Sponsor Destacada */
+    /* Panel Sponsor */
     .sponsor-config-panel { background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 10px; padding: 1.1rem; margin-top: 1.2rem; }
     .badge-monetizacion { background: #dbeafe; color: #1e40af; font-size: 0.72rem; font-weight: 800; padding: 0.2rem 0.5rem; border-radius: 4px; display: inline-block; margin-bottom: 0.5rem; text-transform: uppercase; }
   </style>
@@ -115,7 +114,7 @@
     <button class="btn-submit" type="button" id="btn-login-action">Iniciar Sesión</button>
   </div>
 
-  <!-- VISTA 2: PANEL DEL DUEÑO (MACCHIA) -->
+  <!-- VISTA 2: PANEL DEL DUEÑO -->
   <div id="view-dueno" style="display: none;">
     <div class="top-bar">
       <div class="panel-title">Panel de Administración</div>
@@ -124,7 +123,7 @@
 
     <div class="company-label">Empresa: <span class="company-name">MACCHIA</span></div>
 
-    <!-- Menú de Pestañas -->
+    <!-- Pestañas -->
     <div class="tab-bar">
       <button class="tab-item active" type="button" onclick="cambiarTabDueno('metricas', this)">Métricas</button>
       <button class="tab-item" type="button" onclick="cambiarTabDueno('marca', this)">Marca y Reglas</button>
@@ -166,61 +165,56 @@
       <div class="client-list" id="contenedor-clientes"></div>
     </div>
 
-    <!-- PESTAÑA: MARCA Y REGLAS + GESTOR DE SPONSOR -->
+    <!-- PESTAÑA: MARCA, REGLAS Y SPONSOR -->
     <div id="dueno-marca" class="content-box" style="display: none;">
       <div class="section-title" style="margin-bottom:1rem;">1. Reglas del Programa</div>
       <div class="form-group">
-        <label>Meta de Sellos por Ciclo (ej: 5, 6, 8 o 10)</label>
-        <input type="number" id="cfg-meta-sellos" value="10">
+        <label>Cantidad de Sellos por Ciclo (Meta de compras)</label>
+        <input type="number" id="cfg-meta-sellos" value="10" placeholder="Ej: 5, 6, 8 o 10">
       </div>
 
-      <!-- MÓDULO RETAIL MEDIA / CO-BRANDING -->
+      <!-- GESTIÓN DEL SPONSOR -->
       <div class="sponsor-config-panel">
-        <span class="badge-monetizacion">Monetización y Co-Branding</span>
-        <div style="font-weight:800; font-size:1.05rem; margin-bottom:0.3rem;">Espacio Exclusivo de Patrocinador</div>
+        <span class="badge-monetizacion">Espacio Publicitario / Alianza</span>
+        <div style="font-weight:800; font-size:1.05rem; margin-bottom:0.3rem;">Configuración de Sponsor</div>
         <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">
-          Monetiza la tarjeta vendiendo un espacio a una marca proveedora o aliada comercial.
+          Controla la presencia de marca patrocinadora y sus piezas gráficas en la tarjeta.
         </p>
 
         <div class="form-group">
           <label>¿Activar Patrocinio en la Tarjeta?</label>
           <select id="cfg-sponsor-activo">
-            <option value="NO">NO (Sin patrocinador)</option>
-            <option value="SI">SI (Patrocinador Activo)</option>
+            <option value="NO">NO (Desactivado)</option>
+            <option value="SI">SI (Activo)</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label>Modalidad de Paquete Adquirido</label>
+          <label>Modalidad de Paquete</label>
           <select id="cfg-sponsor-modalidad">
-            <option value="BANNER_SOLO">Tier 1: Solo Banner Glassmorphism abajo</option>
-            <option value="BANNER_Y_SELLO">Tier 2: Banner abajo + Último Sello Personalizado</option>
+            <option value="BANNER_SOLO">Tier 1: Solo Banner Gráfico abajo (400x120)</option>
+            <option value="BANNER_Y_SELLO">Tier 2: Banner abajo + Sello Personalizado en la Meta</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label>Nombre de la Marca Patrocinadora</label>
-          <input type="text" id="cfg-sponsor-nombre" placeholder="Ej: San Mateo / Chanel / Stella Artois">
+          <label>Nombre del Aliado / Marca</label>
+          <input type="text" id="cfg-sponsor-nombre" placeholder="Ej: Coca-Cola">
         </div>
 
         <div class="form-group">
-          <label>URL Logo de la Marca (Para el Banner)</label>
-          <input type="url" id="cfg-sponsor-logo-url" placeholder="https://.../logo.png">
+          <label>URL de Imagen del Banner (400 × 120 px)</label>
+          <input type="url" id="cfg-sponsor-logo-url" placeholder="https://lh3.googleusercontent.com/d/..." value="https://lh3.googleusercontent.com/d/1cFK4pyi_fI9oPwUEQlkoKxgO5E9Mf9-m">
         </div>
 
         <div class="form-group">
-          <label>URL Ícono Cuadrado (Para el Sello Final si es Tier 2)</label>
-          <input type="url" id="cfg-sponsor-stamp-icon" placeholder="https://.../icono-sello.png">
+          <label>URL del Ícono para el Sello Final (Meta)</label>
+          <input type="url" id="cfg-sponsor-stamp-icon" placeholder="https://lh3.googleusercontent.com/d/..." value="https://lh3.googleusercontent.com/d/1b0fhTaF3uq_54zkmKALhYVsZymAWw2Gn">
         </div>
 
         <div class="form-group">
-          <label>Texto Promocional en el Banner</label>
-          <input type="text" id="cfg-sponsor-texto" placeholder="Ej: Disfruta un obsequio especial cortesía del aliado">
-        </div>
-
-        <div class="form-group">
-          <label>Enlace de Destino al Tocar el Banner (Web o WhatsApp)</label>
-          <input type="url" id="cfg-sponsor-link" placeholder="https://...">
+          <label>URL de Destino al Tocar el Banner (Opcional)</label>
+          <input type="url" id="cfg-sponsor-link" placeholder="Opcional: https://... (Dejar en blanco si no tiene link)">
         </div>
       </div>
 
@@ -233,35 +227,32 @@
       </button>
     </div>
 
-    <!-- PESTAÑA: PROMOCIONES Y CUMPLEAÑOS -->
+    <!-- PESTAÑA: PROMOCIONES -->
     <div id="dueno-promociones" class="content-box" style="display: none;">
-      <div class="section-title" style="margin-bottom:0.3rem;">Campaña de Fidelización por Cumpleaños</div>
+      <div class="section-title" style="margin-bottom:0.3rem;">Mensaje de Cumpleaños</div>
       <p style="color:var(--text-muted); font-size:0.83rem; margin-bottom:1.4rem;">
-        Personaliza el mensaje y el beneficio para clientes que cumplen años este mes.
+        Personaliza el texto de felicitación y beneficio para clientes cumpleañeros.
       </p>
 
       <div class="form-group">
-        <label>Mensaje Personalizado para WhatsApp</label>
-        <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.35rem;">
-          Usa <strong>{nombre}</strong> para el nombre y <strong>{tarjeta}</strong> para el enlace de la tarjeta.
-        </div>
+        <label>Plantilla de WhatsApp</label>
         <textarea id="promo-cumple-mensaje" rows="4">¡Hola {nombre}! 🎉 Desde Macchia Parfums te deseamos un muy feliz cumpleaños. Te esperamos en boutique con un detalle especial. Puedes ver tu tarjeta aquí: {tarjeta}</textarea>
       </div>
 
-      <button class="btn-submit" type="button" onclick="guardarConfigCumple()">Guardar Configuración</button>
+      <button class="btn-submit" type="button" onclick="guardarConfigCumple()">Guardar Mensaje</button>
     </div>
 
     <!-- PESTAÑA: CAJEROS -->
     <div id="dueno-cajeros" class="content-box" style="display: none;">
-      <div class="section-title" style="margin-bottom:1rem;">Personal de Turno (Caja)</div>
-      <div style="padding:0.9rem; border:1px solid var(--border); border-radius:8px; margin-bottom:1rem;">
+      <div class="section-title" style="margin-bottom:1rem;">Personal de Turno</div>
+      <div style="padding:0.9rem; border:1px solid var(--border); border-radius:8px;">
         <div style="font-weight:700;">cajero@macchia.com</div>
         <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.2rem;">Rol: Operador de Mostrador</div>
       </div>
     </div>
   </div>
 
-  <!-- VISTA 3: TERMINAL DEL CAJERO -->
+  <!-- VISTA 3: TERMINAL DE MOSTRADOR -->
   <div id="view-cajero" style="display: none;">
     <div class="top-bar">
       <div>
@@ -272,7 +263,7 @@
     </div>
 
     <div class="content-box">
-      <div class="section-title" style="margin-bottom:0.4rem;">1. Atención al Cliente en Mostrador</div>
+      <div class="section-title" style="margin-bottom:0.4rem;">1. Atención al Cliente</div>
       <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:0.9rem;">Escribe el número de celular o WhatsApp:</p>
       
       <div class="form-group">
@@ -363,7 +354,7 @@
     </div>
   </div>
 
-  <!-- VISTA 4: SUPER ADMINISTRADOR -->
+  <!-- VISTA 4: SUPER ADMIN -->
   <div id="view-superadmin" style="display: none;">
     <div class="top-bar">
       <div>
@@ -379,7 +370,7 @@
       
       <div style="background:#f8fafc; border:1px solid var(--border); padding:0.8rem; border-radius:8px; font-size:0.85rem; margin-bottom:1rem;">
         <div>• Conexión: <span style="color:#16a34a; font-weight:700;">ACTIVA</span></div>
-        <div>• Módulo Sponsor: <span style="color:#16a34a; font-weight:700;">INTEGRADO</span></div>
+        <div>• Módulo Sponsor: <span style="color:#16a34a; font-weight:700;">HABILITADO</span></div>
         <div>• Búsqueda: <span style="font-weight:700;">CELULAR (WHATSAPP)</span></div>
       </div>
 
@@ -610,143 +601,5 @@
     }
   }
 
-  /* CARGAR Y GUARDAR CONFIGURACIÓN DE SPONSOR Y REGLAS */
-  async function cargarConfiguracionSponsor() {
-    try {
-      const res = await fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json());
-      if (res && res.success && res.config) {
-        const c = res.config;
-        if (c.COMPRAS_PARA_CICLO) document.getElementById('cfg-meta-sellos').value = c.COMPRAS_PARA_CICLO;
-        if (c.SPONSOR_ACTIVO) document.getElementById('cfg-sponsor-activo').value = c.SPONSOR_ACTIVO;
-        if (c.SPONSOR_MODALIDAD) document.getElementById('cfg-sponsor-modalidad').value = c.SPONSOR_MODALIDAD;
-        if (c.SPONSOR_NOMBRE) document.getElementById('cfg-sponsor-nombre').value = c.SPONSOR_NOMBRE;
-        if (c.SPONSOR_LOGO_URL) document.getElementById('cfg-sponsor-logo-url').value = c.SPONSOR_LOGO_URL;
-        if (c.SPONSOR_STAMP_ICON) document.getElementById('cfg-sponsor-stamp-icon').value = c.SPONSOR_STAMP_ICON;
-        if (c.SPONSOR_TEXTO) document.getElementById('cfg-sponsor-texto').value = c.SPONSOR_TEXTO;
-        if (c.SPONSOR_LINK) document.getElementById('cfg-sponsor-link').value = c.SPONSOR_LINK;
-      }
-    } catch(e) {
-      console.warn("No se pudo cargar la config:", e);
-    }
-  }
-
-  async function guardarReglasYSponsor() {
-    const meta = document.getElementById('cfg-meta-sellos').value;
-    const activo = document.getElementById('cfg-sponsor-activo').value;
-    const mod = document.getElementById('cfg-sponsor-modalidad').value;
-    const nom = document.getElementById('cfg-sponsor-nombre').value.trim();
-    const logo = document.getElementById('cfg-sponsor-logo-url').value.trim();
-    const stamp = document.getElementById('cfg-sponsor-stamp-icon').value.trim();
-    const texto = document.getElementById('cfg-sponsor-texto').value.trim();
-    const link = document.getElementById('cfg-sponsor-link').value.trim();
-
-    const p = new URLSearchParams({
-      action: 'guardarConfiguracionSponsor',
-      COMPRAS_PARA_CICLO: meta,
-      SPONSOR_ACTIVO: activo,
-      SPONSOR_MODALIDAD: mod,
-      SPONSOR_NOMBRE: nom,
-      SPONSOR_LOGO_URL: logo,
-      SPONSOR_STAMP_ICON: stamp,
-      SPONSOR_TEXTO: texto,
-      SPONSOR_LINK: link
-    });
-
-    try {
-      await fetch(`${SCRIPT_URL}?${p.toString()}`);
-      alert("¡Configuración de Reglas y Patrocinio guardada con éxito en Macchia - DB!");
-    } catch(e) {
-      alert("Guardado enviado.");
-    }
-  }
-
-  function cambiarTabDueno(tab, btn) {
-    ['metricas', 'marca', 'promociones', 'cajeros'].forEach(t => {
-      document.getElementById('dueno-' + t).style.display = (t === tab) ? 'block' : 'none';
-    });
-    document.querySelectorAll('#view-dueno .tab-item').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-  }
-
-  async function cargarMetricasDueno() {
-    try {
-      const res = await fetch(`${SCRIPT_URL}?action=getMetricasDueno`).then(r => r.json());
-      if (res && res.success) {
-        datosDuenoCache = res;
-        document.getElementById('kpi-clientes').innerText = res.metricas.clientesRegistrados;
-        document.getElementById('kpi-total-ventas').innerText = `${res.metricas.totalVentas} BOB`;
-        document.getElementById('kpi-ventas-mes').innerText = `${res.metricas.ventasMes} BOB`;
-        document.getElementById('kpi-descuentos').innerText = `${res.metricas.descuentosOtorgados} BOB`;
-        renderizarClientesDueno(res.clientes);
-        return;
-      }
-    } catch(e) {}
-  }
-
-  function renderizarClientesDueno(lista) {
-    const cont = document.getElementById('contenedor-clientes');
-    cont.innerHTML = lista.map(c => `
-      <div class="client-card">
-        <div class="card-top">
-          <div class="cli-name">${c.nombre}</div>
-          <div class="cli-total">${c.totalConsumo} BOB</div>
-        </div>
-        <div class="card-mid">
-          <div>Tel: ${c.telefono}</div>
-          <div>Ciclo ${c.ciclo} • ${c.sellos} sellos</div>
-        </div>
-        <div class="card-bot">
-          <div>Cumpleaños: ${c.cumpleanos} • ${c.comprasCount} compras</div>
-          <div style="display:flex; align-items:center; gap:0.5rem;">
-            <button class="btn-ws-cumple" type="button" onclick="enviarWhatsAppDueno('${c.telefono}', '${c.nombre}')">WhatsApp</button>
-            <span class="cli-reward">${c.beneficio} BOB</span>
-          </div>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  function enviarWhatsAppDueno(tel, nom) {
-    const urlTarjeta = `${CARD_BASE_URL}?tel=${tel}`;
-    let plantilla = document.getElementById('promo-cumple-mensaje').value;
-    let msg = plantilla.replace('{nombre}', nom).replace('{tarjeta}', urlTarjeta);
-    window.open(`https://wa.me/591${tel.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
-  }
-
-  async function guardarConfigCumple() {
-    const mensaje = document.getElementById('promo-cumple-mensaje').value.trim();
-    try {
-      const p = new URLSearchParams({
-        action: 'guardarPromocionCumple',
-        mensaje: mensaje
-      });
-      await fetch(`${SCRIPT_URL}?${p.toString()}`);
-      alert("¡Configuración de cumpleaños guardada!");
-    } catch(e) {
-      alert("Guardado.");
-    }
-  }
-
-  function exportarCSV(tipo) {
-    if (!datosDuenoCache || !datosDuenoCache.clientes) return alert("Sincronizando datos...");
-    let csv = "data:text/csv;charset=utf-8,";
-    if (tipo === 'clientes') {
-      csv += "Nombre,Telefono,Cumpleanos,Total_BOB,Compras,Ciclo,Sellos,Beneficio_BOB\n";
-      datosDuenoCache.clientes.forEach(c => {
-        csv += `"${c.nombre}","${c.telefono}","${c.cumpleanos}",${c.totalConsumo},${c.comprasCount},${c.ciclo},${c.sellos},${c.beneficio}\n`;
-      });
-    }
-    const uri = encodeURI(csv);
-    const link = document.createElement("a");
-    link.href = uri;
-    link.download = `${tipo}_macchia.csv`;
-    link.click();
-  }
-
-  function abrirVistaPreviaTarjeta() {
-    window.open(`${CARD_BASE_URL}?tel=77290636`, '_blank');
-  }
-</script>
-
-</body>
-</html>
+  /* GESTIÓN DE CONFIGURACIÓN DEL SPONSOR Y REGLAS */
+  async function cargarConfiguracionSponsor()
