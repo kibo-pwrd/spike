@@ -9,72 +9,262 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #090e17;
-      --card-bg: #0f172a;
       --brand-header: #020812;
       --gold: #d97706;
-      --gold-light: #fef3c7;
-      --text-light: #f8fafc;
+      --gold-light: #fbbf24;
+      --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --radius: 18px;
+      --radius: 20px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-    body { background: var(--bg); color: var(--text-light); min-height: 100vh; padding: 1.2rem 1rem; display: flex; justify-content: center; align-items: flex-start; }
-    .card-container { width: 100%; max-width: 410px; background: #0b1329; border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.08); overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.5); position: relative; }
+    
+    body {
+      background: #020617;
+      min-height: 100vh;
+      padding: 1.5rem 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      color: var(--text-main);
+    }
+
+    /* CONTENEDOR PRINCIPAL CON LA TRAMA ORIGINAL DE MACCHIA */
+    .card-container {
+      width: 100%;
+      max-width: 420px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(217, 119, 6, 0.25);
+      overflow: hidden;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
+      background-color: var(--brand-header);
+      background-image: url('https://lh3.googleusercontent.com/d/13Dsw1PEAiziJm8-DB_F5zR4TjmIVaGKo');
+      background-repeat: repeat;
+      background-size: 180px auto;
+      position: relative;
+    }
+
+    /* Capa de velo oscuro para mantener contraste */
+    .card-overlay {
+      background: radial-gradient(circle at top, rgba(2, 8, 18, 0.75) 0%, rgba(2, 8, 18, 0.94) 100%);
+      padding: 1.6rem 1.4rem;
+    }
 
     /* Cabecera */
-    .card-header { background: var(--brand-header); padding: 1.6rem 1.2rem 1.2rem; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.06); }
-    .logo-img { max-height: 48px; object-fit: contain; }
-    
-    /* Cuerpo */
-    .card-body { padding: 1.3rem 1.2rem; position: relative; }
-    .client-greeting { font-size: 0.82rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; margin-bottom: 0.2rem; }
-    .client-name { font-family: 'Playfair Display', serif; font-size: 1.65rem; font-weight: 700; color: #fff; margin-bottom: 1.2rem; }
+    .card-header {
+      text-align: center;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 1.2rem;
+    }
+    .logo-img {
+      max-height: 52px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
+    }
+
+    /* Datos del Cliente */
+    .client-section {
+      text-align: center;
+      margin-bottom: 1.4rem;
+    }
+    .client-tag {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gold-light);
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    .client-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.02em;
+    }
 
     /* Grilla Dinámica de Sellos */
-    .stamps-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.65rem; margin-bottom: 1.3rem; }
-    .stamp-slot { aspect-ratio: 1; border-radius: 12px; background: rgba(255,255,255,0.04); border: 1.5px dashed rgba(255,255,255,0.15); display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; transition: 0.3s; }
-    .stamp-slot.active { background: radial-gradient(circle, rgba(217,119,6,0.2) 0%, rgba(15,23,42,0.6) 100%); border: 1.5px solid var(--gold); box-shadow: 0 0 12px rgba(217,119,6,0.3); }
-    .stamp-num { font-size: 0.72rem; font-weight: 800; color: rgba(255,255,255,0.25); }
-    .stamp-icon { width: 55%; height: 55%; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+    .stamps-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.65rem;
+      margin-bottom: 1.3rem;
+    }
 
-    /* Sello Especial de Sponsor (Último Casillero) */
-    .stamp-slot.sponsor-goal { border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.05); }
-    .stamp-slot.sponsor-goal.active { border-color: #fbbf24; background: radial-gradient(circle, rgba(245,158,11,0.35) 0%, rgba(15,23,42,0.8) 100%); box-shadow: 0 0 16px rgba(245,158,11,0.5); }
-    .badge-meta { position: absolute; top: -6px; font-size: 0.55rem; background: #d97706; color: white; font-weight: 800; padding: 0.1rem 0.35rem; border-radius: 4px; letter-spacing: 0.04em; }
+    .stamp-slot {
+      aspect-ratio: 1;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px dashed rgba(255, 255, 255, 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all 0.25s ease;
+      backdrop-filter: blur(4px);
+    }
 
-    /* Tarjeta de Beneficio */
-    .reward-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 0.9rem 1rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.1rem; }
-    .reward-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
-    .reward-val { font-size: 1.1rem; font-weight: 800; color: #fbbf24; }
+    .stamp-slot.active {
+      background: radial-gradient(circle, rgba(217, 119, 6, 0.28) 0%, rgba(2, 8, 18, 0.8) 100%);
+      border: 1.5px solid var(--gold);
+      box-shadow: 0 0 14px rgba(217, 119, 6, 0.35);
+    }
 
-    /* BANNER DE SPONSOR (GLASSMORPHISM) */
-    .sponsor-slot { position: relative; margin-top: 1rem; padding: 0.95rem 1rem; border-radius: 14px; background: rgba(255, 255, 255, 0.95); border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); display: none; text-decoration: none; color: #0f172a; }
-    .sponsor-badge { position: absolute; top: -9px; left: 14px; background: #020812; color: #f8fafc; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); }
-    .sponsor-flex { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; }
-    .sponsor-logo-box { width: 90px; height: 38px; display: flex; align-items: center; justify-content: flex-start; }
-    .sponsor-logo-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
-    .sponsor-info { flex: 1; text-align: right; }
-    .sponsor-title { font-size: 0.76rem; font-weight: 700; line-height: 1.2; color: #0f172a; }
-    .sponsor-cta { font-size: 0.7rem; font-weight: 800; color: #d97706; margin-top: 0.25rem; }
+    .stamp-num {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .stamp-icon {
+      width: 62%;
+      height: 62%;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.6));
+    }
+
+    /* CASILLERO FINAL: SPONSOR / META */
+    .stamp-slot.sponsor-goal {
+      border: 1.5px solid rgba(251, 191, 36, 0.55);
+      background: rgba(251, 191, 36, 0.08);
+    }
+    .stamp-slot.sponsor-goal.active {
+      border: 2px solid #fbbf24;
+      background: radial-gradient(circle, rgba(251, 191, 36, 0.4) 0%, rgba(2, 8, 18, 0.85) 100%);
+      box-shadow: 0 0 18px rgba(251, 191, 36, 0.55);
+    }
+    .badge-meta {
+      position: absolute;
+      top: -7px;
+      font-size: 0.52rem;
+      background: #d97706;
+      color: #ffffff;
+      font-weight: 800;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      letter-spacing: 0.06em;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    /* Caja de Resumen */
+    .reward-box {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 0.95rem 1.1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+      backdrop-filter: blur(6px);
+    }
+    .reward-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .reward-val-highlight {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--gold-light);
+    }
+
+    /* BANNER DE PATROCINIO (GLASSMORPHISM ELEGANTE) */
+    .sponsor-slot {
+      position: relative;
+      margin-top: 1rem;
+      padding: 0.95rem 1.1rem;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      display: block;
+      text-decoration: none;
+      color: #0f172a;
+      transition: transform 0.2s ease;
+    }
+    .sponsor-slot:active {
+      transform: scale(0.99);
+    }
+    .sponsor-badge {
+      position: absolute;
+      top: -9px;
+      left: 14px;
+      background: #020812;
+      color: #f8fafc;
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+    .sponsor-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+    }
+    .sponsor-logo-box {
+      width: 95px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .sponsor-logo-box img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    .sponsor-info {
+      flex: 1;
+      text-align: right;
+    }
+    .sponsor-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #0f172a;
+    }
+    .sponsor-cta {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #d97706;
+      margin-top: 0.2rem;
+    }
 
     /* Footer Legal */
-    .card-footer { text-align: center; font-size: 0.7rem; color: var(--text-muted); margin-top: 1.2rem; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.9rem; }
+    .card-footer {
+      text-align: center;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-top: 1.3rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 0.9rem;
+      line-height: 1.4;
+    }
   </style>
 </head>
 <body>
 
 <div class="card-container">
-  
-  <!-- CABECERA -->
-  <div class="card-header">
-    <img id="card-logo" src="https://lh3.googleusercontent.com/d/1IOQYQ91fVdU1fmG4AIdDQDoZF2YGQZJH" alt="Macchia Parfums" class="logo-img">
-  </div>
+  <div class="card-overlay">
+    
+    <!-- CABECERA -->
+    <div class="card-header">
+      <img id="card-logo" src="https://lh3.googleusercontent.com/d/1IOQYQ91fVdU1fmG4AIdDQDoZF2YGQZJH" alt="Macchia Parfums" class="logo-img">
+    </div>
 
-  <!-- CUERPO -->
-  <div class="card-body">
-    <div class="client-greeting">Tarjeta de Fidelización</div>
-    <div class="client-name" id="card-client-name">Cliente</div>
+    <!-- CUERPO -->
+    <div class="client-section">
+      <div class="client-tag">Tarjeta de Fidelización</div>
+      <div class="client-name" id="card-client-name">Alfonso</div>
+    </div>
 
     <!-- GRILLA DINÁMICA DE SELLOS -->
     <div class="stamps-grid" id="stamps-grid"></div>
@@ -83,23 +273,23 @@
     <div class="reward-box">
       <div>
         <div class="reward-label">Sellos Acumulados</div>
-        <div style="font-size:0.95rem; font-weight:800; color:#fff;" id="lbl-sellos-count">0 / 10</div>
+        <div style="font-size:1.05rem; font-weight:800; color:#fff;" id="lbl-sellos-count">4 / 10</div>
       </div>
       <div style="text-align:right;">
         <div class="reward-label">Beneficio Disponible</div>
-        <div class="reward-val" id="lbl-premio">0.00 BOB</div>
+        <div class="reward-val-highlight" id="lbl-premio">136.40 BOB</div>
       </div>
     </div>
 
-    <!-- BANNER DEL SPONSOR (SE MUESTRA SOLO SI ESTÁ ACTIVO) -->
-    <a href="#" target="_blank" class="sponsor-slot" id="sponsor-banner">
-      <div class="sponsor-badge" id="sponsor-badge-text">Aliado Oficial</div>
+    <!-- BANNER DEL SPONSOR (GLASSMORPHISM) -->
+    <a href="https://kibo-pwrd.github.io/spike/macchia/" target="_blank" class="sponsor-slot" id="sponsor-banner">
+      <div class="sponsor-badge" id="sponsor-badge-text">Aliado Oficial: Maison Royale</div>
       <div class="sponsor-flex">
         <div class="sponsor-logo-box">
-          <img id="sponsor-logo-img" src="" alt="Sponsor">
+          <img id="sponsor-logo-img" src="https://api.iconify.design/solar:wineglass-triangle-bold.svg?color=%23020812&width=120" alt="Sponsor">
         </div>
         <div class="sponsor-info">
-          <div class="sponsor-title" id="sponsor-texto-promo">Detalle cortesía del aliado</div>
+          <div class="sponsor-title" id="sponsor-texto-promo">Copa de cortesía en tu próxima visita exclusiva</div>
           <div class="sponsor-cta">Conocer beneficio &rarr;</div>
         </div>
       </div>
@@ -108,46 +298,61 @@
     <!-- LEGALES -->
     <div class="card-footer">
       Válido en Boutique Macchia Parfums · Beneficio intransferible<br>
-      <span style="opacity:0.6; font-size:0.65rem;">Powered by KIBO</span>
+      <span style="opacity:0.5; font-size:0.62rem;">Powered by KIBO</span>
     </div>
-  </div>
 
+  </div>
 </div>
 
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXhjvfBEJC7XHMJi1jpkAXiAf-XYEW350sar7O29Zpl6LMF3HzAiLeaMCZHQNfWuBP6Q/exec";
+  
+  // Iconos oficiales de Macchia
+  const DEFAULT_STAMP = 'https://lh3.googleusercontent.com/d/1WzFb7rEBFlYu3sQGGo2o_yRq5u8lcNbG';
 
   async function iniciarTarjeta() {
     const params = new URLSearchParams(window.location.search);
     const tel = params.get('tel') || '77290636';
 
-    try {
-      // 1. Obtener configuración general y de sponsor
-      const cfgRes = await fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json());
-      const config = (cfgRes && cfgRes.success) ? cfgRes.config : {};
+    // Valores iniciales de Macchia garantizados
+    let cliente = {
+      nombre: 'Alfonso',
+      sellosActuales: 4,
+      premioCalculado: 136.4,
+      metaSellos: 10
+    };
 
-      // 2. Obtener datos del cliente
-      const cliRes = await fetch(`${SCRIPT_URL}?action=getCliente&telefono=${encodeURIComponent(tel)}`).then(r => r.json());
-      const cliente = (cliRes && cliRes.success) ? cliRes.cliente : {
-        nombre: 'Alfonso',
-        sellosActuales: 4,
-        premioCalculado: 136.4,
-        metaSellos: Number(config.COMPRAS_PARA_CICLO) || 10
-      };
+    let config = {
+      COMPRAS_PARA_CICLO: 10,
+      SPONSOR_ACTIVO: 'SI',
+      SPONSOR_MODALIDAD: 'BANNER_Y_SELLO',
+      SPONSOR_NOMBRE: 'Maison Royale',
+      SPONSOR_LOGO_URL: 'https://api.iconify.design/solar:wineglass-triangle-bold.svg?color=%23020812&width=120',
+      SPONSOR_STAMP_ICON: 'https://api.iconify.design/ph:sparkle-fill.svg?color=%23d97706&width=100',
+      SPONSOR_TEXTO: 'Copa de cortesía en tu próxima visita exclusiva',
+      SPONSOR_LINK: 'https://kibo-pwrd.github.io/spike/macchia/'
+    };
+
+    // Renderizado inmediato para que nunca se vea vacía
+    renderizarTarjeta(cliente, config);
+
+    // Consulta en vivo a la hoja Macchia - DB
+    try {
+      const [cfgRes, cliRes] = await Promise.all([
+        fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json()).catch(() => null),
+        fetch(`${SCRIPT_URL}?action=getCliente&telefono=${encodeURIComponent(tel)}`).then(r => r.json()).catch(() => null)
+      ]);
+
+      if (cfgRes && cfgRes.success && cfgRes.config) {
+        config = Object.assign({}, config, cfgRes.config);
+      }
+      if (cliRes && cliRes.success && cliRes.cliente) {
+        cliente = cliRes.cliente;
+      }
 
       renderizarTarjeta(cliente, config);
     } catch(e) {
-      console.warn("Modo demostración:", e);
-      renderizarTarjeta({
-        nombre: 'Alfonso',
-        sellosActuales: 4,
-        premioCalculado: 136.4,
-        metaSellos: 10
-      }, {
-        COMPRAS_PARA_CICLO: 10,
-        SPONSOR_ACTIVO: 'NO',
-        STAMP_ICON: 'https://lh3.googleusercontent.com/d/1WzFb7rEBFlYu3sQGGo2o_yRq5u8lcNbG'
-      });
+      console.warn("Conexión en segundo plano:", e);
     }
   }
 
@@ -155,18 +360,16 @@
     document.getElementById('card-client-name').innerText = cli.nombre;
     const meta = Number(cfg.COMPRAS_PARA_CICLO) || cli.metaSellos || 10;
     document.getElementById('lbl-sellos-count').innerText = `${cli.sellosActuales} / ${meta}`;
-    document.getElementById('lbl-premio').innerText = `${cli.premioCalculado} BOB`;
+    document.getElementById('lbl-premio').innerText = `${Number(cli.premioCalculado || 0).toFixed(2)} BOB`;
 
-    if (cfg.LOGO_URL) document.getElementById('card-logo').src = cfg.LOGO_URL;
-
-    // RENDERIZAR GRILLA DINÁMICA
+    // Grilla de Sellos
     const grid = document.getElementById('stamps-grid');
     grid.innerHTML = '';
 
-    const sponsorActivo = (cfg.SPONSOR_ACTIVO === 'SI');
+    const sponsorActivo = (String(cfg.SPONSOR_ACTIVO).toUpperCase() === 'SI');
     const esTier2 = (sponsorActivo && cfg.SPONSOR_MODALIDAD === 'BANNER_Y_SELLO');
-    const defaultStamp = cfg.STAMP_ICON || 'https://lh3.googleusercontent.com/d/1WzFb7rEBFlYu3sQGGo2o_yRq5u8lcNbG';
-    const sponsorStamp = cfg.SPONSOR_STAMP_ICON || defaultStamp;
+    const stampIconUrl = cfg.STAMP_ICON || DEFAULT_STAMP;
+    const sponsorStampUrl = cfg.SPONSOR_STAMP_ICON || 'https://api.iconify.design/ph:sparkle-fill.svg?color=%23d97706&width=100';
 
     for (let i = 1; i <= meta; i++) {
       const alcanzado = (i <= cli.sellosActuales);
@@ -183,14 +386,14 @@
 
         const img = document.createElement('img');
         img.className = 'stamp-icon';
-        img.src = sponsorStamp;
-        img.style.opacity = alcanzado ? '1' : '0.28';
+        img.src = sponsorStampUrl;
+        img.style.opacity = alcanzado ? '1' : '0.35';
         slot.appendChild(img);
       } else {
         if (alcanzado) {
           const img = document.createElement('img');
           img.className = 'stamp-icon';
-          img.src = defaultStamp;
+          img.src = stampIconUrl;
           slot.appendChild(img);
         } else {
           const num = document.createElement('span');
@@ -203,13 +406,13 @@
       grid.appendChild(slot);
     }
 
-    // RENDERIZAR BANNER DEL SPONSOR
+    // Banner del Sponsor
     const banner = document.getElementById('sponsor-banner');
     if (sponsorActivo && cfg.SPONSOR_LOGO_URL) {
       banner.style.display = 'block';
       document.getElementById('sponsor-logo-img').src = cfg.SPONSOR_LOGO_URL;
-      if (cfg.SPONSOR_NOMBRE) document.getElementById('sponsor-badge-text').innerText = `Aliado: ${cfg.SPONSOR_NOMBRE}`;
-      if (cfg.SPONSOR_TEXTO) document.getElementById('sponsor-texto-promo').innerText = cfg.SPONSOR_TEXTO;
+      document.getElementById('sponsor-badge-text').innerText = cfg.SPONSOR_NOMBRE ? `Aliado Oficial: ${cfg.SPONSOR_NOMBRE}` : 'Aliado Oficial';
+      document.getElementById('sponsor-texto-promo').innerText = cfg.SPONSOR_TEXTO || 'Detalle especial cortesía del aliado';
       if (cfg.SPONSOR_LINK) banner.href = cfg.SPONSOR_LINK;
     } else {
       banner.style.display = 'none';
