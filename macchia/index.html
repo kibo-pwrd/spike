@@ -216,8 +216,229 @@
       display: block;
     }
 
-    /* PIE LEGAL CON CONDICIONES COMERCIALES */
     .card-footer {
       text-align: center;
       font-size: 0.72rem;
       color: #334155;
+      margin-top: 1.3rem;
+      border-top: 1px solid rgba(15, 23, 42, 0.12);
+      padding-top: 0.9rem;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+    .card-footer-kibo {
+      font-size: 0.65rem;
+      color: #64748b;
+      margin-top: 0.45rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card-container">
+  
+  <div class="card-header">
+    <img id="card-logo" src="https://lh3.googleusercontent.com/d/1IOQYQ91fVdU1fmG4AIdDQDoZF2YGQZJH" alt="Macchia Parfums" class="logo-img">
+  </div>
+
+  <div class="card-body-veil">
+    
+    <div class="client-section">
+      <div class="client-tag">Programa de Fidelización</div>
+      <div class="client-name" id="card-client-name">Cliente</div>
+    </div>
+
+    <div class="stamps-grid" id="stamps-grid"></div>
+
+    <div class="reward-box">
+      <div>
+        <div class="reward-label">Sellos Acumulados</div>
+        <div class="reward-count" id="lbl-sellos-count">0 / 5</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="reward-label">Beneficio Disponible</div>
+        <div class="reward-val" id="lbl-premio">0.00 BOB</div>
+      </div>
+    </div>
+
+    <div class="sponsor-ad-container" id="sponsor-ad-block" style="display: none;">
+      <span class="sponsor-ad-badge" id="sponsor-ad-label">Espacio Comercial</span>
+      <div id="sponsor-wrapper"></div>
+    </div>
+
+    <div class="card-footer" id="card-footer-rules">
+      Ganas 1 sello por compras desde 15 BOB · Ciclo de 5 sellos<br>
+      Canje de beneficio aplicable en consumos desde 20 BOB
+      <div class="card-footer-kibo">POWERED BY KIBO</div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXhjvfBEJC7XHMJi1jpkAXiAf-XYEW350sar7O29Zpl6LMF3HzAiLeaMCZHQNfWuBP6Q/exec";
+  const DEFAULT_STAMP = 'https://lh3.googleusercontent.com/d/1WzFb7rEBFlYu3sQGGo2o_yRq5u8lcNbG';
+  const BANNER_DEFAULT = "https://lh3.googleusercontent.com/d/1cFK4pyi_fI9oPwUEQlkoKxgO5E9Mf9-m";
+  const STAMP_DEFAULT = "https://lh3.googleusercontent.com/d/1b0fhTaF3uq_54zkmKALhYVsZymAWw2Gn";
+
+  // Estado inicial listo para renderizar al instante
+  let currentConfig = {
+    COMPRAS_PARA_CICLO: 5,
+    MONTO_MINIMO_SELLO: 15,
+    MONTO_MINIMO_CANJE: 20,
+    SPONSOR_ACTIVO: 'SI',
+    SPONSOR_MODALIDAD: 'BANNER_Y_SELLO',
+    SPONSOR_NOMBRE: 'Coca-Cola',
+    SPONSOR_LOGO_URL: BANNER_DEFAULT,
+    SPONSOR_STAMP_ICON: STAMP_DEFAULT,
+    SPONSOR_LINK: ''
+  };
+
+  let currentCliente = {
+    nombre: 'Alfonso',
+    sellosActuales: 3,
+    premioCalculado: 45.00,
+    metaSellos: 5
+  };
+
+  async function iniciarTarjeta() {
+    const params = new URLSearchParams(window.location.search);
+    const tel = params.get('tel') || '77290636';
+
+    // 1. DIBUJAR INMEDIATAMENTE (Evita pantalla en blanco o congelamiento)
+    renderizarTarjeta(currentCliente, currentConfig);
+    renderizarCondiciones(currentConfig);
+
+    // 2. OBTENER CONFIGURACIÓN REAL DE SHEETS
+    try {
+      const cfgRes = await fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json());
+      if (cfgRes && cfgRes.success && cfgRes.config) {
+        currentConfig = Object.assign({}, currentConfig, cfgRes.config);
+        renderizarCondiciones(currentConfig);
+        renderizarTarjeta(currentCliente, currentConfig);
+      }
+    } catch(e) {
+      console.warn("Error leyendo configuración:", e);
+    }
+
+    // 3. OBTENER CLIENTE REAL DE SHEETS
+    try {
+      const cliRes = await fetch(`${SCRIPT_URL}?action=getCliente&telefono=${encodeURIComponent(tel)}`).then(r => r.json());
+      if (cliRes && cliRes.success && cliRes.cliente) {
+        currentCliente = cliRes.cliente;
+        renderizarTarjeta(currentCliente, currentConfig);
+      }
+    } catch(e) {
+      console.warn("Error leyendo cliente:", e);
+    }
+  }
+
+  function renderizarCondiciones(cfg) {
+    const minSello = cfg.MONTO_MINIMO_SELLO || 15;
+    const minCanje = cfg.MONTO_MINIMO_CANJE || 20;
+    const meta = Number(cfg.COMPRAS_PARA_CICLO) || 5;
+
+    const footer = document.getElementById('card-footer-rules');
+    if (footer) {
+      footer.innerHTML = `
+        Ganas 1 sello por compras desde ${minSello} BOB · Ciclo de ${meta} sellos<br>
+        Canje de beneficio aplicable en consumos desde ${minCanje} BOB
+        <div class="card-footer-kibo">POWERED BY KIBO</div>
+      `;
+    }
+  }
+
+  function renderizarTarjeta(cli, cfg) {
+    const nameEl = document.getElementById('card-client-name');
+    if (nameEl) nameEl.innerText = cli.nombre || 'Cliente';
+
+    const meta = Number(cfg.COMPRAS_PARA_CICLO) || cli.metaSellos || 5;
+    const countEl = document.getElementById('lbl-sellos-count');
+    if (countEl) countEl.innerText = `${cli.sellosActuales || 0} / ${meta}`;
+
+    const premioEl = document.getElementById('lbl-premio');
+    if (premioEl) premioEl.innerText = `${Number(cli.premioCalculado || 0).toFixed(2)} BOB`;
+
+    // Renderizado de casilleros de sellos
+    const grid = document.getElementById('stamps-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    const sponsorActivo = (String(cfg.SPONSOR_ACTIVO).toUpperCase() === 'SI');
+    const esTier2 = (sponsorActivo && cfg.SPONSOR_MODALIDAD === 'BANNER_Y_SELLO');
+    const stampIconUrl = cfg.STAMP_ICON || DEFAULT_STAMP;
+    const sponsorStampUrl = cfg.SPONSOR_STAMP_ICON || STAMP_DEFAULT;
+
+    for (let i = 1; i <= meta; i++) {
+      const alcanzado = (i <= (cli.sellosActuales || 0));
+      const esUltimo = (i === meta);
+      const slot = document.createElement('div');
+      slot.className = 'stamp-slot' + (alcanzado ? ' active' : '');
+
+      if (esUltimo && esTier2) {
+        slot.classList.add('sponsor-goal');
+        const badge = document.createElement('div');
+        badge.className = 'badge-meta';
+        badge.innerText = 'META';
+        slot.appendChild(badge);
+
+        const img = document.createElement('img');
+        img.className = 'stamp-icon';
+        img.src = sponsorStampUrl;
+        img.style.opacity = alcanzado ? '1' : '0.35';
+        slot.appendChild(img);
+      } else {
+        if (alcanzado) {
+          const img = document.createElement('img');
+          img.className = 'stamp-icon';
+          img.src = stampIconUrl;
+          slot.appendChild(img);
+        } else {
+          const num = document.createElement('span');
+          num.className = 'stamp-num';
+          num.innerText = i;
+          slot.appendChild(num);
+        }
+      }
+
+      grid.appendChild(slot);
+    }
+
+    // Renderizado del banner comercial
+    const bannerBlock = document.getElementById('sponsor-ad-block');
+    const bannerWrapper = document.getElementById('sponsor-wrapper');
+    const bannerLabel = document.getElementById('sponsor-ad-label');
+
+    const imagenUrl = cfg.SPONSOR_LOGO_URL || BANNER_DEFAULT;
+    const linkUrl = (cfg.SPONSOR_LINK || '').trim();
+
+    if (sponsorActivo && imagenUrl && bannerBlock && bannerWrapper) {
+      bannerBlock.style.display = 'block';
+      if (bannerLabel) bannerLabel.innerText = cfg.SPONSOR_NOMBRE ? `Aliado: ${cfg.SPONSOR_NOMBRE}` : 'Espacio Comercial';
+
+      if (linkUrl) {
+        bannerWrapper.innerHTML = `
+          <a href="${linkUrl}" target="_blank" class="sponsor-ad-frame clickable">
+            <img src="${imagenUrl}" alt="Sponsor" class="sponsor-ad-img">
+          </a>
+        `;
+      } else {
+        bannerWrapper.innerHTML = `
+          <div class="sponsor-ad-frame">
+            <img src="${imagenUrl}" alt="Sponsor" class="sponsor-ad-img">
+          </div>
+        `;
+      }
+    } else if (bannerBlock) {
+      bannerBlock.style.display = 'none';
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', iniciarTarjeta);
+</script>
+
+</body>
+</html>
