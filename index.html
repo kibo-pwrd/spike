@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Macchia Parfums</title>
+  <title>Macchia Parfums · Terminal & Tarjeta</title>
   
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -30,15 +30,8 @@
   <script>
     const APPS_SCRIPT_EXEC_URL = "https://script.google.com/macros/s/AKfycbwcc5kZ2nAa75ujiq9-uhSEOW4GXLCRR4lUXEtp1beVfrRyYzeJHmNHHb8BMcLHSLfr/exec";
 
-    // Captura los parámetros que vienen en la barra de direcciones (?cli=..., ?demo=1, ?page=owner, etc.)
-    let query = window.location.search;
-
-    // Si entra a la raíz limpia sin ningún parámetro, le muestra la tarjeta en modo demo
-    if (!query || query === "" || query === "?") {
-      query = "?demo=1";
-    }
-
-    // Pasa exactamente los parámetros al iframe de Apps Script
+    // Pasa exactamente los parámetros de la URL sin forzar demo
+    const query = window.location.search || "";
     document.getElementById('app-frame').src = APPS_SCRIPT_EXEC_URL + query;
   </script>
 
