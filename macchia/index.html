@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title id="pwa-title">Macchia Parfums · Tarjeta Digital</title>
+  <title>Macchia Parfums · Tarjeta Digital</title>
   
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -24,13 +24,15 @@
   <iframe id="app-frame" src="" allow="clipboard-write"></iframe>
 
   <script>
-    // URL activa de Apps Script (kibopwrd)
-    const APPS_SCRIPT_BASE_URL = "https://script.google.com/macros/s/AKfycbwcc5kZ2nAa75ujiq9-uhSEOW4GXLCRR4lUXEtp1beVfrRyYzeJHmNHHb8BMcLHSLfr/exec";
+    const APPS_SCRIPT_EXEC_URL = "https://script.google.com/macros/s/AKfycbwcc5kZ2nAa75ujiq9-uhSEOW4GXLCRR4lUXEtp1beVfrRyYzeJHmNHHb8BMcLHSLfr/exec";
 
-    // Si no trae parámetros, abre en modo demo estándar automáticamente
-    const query = window.location.search || '?demo=1';
-    
-    document.getElementById('app-frame').src = APPS_SCRIPT_BASE_URL + query;
+    // Pasa exactamente los parámetros recibidos (?demo=1 o ?cli=... o ?page=card)
+    let search = window.location.search;
+    if (!search || search === "") {
+      search = "?demo=1";
+    }
+
+    document.getElementById('app-frame').src = APPS_SCRIPT_EXEC_URL + search;
   </script>
 
 </body>
