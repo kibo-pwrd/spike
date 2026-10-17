@@ -226,6 +226,18 @@
         👁 Probar y Ver Tarjeta en Producción
       </button>
     </div>
+    <div class="form-group">
+  <label>Cantidad de Sellos por Ciclo</label>
+  <input type="number" id="cfg-meta-sellos" value="5">
+</div>
+<div class="form-group">
+  <label>Monto Mínimo por Compra para Ganar Sello (BOB)</label>
+  <input type="number" id="cfg-monto-min-sello" value="15">
+</div>
+<div class="form-group">
+  <label>Monto Mínimo de Consumo para Canjear Beneficio (BOB)</label>
+  <input type="number" id="cfg-monto-min-canje" value="20">
+</div>
 
     <!-- PESTAÑA: PROMOCIONES -->
     <div id="dueno-promociones" class="content-box" style="display: none;">
@@ -623,26 +635,41 @@
 
   /* GESTIÓN DE CONFIGURACIÓN DEL SPONSOR Y REGLAS CON MANEJO DE ERRORES */
   async function cargarConfiguracionSponsor() {
-    try {
-      const res = await fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json());
-      if (res && res.success && res.config) {
-        const c = res.config;
-        const setVal = (id, val) => {
-          const el = document.getElementById(id);
-          if (el && val !== undefined) el.value = val;
-        };
-        setVal('cfg-meta-sellos', c.COMPRAS_PARA_CICLO);
-        setVal('cfg-sponsor-activo', c.SPONSOR_ACTIVO);
-        setVal('cfg-sponsor-modalidad', c.SPONSOR_MODALIDAD);
-        setVal('cfg-sponsor-nombre', c.SPONSOR_NOMBRE);
-        setVal('cfg-sponsor-logo-url', c.SPONSOR_LOGO_URL);
-        setVal('cfg-sponsor-stamp-icon', c.SPONSOR_STAMP_ICON);
-        setVal('cfg-sponsor-link', c.SPONSOR_LINK);
-      }
-    } catch(e) {
-      console.warn("Aviso: Configuración cargada en modo seguro.", e);
+  try {
+    const res = await fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json());
+    if (res && res.success && res.config) {
+      const c = res.config;
+      const setVal = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.value = val; };
+      setVal('cfg-meta-sellos', c.COMPRAS_PARA_CICLO);
+      setVal('cfg-monto-min-sello', c.MONTO_MINIMO_SELLO);
+      setVal('cfg-monto-min-canje', c.MONTO_MINIMO_CANJE);
+      setVal('cfg-sponsor-activo', c.SPONSOR_ACTIVO);
+      setVal('cfg-sponsor-modalidad', c.SPONSOR_MODALIDAD);
+      setVal('cfg-sponsor-nombre', c.SPONSOR_NOMBRE);
+      setVal('cfg-sponsor-logo-url', c.SPONSOR_LOGO_URL);
+      setVal('cfg-sponsor-stamp-icon', c.SPONSOR_STAMP_ICON);
+      setVal('cfg-sponsor-link', c.SPONSOR_LINK);
     }
-  }
+  } catch(e) {}
+}
+
+async function guardarReglasYSponsor() {
+  const getVal = (id) => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+  const p = new URLSearchParams({
+    action: 'guardarConfiguracionSponsor',
+    COMPRAS_PARA_CICLO: getVal('cfg-meta-sellos') || '5',
+    MONTO_MINIMO_SELLO: getVal('cfg-monto-min-sello') || '15',
+    MONTO_MINIMO_CANJE: getVal('cfg-monto-min-canje') || '20',
+    SPONSOR_ACTIVO: getVal('cfg-sponsor-activo') || 'NO',
+    SPONSOR_MODALIDAD: getVal('cfg-sponsor-modalidad') || 'BANNER_Y_SELLO',
+    SPONSOR_NOMBRE: getVal('cfg-sponsor-nombre'),
+    SPONSOR_LOGO_URL: getVal('cfg-sponsor-logo-url'),
+    SPONSOR_STAMP_ICON: getVal('cfg-sponsor-stamp-icon'),
+    SPONSOR_LINK: getVal('cfg-sponsor-link')
+  });
+  await fetch(`${SCRIPT_URL}?${p.toString()}`);
+  alert("¡Configuración guardada en Macchia - DB!");
+}
 
   async function guardarReglasYSponsor() {
     const getVal = (id) => {
@@ -723,6 +750,7 @@
       </div>
     `).join('');
   }
+  
 
   function enviarWhatsAppDueno(tel, nom) {
     const urlTarjeta = `${CARD_BASE_URL}?tel=${tel}`;
