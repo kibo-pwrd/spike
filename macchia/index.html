@@ -246,8 +246,8 @@
   <div class="card-body-veil">
     
     <div class="client-section">
-      <div class="client-tag">Programa de Fidelización</div>
-      <div class="client-name" id="card-client-name">Cliente</div>
+      <div class="client-tag" id="card-badge-status">Programa de Fidelización</div>
+      <div class="client-name" id="card-client-name">Cliente Macchia</div>
     </div>
 
     <div class="stamps-grid" id="stamps-grid"></div>
@@ -255,11 +255,11 @@
     <div class="reward-box">
       <div>
         <div class="reward-label">Sellos Acumulados</div>
-        <div class="reward-count" id="lbl-sellos-count">0 / 5</div>
+        <div class="reward-count" id="lbl-sellos-count">2 / 5</div>
       </div>
       <div style="text-align:right;">
         <div class="reward-label">Beneficio Disponible</div>
-        <div class="reward-val" id="lbl-premio">0.00 BOB</div>
+        <div class="reward-val" id="lbl-premio">30.00 BOB</div>
       </div>
     </div>
 
@@ -284,7 +284,6 @@
   const BANNER_DEFAULT = "https://lh3.googleusercontent.com/d/1cFK4pyi_fI9oPwUEQlkoKxgO5E9Mf9-m";
   const STAMP_DEFAULT = "https://lh3.googleusercontent.com/d/1b0fhTaF3uq_54zkmKALhYVsZymAWw2Gn";
 
-  // Estado inicial listo para renderizar al instante
   let currentConfig = {
     COMPRAS_PARA_CICLO: 5,
     MONTO_MINIMO_SELLO: 15,
@@ -297,42 +296,53 @@
     SPONSOR_LINK: ''
   };
 
+  // Plantilla estándar de demostración (2 sellos de prueba para verificar diseño y sponsor)
   let currentCliente = {
-    nombre: 'Alfonso',
-    sellosActuales: 3,
-    premioCalculado: 45.00,
+    nombre: 'Cliente Macchia',
+    sellosActuales: 2,
+    premioCalculado: 30.00,
     metaSellos: 5
   };
 
   async function iniciarTarjeta() {
     const params = new URLSearchParams(window.location.search);
-    const tel = params.get('tel') || '77290636';
+    const tel = params.get('tel');
+    const esModoDemo = params.get('demo') === '1' || !tel;
 
-    // 1. DIBUJAR INMEDIATAMENTE (Evita pantalla en blanco o congelamiento)
+    if (esModoDemo) {
+      document.getElementById('card-badge-status').innerText = 'Vista Previa Estándar';
+      document.getElementById('card-client-name').innerText = 'Cliente Macchia';
+    }
+
+    // 1. Render inmediato con valores estándar
     renderizarTarjeta(currentCliente, currentConfig);
     renderizarCondiciones(currentConfig);
 
-    // 2. OBTENER CONFIGURACIÓN REAL DE SHEETS
+    // 2. Traer configuración real de Sheets
     try {
       const cfgRes = await fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json());
       if (cfgRes && cfgRes.success && cfgRes.config) {
         currentConfig = Object.assign({}, currentConfig, cfgRes.config);
+        currentCliente.metaSellos = Number(currentConfig.COMPRAS_PARA_CICLO) || 5;
         renderizarCondiciones(currentConfig);
         renderizarTarjeta(currentCliente, currentConfig);
       }
     } catch(e) {
-      console.warn("Error leyendo configuración:", e);
+      console.warn("Carga de configuración:", e);
     }
 
-    // 3. OBTENER CLIENTE REAL DE SHEETS
-    try {
-      const cliRes = await fetch(`${SCRIPT_URL}?action=getCliente&telefono=${encodeURIComponent(tel)}`).then(r => r.json());
-      if (cliRes && cliRes.success && cliRes.cliente) {
-        currentCliente = cliRes.cliente;
-        renderizarTarjeta(currentCliente, currentConfig);
+    // 3. Si viene un teléfono real, consultar datos reales del cliente
+    if (!esModoDemo && tel) {
+      try {
+        const cliRes = await fetch(`${SCRIPT_URL}?action=getCliente&telefono=${encodeURIComponent(tel)}`).then(r => r.json());
+        if (cliRes && cliRes.success && cliRes.cliente) {
+          currentCliente = cliRes.cliente;
+          document.getElementById('card-badge-status').innerText = 'Programa de Fidelización';
+          renderizarTarjeta(currentCliente, currentConfig);
+        }
+      } catch(e) {
+        console.warn("Carga de cliente real:", e);
       }
-    } catch(e) {
-      console.warn("Error leyendo cliente:", e);
     }
   }
 
@@ -362,7 +372,6 @@
     const premioEl = document.getElementById('lbl-premio');
     if (premioEl) premioEl.innerText = `${Number(cli.premioCalculado || 0).toFixed(2)} BOB`;
 
-    // Renderizado de casilleros de sellos
     const grid = document.getElementById('stamps-grid');
     if (!grid) return;
     grid.innerHTML = '';
@@ -407,7 +416,6 @@
       grid.appendChild(slot);
     }
 
-    // Renderizado del banner comercial
     const bannerBlock = document.getElementById('sponsor-ad-block');
     const bannerWrapper = document.getElementById('sponsor-wrapper');
     const bannerLabel = document.getElementById('sponsor-ad-label');
