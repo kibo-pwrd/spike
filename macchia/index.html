@@ -40,7 +40,7 @@
       border: 1px solid rgba(15, 23, 42, 0.06);
     }
 
-    /* 1. CABECERA: COLOR OFICIAL MACCHIA (#020812) */
+    /* CABECERA INSTITUCIONAL MACCHIA */
     .card-header {
       background-color: var(--brand-header);
       padding: 1.5rem 1.2rem;
@@ -55,7 +55,7 @@
       object-fit: contain;
     }
 
-    /* 2. CUERPO CON TRAMA Y CAPA BLANCA DE CONTRASTE */
+    /* CUERPO CON TRAMA Y CAPA BLANCA DE CONTRASTE */
     .card-body-wrapper {
       position: relative;
       background-color: #f8fafc;
@@ -70,7 +70,7 @@
       padding: 1.4rem 1.2rem 1.6rem;
     }
 
-    /* 3. DATOS DEL CLIENTE: MISMA TIPOGRAFÍA */
+    /* DATOS DEL CLIENTE */
     .client-section {
       text-align: center;
       margin-bottom: 1.3rem;
@@ -125,12 +125,12 @@
     }
 
     .stamp-icon {
-      width: 62%;
-      height: 62%;
+      width: 65%;
+      height: 65%;
       object-fit: contain;
     }
 
-    /* Sello Especial de Sponsor (Meta) */
+    /* SELLO FINAL: SPONSOR / META */
     .stamp-slot.sponsor-goal {
       border: 1.5px solid #f59e0b;
       background: #fffdf5;
@@ -183,7 +183,7 @@
       color: var(--gold-dark);
     }
 
-    /* 4. BANNER PUBLICITARIO GRÁFICO (400x120) */
+    /* BANNER PUBLICITARIO GRÁFICO (400x120) */
     .sponsor-ad-container {
       margin-top: 1.1rem;
       position: relative;
@@ -205,7 +205,7 @@
     .sponsor-ad-link {
       display: block;
       width: 100%;
-      aspect-ratio: 400 / 120; /* Proporción exacta 400x120 */
+      aspect-ratio: 400 / 120;
       border-radius: 14px;
       overflow: hidden;
       border: 1px solid rgba(15, 23, 42, 0.12);
@@ -246,16 +246,15 @@
 
 <div class="card-container">
   
-  <!-- 1. CABECERA CON COLOR OFICIAL MACCHIA -->
+  <!-- CABECERA -->
   <div class="card-header">
     <img id="card-logo" src="https://lh3.googleusercontent.com/d/1IOQYQ91fVdU1fmG4AIdDQDoZF2YGQZJH" alt="Macchia Parfums" class="logo-img">
   </div>
 
-  <!-- 2. CUERPO CLARO CON TRAMA Y CAPA BLANCA -->
+  <!-- CUERPO CLARO CON TRAMA -->
   <div class="card-body-wrapper">
     <div class="card-body-veil">
       
-      <!-- 3. NOMBRE CON LA MISMA TIPOGRAFÍA -->
       <div class="client-section">
         <div class="client-tag">Programa de Fidelización</div>
         <div class="client-name" id="card-client-name">Alfonso</div>
@@ -276,7 +275,7 @@
         </div>
       </div>
 
-      <!-- 4. BANNER ANUNCIANTE 400x120 IMAGEN COMPLETA -->
+      <!-- BANNER ANUNCIANTE 400x120 -->
       <div class="sponsor-ad-container" id="sponsor-ad-block" style="display: none;">
         <span class="sponsor-ad-badge" id="sponsor-ad-label">Espacio Comercial</span>
         <a href="#" target="_blank" class="sponsor-ad-link" id="sponsor-ad-link">
@@ -299,8 +298,9 @@
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXhjvfBEJC7XHMJi1jpkAXiAf-XYEW350sar7O29Zpl6LMF3HzAiLeaMCZHQNfWuBP6Q/exec";
   const DEFAULT_STAMP = 'https://lh3.googleusercontent.com/d/1WzFb7rEBFlYu3sQGGo2o_yRq5u8lcNbG';
 
-  // Banner gráfico de prueba 400x120 nítido y elegante
-  const BANNER_MOCKUP_400x120 = "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800&auto=format&fit=crop&q=80";
+  // URLs oficiales directas de tus materiales de Drive
+  const BANNER_SPONSOR_URL = "https://lh3.googleusercontent.com/d/1cFK4pyi_fI9oPwUEQlkoKxgO5E9Mf9-m";
+  const STAMP_SPONSOR_URL = "https://lh3.googleusercontent.com/d/1b0fhTaF3uq_54zkmKALhYVsZymAWw2Gn";
 
   async function iniciarTarjeta() {
     const params = new URLSearchParams(window.location.search);
@@ -317,16 +317,16 @@
       COMPRAS_PARA_CICLO: 10,
       SPONSOR_ACTIVO: 'SI',
       SPONSOR_MODALIDAD: 'BANNER_Y_SELLO',
-      SPONSOR_NOMBRE: 'Maison Royale',
-      SPONSOR_LOGO_URL: BANNER_MOCKUP_400x120, // Imagen gráfica 400x120
-      SPONSOR_STAMP_ICON: 'https://api.iconify.design/ph:sparkle-fill.svg?color=%23d97706&width=100',
+      SPONSOR_NOMBRE: 'Coca-Cola',
+      SPONSOR_LOGO_URL: BANNER_SPONSOR_URL,
+      SPONSOR_STAMP_ICON: STAMP_SPONSOR_URL,
       SPONSOR_LINK: 'https://kibo-pwrd.github.io/spike/macchia/'
     };
 
-    // Render inmediato de seguridad
+    // Renderizado inmediato
     renderizarTarjeta(cliente, config);
 
-    // Consulta en vivo a la hoja Macchia - DB
+    // Consulta de datos en vivo desde Macchia - DB
     try {
       const [cfgRes, cliRes] = await Promise.all([
         fetch(`${SCRIPT_URL}?action=getConfig`).then(r => r.json()).catch(() => null),
@@ -335,6 +335,9 @@
 
       if (cfgRes && cfgRes.success && cfgRes.config) {
         config = Object.assign({}, config, cfgRes.config);
+        // Garantizar uso de imagen si viene vacío
+        if (!config.SPONSOR_LOGO_URL) config.SPONSOR_LOGO_URL = BANNER_SPONSOR_URL;
+        if (!config.SPONSOR_STAMP_ICON) config.SPONSOR_STAMP_ICON = STAMP_SPONSOR_URL;
       }
       if (cliRes && cliRes.success && cliRes.cliente) {
         cliente = cliRes.cliente;
@@ -342,7 +345,7 @@
 
       renderizarTarjeta(cliente, config);
     } catch(e) {
-      console.warn("Cargando vista previa:", e);
+      console.warn("Modo local/reserva activo:", e);
     }
   }
 
@@ -359,7 +362,7 @@
     const sponsorActivo = (String(cfg.SPONSOR_ACTIVO).toUpperCase() === 'SI');
     const esTier2 = (sponsorActivo && cfg.SPONSOR_MODALIDAD === 'BANNER_Y_SELLO');
     const stampIconUrl = cfg.STAMP_ICON || DEFAULT_STAMP;
-    const sponsorStampUrl = cfg.SPONSOR_STAMP_ICON || 'https://api.iconify.design/ph:sparkle-fill.svg?color=%23d97706&width=100';
+    const sponsorStampUrl = cfg.SPONSOR_STAMP_ICON || STAMP_SPONSOR_URL;
 
     for (let i = 1; i <= meta; i++) {
       const alcanzado = (i <= cli.sellosActuales);
@@ -396,13 +399,13 @@
       grid.appendChild(slot);
     }
 
-    // Banner publicitario 400x120
+    // Banner 400x120
     const bannerBlock = document.getElementById('sponsor-ad-block');
     const bannerImg = document.getElementById('sponsor-ad-img');
     const bannerLink = document.getElementById('sponsor-ad-link');
     const bannerLabel = document.getElementById('sponsor-ad-label');
 
-    const imagenUrl = cfg.SPONSOR_LOGO_URL || BANNER_MOCKUP_400x120;
+    const imagenUrl = cfg.SPONSOR_LOGO_URL || BANNER_SPONSOR_URL;
 
     if (sponsorActivo && imagenUrl) {
       bannerBlock.style.display = 'block';
