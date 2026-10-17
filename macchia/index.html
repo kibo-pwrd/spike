@@ -24,15 +24,16 @@
   <iframe id="app-frame" src="" allow="clipboard-write"></iframe>
 
   <script>
+    // URL activa de Apps Script (kibopwrd)
     const APPS_SCRIPT_EXEC_URL = "https://script.google.com/macros/s/AKfycbwcc5kZ2nAa75ujiq9-uhSEOW4GXLCRR4lUXEtp1beVfrRyYzeJHmNHHb8BMcLHSLfr/exec";
 
-    // Pasa exactamente los parámetros recibidos (?demo=1 o ?cli=... o ?page=card)
-    let search = window.location.search;
-    if (!search || search === "") {
-      search = "?demo=1";
+    // Si entra directo sin cliente, fuerza ?demo=1 para mostrar la tarjeta estándar
+    let params = window.location.search;
+    if (!params || params === "" || params === "?") {
+      params = "?demo=1";
     }
 
-    document.getElementById('app-frame').src = APPS_SCRIPT_EXEC_URL + search;
+    document.getElementById('app-frame').src = APPS_SCRIPT_EXEC_URL + params;
   </script>
 
 </body>
