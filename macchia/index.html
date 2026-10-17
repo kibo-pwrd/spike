@@ -1,141 +1,37 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Macchia Parfums · Tarjeta de Fidelización</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title id="pwa-title">Macchia Parfums · Tarjeta Digital</title>
+  
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#020812">
+
+  <link rel="icon" type="image/png" href="https://lh3.googleusercontent.com/d/1WzFb7rEBFlYu3sQGGo2o_yRq5u8lcNbG">
+  <link rel="apple-touch-icon" href="https://lh3.googleusercontent.com/d/1WzFb7rEBFlYu3sQGGo2o_yRq5u8lcNbG">
+
   <style>
-    :root {
-      --brand-header: #020812;
-      --text-dark: #0f172a;
-      --text-muted: #64748b;
-      --gold: #d97706;
-      --gold-dark: #b45309;
-      --border-soft: rgba(15, 23, 42, 0.08);
-      --radius: 20px;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background-color: #020812; }
+    iframe { width: 100%; height: 100%; border: none; display: block; }
+  </style>
+</head>
+<body>
 
-    body {
-      background: #020617;
-      min-height: 100vh;
-      padding: 1.4rem 1rem 2rem;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      color: var(--text-dark);
-    }
+  <iframe id="app-frame" src="" allow="clipboard-write"></iframe>
 
-    .card-container {
-      width: 100%;
-      max-width: 420px;
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      background-color: #f1f5f9;
-      background-image: url('https://lh3.googleusercontent.com/d/13Dsw1PEAiziJm8-DB_F5zR4TjmIVaGKo');
-      background-repeat: repeat;
-      background-size: 150px auto;
-    }
+  <script>
+    // URL activa de Apps Script (kibopwrd)
+    const APPS_SCRIPT_BASE_URL = "https://script.google.com/macros/s/AKfycbwcc5kZ2nAa75ujiq9-uhSEOW4GXLCRR4lUXEtp1beVfrRyYzeJHmNHHb8BMcLHSLfr/exec";
 
-    .card-header {
-      background-color: var(--brand-header);
-      padding: 1.5rem 1.2rem;
-      text-align: center;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .logo-img {
-      max-height: 48px;
-      width: auto;
-      object-fit: contain;
-    }
+    // Si no trae parámetros, abre en modo demo estándar automáticamente
+    const query = window.location.search || '?demo=1';
+    
+    document.getElementById('app-frame').src = APPS_SCRIPT_BASE_URL + query;
+  </script>
 
-    .card-body-veil {
-      background: rgba(255, 255, 255, 0.45);
-      backdrop-filter: blur(2px);
-      -webkit-backdrop-filter: blur(2px);
-      padding: 1.4rem 1.2rem 1.6rem;
-    }
-
-    .client-section {
-      text-align: center;
-      margin-bottom: 1.3rem;
-    }
-    .client-tag {
-      font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--brand-header);
-      margin-bottom: 0.25rem;
-    }
-    .client-name {
-      font-size: 1.65rem;
-      font-weight: 800;
-      color: var(--brand-header);
-      letter-spacing: -0.02em;
-    }
-
-    .stamps-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 0.65rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .stamp-slot {
-      aspect-ratio: 1;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.95);
-      border: 1.5px dashed #94a3b8;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-      transition: all 0.2s ease;
-    }
-
-    .stamp-slot.active {
-      border: 1.5px solid var(--gold);
-      background: radial-gradient(circle, #fffbeb 0%, #fef3c7 100%);
-      box-shadow: 0 4px 10px rgba(217, 119, 6, 0.28);
-    }
-
-    .stamp-num {
-      font-size: 0.82rem;
-      font-weight: 800;
-      color: #64748b;
-    }
-
-    .stamp-icon {
-      width: 65%;
-      height: 65%;
-      object-fit: contain;
-    }
-
-    .stamp-slot.sponsor-goal {
-      border: 1.5px solid #f59e0b;
-      background: rgba(255, 255, 255, 0.98);
-    }
-    .stamp-slot.sponsor-goal.active {
-      border: 2px solid #d97706;
-      background: radial-gradient(circle, #fef3c7 0%, #fde68a 100%);
-      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.35);
-    }
-    .badge-meta {
-      position: absolute;
-      top: -7px;
-      font-size: 0.52rem;
-      background: var(--brand-header);
-      color: #ffffff;
-      font-weight: 800;
-      padding: 0.12rem
+</body>
+</html>
